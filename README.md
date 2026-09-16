@@ -78,5 +78,9 @@ Three things that are load-bearing and look like mistakes if you don't know:
   it, which is what a real patch bay does.
 - **Callout dots are percentage-positioned inside the image's own aspect box.** Every one
   was verified against the rendered screenshot, not estimated. If you move one, re-check it.
+- **The two tarot crops are exactly 292 x 458, and `.card` is `aspect-ratio: 292/458`.**
+  They were cut to the artwork's own cream frame, measured off the source screenshot by
+  finding the continuous bright columns. If you recrop them, keep both files the same size
+  and keep the CSS ratio in step, or `background-size` trims a frame edge off one card.
 
 `index.v1.html` is the rejected first version, kept for reference.
