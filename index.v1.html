@@ -1,0 +1,807 @@
+<!doctype html>
+<html lang="en" class="no-js" data-grade="construct" data-object="none" data-focus="released">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Jovan Špinjo — Junior AI integration & data/BI</title>
+<meta name="description" content="Belgrade. Final-year at ITS. I own the data model, the security model and the LLM integration in everything here — and this page says which parts I wrote by hand.">
+<meta name="color-scheme" content="dark">
+<meta property="og:title" content="Jovan Špinjo — Junior AI integration & data/BI">
+<meta property="og:description" content="Two products built by directing coding agents. One written entirely by hand. This page says which.">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23171A10'/%3E%3Ccircle cx='16' cy='16' r='9' fill='none' stroke='%23C8912F' stroke-width='2.5'/%3E%3Ccircle cx='16' cy='16' r='2.5' fill='%23C8912F'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@500..800&family=IBM+Plex+Mono&family=IBM+Plex+Sans:wght@400;600&display=swap">
+<style>
+/* ============================================================
+   GRADE A — CONSTRUCT. Lifted warm green-black, tungsten practical.
+   ============================================================ */
+:root{
+  --c-ground:#171A10; --c-ground-2:#1E2216; --c-rule:#2C3223;
+  --c-ink:#D6DBC2; --c-ink-dim:#8E9880;
+  --c-accent:#C8912F; --c-accent-dim:#6B4E1C;
+
+  /* GRADE B — REAL. Crushed blue-steel, arc specular. */
+  --r-ground:#0A0E13; --r-ground-2:#10161D; --r-rule:#1E2932;
+  --r-ink:#C3D2DC; --r-ink-dim:#7E929E; --r-accent:#E6F2FF;
+
+  /* Cross-grade semantics — identical hex in both worlds. */
+  --oxide:#B8452E;
+  --void:#ECEFE8; --void-ink:#10140C; --void-rule:#C7CDC0;
+
+  --t:0;
+  --ground:  color-mix(in oklab, var(--c-ground)   calc((1 - var(--t)) * 100%), var(--r-ground));
+  --ground-2:color-mix(in oklab, var(--c-ground-2) calc((1 - var(--t)) * 100%), var(--r-ground-2));
+  --rule:    color-mix(in oklab, var(--c-rule)     calc((1 - var(--t)) * 100%), var(--r-rule));
+  --ink:     color-mix(in oklab, var(--c-ink)      calc((1 - var(--t)) * 100%), var(--r-ink));
+  --ink-dim: color-mix(in oklab, var(--c-ink-dim)  calc((1 - var(--t)) * 100%), var(--r-ink-dim));
+  --accent:  color-mix(in oklab, var(--c-accent)   calc((1 - var(--t)) * 100%), var(--r-accent));
+
+  --ease-wipe:cubic-bezier(.16,1,.3,1);
+  --dur-wipe:220ms; --dur-decay:420ms;
+  --gutter:clamp(20px,3.2vw,44px);
+  --max:1320px;
+
+  --fs-name:clamp(56px,11.2vw,148px);
+  --fs-title:clamp(34px,5.4vw,76px);
+  --fs-figure:clamp(32px,4.4vw,62px);
+  --fs-seam:clamp(22px,3vw,38px);
+  --fs-lead:clamp(18px,1.55vw,24px);
+  --fs-body:clamp(15px,calc(0.45vw + 13.3px),17px);
+  --fs-body-s:15px; --fs-label:13px; --fs-mono:14px; --fs-token:12px;
+}
+@supports not (color: color-mix(in oklab,#000 50%,#fff)){
+  :root{--ground:var(--c-ground);--ground-2:var(--c-ground-2);--rule:var(--c-rule);
+        --ink:var(--c-ink);--ink-dim:var(--c-ink-dim);--accent:var(--c-accent);}
+  html[data-grade="real"]{--ground:var(--r-ground);--ground-2:var(--r-ground-2);--rule:var(--r-rule);
+        --ink:var(--r-ink);--ink-dim:var(--r-ink-dim);--accent:var(--r-accent);}
+}
+html[data-grade="void"]{--ground:var(--void);--ground-2:#E2E6DC;--ink:var(--void-ink);
+  --rule:var(--void-rule);--ink-dim:#5A6153;--accent:#8A5A12;}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+
+/* Ground lives on <html> so the fixed rain canvas at z-index:-1 paints ABOVE it
+   but still behind every scrap of body content. A background on body would
+   propagate to the viewport and bury the canvas. */
+html{background:var(--ground);transition:background 160ms linear}
+body{
+  margin:0; background:transparent; color:var(--ink);
+  font-family:"IBM Plex Sans",system-ui,sans-serif; font-size:var(--fs-body); line-height:1.55;
+  -webkit-font-smoothing:antialiased;
+  transition:background 160ms linear,color 160ms linear;
+  overflow-x:hidden;
+}
+/* The green world is airless. The canvas is tied to the grade ramp, so it is invisible
+   above the seam, materialises across it, and is cut off entirely in the white construct. */
+#rain{position:fixed;inset:0;z-index:-1;pointer-events:none;display:block;opacity:var(--t)}
+html[data-grade="void"] #rain{opacity:0}
+
+.wrap{max-width:var(--max);margin:0 auto;padding-left:var(--gutter);padding-right:var(--gutter)}
+.grid{display:grid;grid-template-columns:repeat(12,1fr);gap:24px}
+@media (max-width:900px){.grid{grid-template-columns:repeat(6,1fr);gap:16px}}
+
+a{color:var(--accent);text-underline-offset:3px;text-decoration-thickness:1px}
+a:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+h1,h2,h3{margin:0;font-weight:800;font-family:"Big Shoulders Display","Arial Narrow",sans-serif}
+p{margin:0}
+.mono{font-family:"IBM Plex Mono",ui-monospace,monospace}
+.label{font-size:var(--fs-label);letter-spacing:.13em;text-transform:uppercase;color:var(--ink-dim);
+  font-family:"IBM Plex Mono",monospace}
+.tok{font-family:"IBM Plex Mono",monospace;font-size:var(--fs-token);letter-spacing:.16em;
+  text-transform:uppercase;color:var(--oxide)}
+.fig{font-family:"Big Shoulders Display","Arial Narrow",sans-serif;font-weight:800;
+  font-size:var(--fs-figure);line-height:.92;letter-spacing:-.012em;font-variant-numeric:tabular-nums}
+.sect-no{font-family:"IBM Plex Mono",monospace;font-size:var(--fs-token);letter-spacing:.16em;
+  color:var(--ink-dim);display:block;margin-bottom:10px}
+.sect-title{font-size:var(--fs-title);line-height:.9;letter-spacing:-.016em}
+.prose{max-width:62ch}
+.prose + .prose{margin-top:1.1em}
+
+/* ---------------- rail ---------------- */
+.rail{position:sticky;top:0;z-index:40;background:var(--ground);
+  border-bottom:1px solid var(--rule);transition:background 160ms linear}
+.rail__in{max-width:var(--max);margin:0 auto;padding:0 var(--gutter);min-height:44px;
+  display:flex;align-items:center;gap:22px}
+.rail__name{font-family:"Big Shoulders Display","Arial Narrow",sans-serif;font-weight:500;
+  font-size:16px;letter-spacing:.02em;white-space:nowrap;color:var(--ink)}
+.ticks{display:flex;gap:14px;overflow-x:auto;scrollbar-width:none;flex:1}
+.ticks::-webkit-scrollbar{display:none}
+.ticks a{font-family:"IBM Plex Mono",monospace;font-size:var(--fs-label);color:var(--ink-dim);
+  text-decoration:none;padding:12px 0;border-bottom:2px solid transparent;white-space:nowrap}
+.ticks a[aria-current="true"]{color:var(--ink);border-bottom-color:var(--accent)}
+.rail__cta{display:flex;gap:16px;align-items:center;font-size:var(--fs-body-s);white-space:nowrap}
+.rail__cta a{text-decoration:none;color:var(--ink-dim)}
+.rail__cta a.mail{color:var(--accent)}
+.rail__cta a:hover{color:var(--ink)}
+@media (max-width:900px){
+  .rail__in{flex-wrap:wrap;padding-block:6px;gap:8px 16px;min-height:68px}
+  .ticks{order:3;flex-basis:100%;gap:16px}
+  .ticks a{padding:6px 0}
+  .rail__cta{margin-left:auto}
+}
+
+/* ---------------- 00 plate ---------------- */
+#s00{padding-block:clamp(28px,4vh,56px) clamp(40px,7vh,96px)}
+.pos{grid-column:1/7;font-size:var(--fs-body-s);color:var(--ink-dim);max-width:46ch;margin-bottom:14px}
+/* Two block lines rather than a <br>: at line-height .82 the caron on Š collides with
+   the descender line above it. Each line keeps the tight .82; the gap is added between
+   them, so the lockup stays tight and the diacritic still clears. */
+.name{grid-column:1/9;font-size:var(--fs-name);line-height:.82;letter-spacing:-.022em;
+  margin:0 0 26px;display:flex;flex-direction:column}
+.name span{display:block}
+.name span + span{margin-top:.12em}
+.claim{grid-column:1/8;font-size:var(--fs-lead);line-height:1.34;max-width:46ch;color:var(--ink)}
+.figs{grid-column:1/10;margin-top:46px;padding-top:18px;border-top:1px solid var(--rule);
+  display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+.figs div p{font-size:var(--fs-label);letter-spacing:.06em;color:var(--ink-dim);margin-top:8px;
+  font-family:"IBM Plex Mono",monospace;line-height:1.35}
+.hook{grid-column:8/13;margin-top:46px;padding-top:18px;border-top:1px solid var(--c-accent);
+  font-size:var(--fs-lead);line-height:1.34;max-width:34ch}
+@media (max-width:900px){
+  .pos,.name,.claim,.figs,.hook{grid-column:1/-1}
+  .figs{grid-template-columns:1fr 1fr;gap:26px 20px;margin-top:34px}
+  .hook{margin-top:30px}
+}
+
+/* ---------------- 01 manifest ---------------- */
+#s01{padding-block:clamp(24px,3vh,40px)}
+.man{border-top:1px solid var(--rule);margin-top:14px}
+.man__head,.man__row{display:grid;grid-template-columns:34px 1.1fr 2.4fr 1.2fr 92px 96px;gap:16px;
+  align-items:baseline;padding:14px 8px;border-bottom:1px solid var(--rule)}
+.man__head span{font-size:var(--fs-label);letter-spacing:.13em;text-transform:uppercase;
+  color:var(--ink-dim);font-family:"IBM Plex Mono",monospace}
+.man__row{text-decoration:none;color:inherit;transition:background 120ms linear}
+.man__row:hover,.man__row:focus-within{background:var(--ground-2);border-bottom-color:var(--c-accent)}
+.man__n{font-family:"IBM Plex Mono",monospace;font-size:var(--fs-token);color:var(--ink-dim)}
+.man__name{font-family:"Big Shoulders Display","Arial Narrow",sans-serif;font-weight:500;
+  font-size:22px;letter-spacing:.01em;color:var(--ink)}
+.man__what,.man__scale{font-size:var(--fs-body-s);color:var(--ink-dim)}
+.man__auth{text-align:right}
+.man__state{font-family:"IBM Plex Mono",monospace;font-size:var(--fs-token);letter-spacing:.1em;
+  text-align:right;color:var(--ink-dim)}
+@media (max-width:900px){
+  .man__head{display:none}
+  .man__row{grid-template-columns:1fr auto;gap:6px 12px;padding:16px 4px}
+  .man__n{display:none}
+  .man__name{grid-column:1;grid-row:1}
+  .man__auth{grid-column:2;grid-row:1;text-align:right}
+  .man__what{grid-column:1/-1;grid-row:2}
+  .man__scale{grid-column:1;grid-row:3;font-size:var(--fs-label)}
+  .man__state{grid-column:2;grid-row:3}
+}
+
+/* ---------------- 02 construct ---------------- */
+#s02{padding-block:clamp(88px,13vh,190px)}
+.obj{margin-top:64px}
+.plate{background:var(--ground-2);border:1px solid var(--rule);padding:8px;position:relative}
+.plate img{display:block;width:100%;height:auto;filter:saturate(.88) contrast(1.02)}
+html[data-grade="real"] .plate img{filter:saturate(.72) contrast(1.1)}
+.plate__empty{aspect-ratio:16/10;display:flex;flex-direction:column;justify-content:flex-end;
+  padding:16px;border:1px dashed var(--rule);gap:4px}
+.plate__empty b{font-family:"IBM Plex Mono",monospace;font-size:var(--fs-token);letter-spacing:.14em;
+  color:var(--oxide);font-weight:400}
+.plate__empty span{font-family:"IBM Plex Mono",monospace;font-size:var(--fs-label);color:var(--ink-dim)}
+.obj__name{font-size:var(--fs-title);line-height:.9;letter-spacing:-.016em;margin-bottom:14px}
+.obj__head{font-size:var(--fs-lead);line-height:1.34;max-width:40ch;margin-bottom:20px;color:var(--ink)}
+.obj__stats{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;margin-top:26px;
+  padding-top:16px;border-top:1px solid var(--rule)}
+.obj__stats p{font-size:var(--fs-label);color:var(--ink-dim);margin-top:6px;
+  font-family:"IBM Plex Mono",monospace}
+.sub{margin-top:34px;padding-top:16px;border-top:1px solid var(--c-accent-dim);
+  transition:border-color 260ms linear}
+.sub__label{font-family:"IBM Plex Mono",monospace;font-size:var(--fs-token);letter-spacing:.16em;
+  color:var(--ink-dim);display:block;margin-bottom:12px;transition:color 260ms linear}
+.sub__body{color:var(--ink-dim);transition:color 260ms linear}
+.rendered{transition:opacity 260ms linear,filter 260ms linear}
+
+/* PULL FOCUS engaged: recede the rendered plane, promote the substrate. */
+html[data-focus="pulled"] .obj.is-band .rendered{opacity:.3;filter:brightness(.48) saturate(.32)}
+@media (pointer:fine) and (min-width:900px){
+  html[data-focus="pulled"] .obj.is-band .rendered{filter:blur(6px) brightness(.48) saturate(.32)}
+}
+html[data-focus="pulled"] .obj.is-band .sub{border-top-color:var(--accent)}
+html[data-focus="pulled"] .obj.is-band .sub__label{color:var(--oxide)}
+html[data-focus="pulled"] .obj.is-band .sub__body{color:var(--ink)}
+.sub.bloom .sub__body{color:var(--r-accent)}
+.sub.bloom{border-top-color:var(--r-accent)}
+.sub.bloom .sub__body,.sub.bloom{transition-duration:var(--dur-decay)}
+
+/* Eren + Outrank: deliberately different rhythms, never a repeated card. */
+.obj--eren .plate{grid-column:1/8}
+.obj--eren .obj__text{grid-column:8/13;padding-top:120px}
+.obj--eren .sub{grid-column:1/8}
+.obj--out .plate{grid-column:8/13;margin-top:-60px}
+.obj--out .obj__text{grid-column:1/7}
+.obj--out .sub{grid-column:1/7}
+.divider{border:0;border-top:1px solid var(--rule);margin:clamp(70px,11vh,150px) 0 0}
+@media (max-width:900px){
+  .obj--eren .plate,.obj--eren .obj__text,.obj--eren .sub,
+  .obj--out .plate,.obj--out .obj__text,.obj--out .sub{grid-column:1/-1;padding-top:0;margin-top:0}
+  .obj__text{margin-top:22px}
+  .plate{margin-inline:calc(var(--gutter) * -1);border-left:0;border-right:0}
+  .sub{border-top-color:var(--c-accent)}
+}
+
+/* ---------------- 03 seam ---------------- */
+#s03{min-height:88svh;padding-block:clamp(72px,10vh,120px);display:flex;flex-direction:column;
+  justify-content:center}
+.seam{max-width:900px}
+.seam p{font-size:var(--fs-seam);line-height:1.24;letter-spacing:-.008em;max-width:19ch;
+  color:var(--r-accent);margin-bottom:18px;clip-path:inset(0 0 100% 0);
+  transition:clip-path var(--dur-wipe) var(--ease-wipe)}
+.seam p.in{clip-path:inset(0 0 0 0)}
+.ledger{margin-top:56px;padding-top:18px;border-top:1px solid var(--r-accent);max-width:62ch}
+.ledger div{display:grid;grid-template-columns:200px 1fr;gap:18px;padding:12px 0;
+  border-bottom:1px solid var(--rule)}
+.ledger div:last-child{border-bottom:0}
+@media (max-width:900px){.ledger div{grid-template-columns:1fr;gap:6px}}
+
+/* ---------------- 04 real ---------------- */
+#s04{padding-block:clamp(88px,13vh,190px)}
+.murmur__name{grid-column:1/7;font-size:var(--fs-title);line-height:.9;letter-spacing:-.016em}
+.murmur__plate{grid-column:7/13}
+.murmur__prose{grid-column:1/8;margin-top:clamp(70px,10vh,120px)}
+.chain{grid-column:1/11;margin-block:clamp(70px,10vh,120px)}
+.chain svg{width:100%;height:auto;display:block}
+.chain .vert{display:none}
+.closing{grid-column:1/9;font-size:var(--fs-seam);line-height:1.24;max-width:24ch;
+  padding-top:18px;border-top:1px solid var(--r-accent);margin-top:40px}
+.schema{grid-column:1/6}
+.schema svg{width:100%;height:auto;display:block}
+.comtrade__text{grid-column:6/11}
+@media (max-width:900px){
+  .murmur__name,.murmur__plate,.murmur__prose,.chain,.closing,.schema,.comtrade__text{grid-column:1/-1}
+  .murmur__plate{margin-top:22px}
+  .murmur__prose,.chain{margin-block:44px}
+  .chain .horiz{display:none}
+  .chain .vert{display:block}
+  .comtrade__text{margin-top:26px}
+  .schema{overflow-x:auto}
+  .schema svg{min-width:420px}
+}
+.idx{margin-top:22px;border-top:1px solid var(--rule)}
+.idx div{display:grid;grid-template-columns:2fr 2.2fr 1.4fr;gap:18px;padding:14px 4px;
+  border-bottom:1px solid var(--rule);font-size:var(--fs-body-s)}
+.idx b{font-weight:600;color:var(--ink)}
+.idx span:last-child{color:var(--ink-dim);font-family:"IBM Plex Mono",monospace;font-size:var(--fs-label)}
+@media (max-width:900px){.idx div{grid-template-columns:1fr;gap:5px}}
+
+/* ---------------- 05 void ---------------- */
+#s05{padding-block:clamp(96px,16vh,220px) clamp(60px,8vh,110px);min-height:96vh;
+  display:flex;flex-direction:column;justify-content:flex-end}
+.void__line{font-size:var(--fs-title);line-height:.9;letter-spacing:-.016em;margin-bottom:40px}
+.contact{max-width:520px;border-top:1px solid var(--rule)}
+.contact a,.contact span{display:block;padding:14px 0;border-bottom:1px solid var(--rule);
+  font-size:var(--fs-lead);text-decoration:none}
+.contact span{color:var(--ink-dim)}
+.colophon{margin-top:56px;font-size:var(--fs-body-s);color:var(--ink-dim);max-width:62ch}
+@media (max-width:900px){#s05{min-height:72vh}}
+
+/* ---------------- pull focus ring ---------------- */
+/* It is fixed, so content will always scroll beneath it. It carries its own ground
+   or it sits illegibly on top of the ledger. */
+.rack{position:fixed;left:var(--gutter);bottom:calc(20px + env(safe-area-inset-bottom));z-index:50;
+  display:flex;align-items:center;gap:14px;background:var(--ground);border:1px solid var(--rule);
+  padding:8px 16px 8px 8px;cursor:pointer;
+  color:var(--ink);font-family:"IBM Plex Mono",monospace;text-align:left;
+  transition:background 160ms linear,border-color 180ms linear}
+.rack__ring{width:56px;height:56px;min-width:56px;border:1px solid var(--rule);border-radius:50%;
+  display:grid;place-items:center;transition:border-color 180ms linear,box-shadow 180ms linear}
+.rack__ring i{width:8px;height:8px;background:var(--ink-dim);border-radius:50%;
+  transition:background 180ms linear,transform 180ms linear}
+.rack[aria-pressed="true"] .rack__ring{border-color:var(--accent)}
+.rack[aria-pressed="true"] .rack__ring i{background:var(--accent);transform:scale(1.5)}
+.rack[aria-disabled="true"] .rack__ring{border-color:var(--oxide)}
+.rack.pulse .rack__ring{box-shadow:0 0 0 2px var(--r-accent)}
+.rack__txt b{display:block;font-size:var(--fs-label);letter-spacing:.14em;font-weight:400;color:var(--ink)}
+.rack__txt small{display:block;font-size:var(--fs-token);letter-spacing:.1em;color:var(--ink-dim);
+  margin-top:4px;max-width:26ch}
+@media (max-width:900px){
+  .rack{left:auto;right:var(--gutter);bottom:calc(16px + env(safe-area-inset-bottom));
+    flex-direction:row-reverse;background:var(--ground);border:1px solid var(--rule);padding:8px}
+  .rack__ring{width:48px;height:48px;min-width:48px}
+  .rack__txt small{display:none}
+}
+html[data-grade="void"] .rack{display:none}
+
+@media (prefers-reduced-motion:reduce){
+  .rendered,.sub,.sub__label,.sub__body,.seam p,.rack__ring,.rack__ring i{transition-duration:0ms !important}
+  html[data-focus="pulled"] .obj.is-band .rendered{filter:brightness(.48) saturate(.32) !important}
+  .seam p{clip-path:inset(0 0 0 0)}
+}
+/* No-JS: every plane is already visible; just ensure the seam lines are not clipped. */
+html.no-js .seam p{clip-path:none}
+html.no-js .rack{display:none}
+</style>
+</head>
+<body>
+<canvas id="rain" aria-hidden="true"></canvas>
+
+<header class="rail">
+  <div class="rail__in">
+    <span class="rail__name">ŠPINJO / J</span>
+    <nav class="ticks" aria-label="Sections">
+      <a href="#s00">00</a><a href="#s01">01</a><a href="#s02">02</a>
+      <a href="#s03">03</a><a href="#s04">04</a><a href="#s05">05</a>
+    </nav>
+    <div class="rail__cta">
+      <a class="mail" href="mailto:jocaspinjo@gmail.com">jocaspinjo@gmail.com</a>
+      <a href="cv.pdf">CV (PDF)</a>
+      <a href="https://github.com/kaizennnnnnnnn" rel="me noopener">GitHub</a>
+    </div>
+  </div>
+</header>
+
+<main>
+
+<!-- ============ 00 / PLATE ============ -->
+<section id="s00" class="wrap" aria-labelledby="h-name">
+  <div class="grid">
+    <p class="pos">Belgrade. Final-year at ITS. Junior AI integration and data/BI.</p>
+    <h1 class="name" id="h-name"><span>JOVAN</span><span>ŠPINJO</span></h1>
+    <p class="claim">In everything on this page I own the data model, the security model and the LLM integration.</p>
+    <div class="figs">
+      <div><span class="fig">1,121</span><p>commits, Apr–Sep 2026</p></div>
+      <div><span class="fig">73</span><p>SQL migrations</p></div>
+      <div><span class="fig">93</span><p>row-level-security policies</p></div>
+      <div><span class="fig">7,315</span><p>lines written by hand</p></div>
+    </div>
+    <p class="hook">Two of the things here were built by directing coding agents. One was written by hand. This page says which, in the table you are about to read, and it does not soften it anywhere after that.</p>
+  </div>
+</section>
+
+<!-- ============ 01 / MANIFEST ============ -->
+<section id="s01" class="wrap" aria-labelledby="h-man">
+  <span class="sect-no">01</span>
+  <h2 class="sect-title" id="h-man">MANIFEST</h2>
+  <div class="man">
+    <div class="man__head">
+      <span>#</span><span>Name</span>
+      <span>What it is</span><span>Scale</span>
+      <span style="text-align:right">Authorship</span>
+      <span style="text-align:right">State</span>
+    </div>
+    <a class="man__row" href="#s04">
+      <span class="man__n">01</span><span class="man__name">MURMUR</span>
+      <span class="man__what">push-to-talk dictation that works with the network off</span>
+      <span class="man__scale">32 modules · 7,315 lines</span>
+      <span class="man__auth tok">Hand</span><span class="man__state">not on GitHub</span>
+    </a>
+    <a class="man__row" href="#s02">
+      <span class="man__n">02</span><span class="man__name">EREN</span>
+      <span class="man__what">a cat-care PWA two people have used daily since April</span>
+      <span class="man__scale">73 migrations · 93 policies</span>
+      <span class="man__auth tok">Directed</span><span class="man__state">live</span>
+    </a>
+    <a class="man__row" href="#s02">
+      <span class="man__n">03</span><span class="man__name">OUTRANK</span>
+      <span class="man__what">a habit tracker whose assistant runs on a seconds budget</span>
+      <span class="man__scale">56 routes · 3 budget tiers</span>
+      <span class="man__auth tok">Directed</span><span class="man__state">live</span>
+    </a>
+    <a class="man__row" href="#s04">
+      <span class="man__n">04</span><span class="man__name">COMTRADE</span>
+      <span class="man__what">a sales data warehouse, its ETL and its reports</span>
+      <span class="man__scale">1 star schema · 80 hours</span>
+      <span class="man__auth tok">Contract</span><span class="man__state">delivered</span>
+    </a>
+    <a class="man__row" href="#s04">
+      <span class="man__n">05</span><span class="man__name">FACULTY</span>
+      <span class="man__what">four coursework builds in four stacks</span>
+      <span class="man__scale">19 entities · 4 builds</span>
+      <span class="man__auth tok">Academic</span><span class="man__state">archived</span>
+    </a>
+  </div>
+</section>
+
+<!-- ============ 02 / CONSTRUCT ============ -->
+<section id="s02" class="wrap" aria-labelledby="h-con">
+  <span class="sect-no">02</span>
+  <h2 class="sect-title" id="h-con">CONSTRUCT</h2>
+
+  <article class="obj obj--eren grid" data-object="eren">
+    <div class="plate rendered">
+      <div class="plate__empty"><b>plate 01</b><span>eren — home screen · 16:10</span></div>
+    </div>
+    <div class="obj__text rendered">
+      <h3 class="obj__name">EREN</h3>
+      <p class="obj__head">A cat-care app two people have used every day since April, and a chat endpoint that stopped paying twice for the same 2,900 tokens.</p>
+      <p class="prose">Live at <a href="https://eren-care-app.vercel.app" rel="noopener">eren-care-app.vercel.app</a>. A progressive web app for a two-person household: stats that decay in real time, a shared journal, an arcade, a shop, and a chat companion running on Claude Sonnet 5 over a streaming endpoint.</p>
+      <p class="prose">Push notifications come from a database-backed cron sweep, because the hosting tier has no hourly scheduler and the client ping alone is not a guarantee.</p>
+      <div class="obj__stats">
+        <div><span class="fig">1,121</span><p>commits</p></div>
+        <div><span class="fig">73</span><p>SQL migrations</p></div>
+        <div><span class="fig">14</span><p>API routes</p></div>
+        <div><span class="fig">37</span><p>tables</p></div>
+      </div>
+    </div>
+    <div class="sub">
+      <span class="sub__label">Substrate — what is mine, layer by layer</span>
+      <div class="sub__body">
+        <p class="prose">The schema is mine: 37 tables, 93 row-level-security policies, 27 security-definer RPCs. I designed the access model, and I read and modified every policy written for it. The LLM integration is mine. I did not write the React or the TypeScript. I read it, I change it, I debug it, and I ship it.</p>
+        <p class="prose">Three decisions in here that nobody handed me. The prompt prefix is split at two cache breakpoints by how often each part changes — persona daily, memories the moment one is saved — so saving a memory stopped rewriting a roughly 2,900-token prefix at the 1.25× cache-write rate.</p>
+        <p class="prose">The daily spend ceiling is an integer ledger in micro-USD, written in a <span class="mono">finally</span> block, so a stream the user cancels halfway is still billed and the ceiling still means something.</p>
+        <p class="prose">And the multi-tenant decay sweep pages by keyset on <span class="mono">id</span>, not <span class="mono">OFFSET</span>, because the sweep mutates <span class="mono">last_decay_at</span> — the very column an <span class="mono">OFFSET</span> would have ordered on, which silently skips households once the table outgrows one page.</p>
+      </div>
+    </div>
+  </article>
+
+  <hr class="divider">
+
+  <article class="obj obj--out grid" data-object="outrank">
+    <div class="plate rendered">
+      <div class="plate__empty"><b>plate 02</b><span>outrank — habit board · 16:10</span></div>
+    </div>
+    <div class="obj__text rendered">
+      <h3 class="obj__name">OUTRANK</h3>
+      <p class="obj__head">A habit tracker whose voice assistant is allowed to cost exactly sixty, two hundred and forty, or six hundred seconds a day.</p>
+      <p class="prose">A progressive web app for building and holding habits, with a text and voice assistant behind the Anthropic SDK. Next.js 16 and React 19 on Firebase — the stack it runs on, stated as a fact about the repository and not as a claim about me.</p>
+      <div class="obj__stats">
+        <div><span class="fig">462</span><p>commits</p></div>
+        <div><span class="fig">56</span><p>routes</p></div>
+      </div>
+    </div>
+    <div class="sub">
+      <span class="sub__label">Substrate — where the money stops</span>
+      <div class="sub__body">
+        <p class="prose">The budget model is mine. Each tier gets a daily allowance in seconds — 60, 240, 600 — and the allowance is checked before a realtime session is ever minted, not after it ends, so an exhausted account is refused with <span class="mono">HTTP 429</span> instead of running up a bill and getting reconciled later.</p>
+        <p class="prose">The quota increment happens inside a Firestore transaction, because two tabs opening a session at the same moment is not a hypothetical. The application code around it was written by coding agents I directed.</p>
+      </div>
+    </div>
+  </article>
+</section>
+
+<!-- ============ 03 / THE SEAM ============ -->
+<section id="s03" class="wrap" aria-labelledby="h-seam">
+  <div class="seam">
+    <span class="sect-no">03</span>
+    <h2 class="sect-title" id="h-seam" style="margin-bottom:44px">THE SEAM</h2>
+    <p>Nobody chose the cache breakpoints for me.</p>
+    <p>Nobody told me an interrupted stream still costs money.</p>
+    <p>Nobody warned me that an <span class="mono" style="font-size:.86em">OFFSET</span> orders on the column the sweep is mutating.</p>
+    <div class="ledger">
+      <div><span class="tok">Written by hand</span><span>Murmur. Python, 32 modules, 7,315 lines. No agents.</span></div>
+      <div><span class="tok">Owned, not delegated</span><span>Every schema, access model and LLM integration on this page.</span></div>
+      <div><span class="tok">Directed, not authored</span><span>The React and TypeScript in Eren and Outrank.</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 04 / REAL ============ -->
+<section id="s04" class="wrap" aria-labelledby="h-real">
+  <span class="sect-no">04</span>
+  <h2 class="sect-title" id="h-real">REAL</h2>
+
+  <article class="obj grid" data-object="murmur" style="margin-top:70px">
+    <h3 class="murmur__name">MURMUR</h3>
+    <div class="murmur__plate plate">
+      <div class="plate__empty"><b>plate 03</b><span>murmur — listening overlay · 16:10</span></div>
+    </div>
+
+    <div class="chain" aria-label="Murmur signal chain: hotkey, trim, high-pass filter, normalise, local inference, fallback to Groq">
+      <svg class="horiz" viewBox="0 0 1200 130" preserveAspectRatio="xMinYMid meet" role="img"
+           aria-label="Signal chain diagram">
+        <g fill="none" stroke="currentColor" stroke-width="1" opacity=".55">
+          <path d="M92 52 H150 M300 52 H358 M508 52 H566 M690 52 H748 M900 52 H958"/>
+        </g>
+        <g font-family="IBM Plex Mono, monospace" font-size="11" fill="currentColor">
+          <g stroke="currentColor" stroke-width="1" fill="none" opacity=".45">
+            <rect x="2" y="34" width="90" height="36"/><rect x="150" y="34" width="150" height="36"/>
+            <rect x="358" y="34" width="150" height="36"/><rect x="566" y="34" width="124" height="36"/>
+            <rect x="748" y="34" width="152" height="36"/>
+          </g>
+          <text x="14" y="56">hotkey</text>
+          <text x="162" y="50">trim 200 ms head</text><text x="162" y="64">100 ms tail</text>
+          <text x="370" y="50">Butterworth HP</text><text x="370" y="64">4th order · 100 Hz</text>
+          <text x="578" y="56">normalise 0.8</text>
+          <text x="760" y="50">faster-whisper</text><text x="760" y="64">small.en · local GPU</text>
+          <text x="970" y="56">text</text>
+        </g>
+        <g stroke="#B8452E" stroke-width="1" fill="none">
+          <path d="M824 70 V104 H1056"/>
+          <rect x="1056" y="86" width="142" height="36"/>
+        </g>
+        <g font-family="IBM Plex Mono, monospace" font-size="11" fill="#B8452E">
+          <text x="832" y="98">empty result</text>
+          <text x="1066" y="102">Groq whisper</text><text x="1066" y="116">large-v3-turbo</text>
+        </g>
+      </svg>
+      <svg class="vert" viewBox="0 0 340 620" preserveAspectRatio="xMinYMin meet" role="img"
+           aria-label="Signal chain diagram, vertical">
+        <g font-family="IBM Plex Mono, monospace" font-size="12" fill="currentColor">
+          <g stroke="currentColor" stroke-width="1" fill="none" opacity=".45">
+            <rect x="2" y="2" width="180" height="40"/><rect x="2" y="92" width="180" height="52"/>
+            <rect x="2" y="194" width="180" height="52"/><rect x="2" y="296" width="180" height="40"/>
+            <rect x="2" y="386" width="180" height="52"/>
+          </g>
+          <g stroke="currentColor" stroke-width="1" opacity=".55" fill="none">
+            <path d="M92 42 V92 M92 144 V194 M92 246 V296 M92 336 V386 M92 438 V520"/>
+          </g>
+          <text x="14" y="27">hotkey</text>
+          <text x="14" y="113">trim 200 ms head</text><text x="14" y="130">100 ms tail</text>
+          <text x="14" y="215">Butterworth HP</text><text x="14" y="232">4th order · 100 Hz</text>
+          <text x="14" y="321">normalise 0.8</text>
+          <text x="14" y="407">faster-whisper</text><text x="14" y="424">small.en · local GPU</text>
+          <text x="14" y="536">text</text>
+        </g>
+        <g stroke="#B8452E" stroke-width="1" fill="none">
+          <path d="M92 460 H232 V520"/><rect x="152" y="520" width="160" height="52"/>
+        </g>
+        <g font-family="IBM Plex Mono, monospace" font-size="12" fill="#B8452E">
+          <text x="100" y="454">empty result</text>
+          <text x="164" y="541">Groq whisper</text><text x="164" y="558">large-v3-turbo</text>
+        </g>
+      </svg>
+    </div>
+
+    <div class="murmur__prose">
+      <p class="obj__head">You hold a key, you talk, and the text is in the editor before you have finished thinking the next sentence. Every line of it is mine.</p>
+      <p class="prose">A push-to-talk dictation app for Windows. Python 3.12, PySide6 on Qt6, 32 modules, 7,315 lines, written by hand.</p>
+      <p class="prose"><span class="mono">faster-whisper small.en</span> runs locally on the GPU. Getting there meant fixing CUDA DLL loading on Windows: the <span class="mono">nvidia-cu12</span> wheels place cuBLAS and cuDNN outside the directories Windows searches, so the loader is corrected at process start. When local inference comes back empty the request falls through to Groq's <span class="mono">whisper-large-v3-turbo</span> — the only branch on this page drawn in rust, because it is the only path that exists conditionally.</p>
+      <p class="prose">Before the model sees anything, the audio is cleaned: 200 milliseconds off the head and 100 off the tail to kill the transient of the hotkey itself, a 4th-order Butterworth high-pass at 100 Hz, then peak normalisation to 0.8. A guard on silence, because a model handed near-silence will confidently invent a sentence. And a 282-line watcher that learns the corrections I keep making and stops making me make them.</p>
+      <p class="prose">It is not on GitHub. I am saying so here rather than leaving you to find out.</p>
+    </div>
+    <p class="closing">7,315 lines. 32 modules. Not on GitHub. Every line is mine.</p>
+  </article>
+
+  <div class="grid" style="margin-top:clamp(80px,12vh,170px)">
+    <div class="schema">
+      <svg viewBox="0 0 420 330" role="img" aria-label="Star schema: one fact table with four dimensions, SSIS packages feeding it, Power BI reports reading it">
+        <g stroke="currentColor" stroke-width="1" fill="none" opacity=".5">
+          <path d="M210 92 V126 M210 204 V238 M128 165 H92 M292 165 H328"/>
+        </g>
+        <g stroke="currentColor" stroke-width="1" fill="none" opacity=".75">
+          <rect x="128" y="126" width="164" height="78"/>
+        </g>
+        <g stroke="currentColor" stroke-width="1" fill="none" opacity=".45">
+          <rect x="140" y="40" width="140" height="52"/><rect x="140" y="238" width="140" height="52"/>
+          <rect x="0" y="139" width="92" height="52"/><rect x="328" y="139" width="92" height="52"/>
+        </g>
+        <g font-family="IBM Plex Mono, monospace" font-size="11" fill="currentColor">
+          <text x="140" y="154">FACT</text><text x="140" y="170">sales</text>
+          <text x="140" y="188" opacity=".7">measures · keys</text>
+          <text x="152" y="62" opacity=".8">DIM date</text><text x="152" y="78" opacity=".55">calendar grain</text>
+          <text x="152" y="260" opacity=".8">DIM product</text><text x="152" y="276" opacity=".55">hierarchy</text>
+          <text x="10" y="162" opacity=".8">DIM customer</text><text x="10" y="178" opacity=".55">geography</text>
+          <text x="338" y="162" opacity=".8">DIM store</text><text x="338" y="178" opacity=".55">region</text>
+          <text x="0" y="316" opacity=".75">SSIS packages →</text>
+          <text x="300" y="316" opacity=".75">→ Power BI</text>
+        </g>
+        <g stroke="currentColor" stroke-width="1" fill="none" opacity=".3">
+          <path d="M96 306 H128 V204"/><path d="M292 204 V306 H296"/>
+        </g>
+      </svg>
+    </div>
+    <div class="comtrade__text">
+      <h3 class="obj__name">COMTRADE</h3>
+      <p class="obj__head">Eighty hours in Belgrade, modelling somebody else's sales data until it answered questions.</p>
+      <p class="prose">System Integration, Belgrade. May to June 2026, 80 hours. I modelled a data warehouse over sales data in MS SQL Server, built the SSIS packages that load it, and wrote the Power BI reports that read it. The schema beside this paragraph is the deliverable, drawn as it was designed: one fact table, its dimensions, the packages feeding it from the left and the reports hanging off it on the right.</p>
+      <p class="prose">This sits in the cold half of the page next to Murmur on purpose. These are the two things nobody helped me with.</p>
+    </div>
+  </div>
+
+  <div style="margin-top:clamp(80px,12vh,170px)">
+    <h3 class="obj__name">FACULTY</h3>
+    <p class="obj__head">Four coursework builds in four stacks, each one written the slow way.</p>
+    <div class="idx">
+      <div><span><b>Ručna Radinost</b></span><span>multi-vendor marketplace, three roles, Identity</span><span>C# · .NET 8 · EF Core 9</span></div>
+      <div><span><b>Apoteka „Vita"</b></span><span>pharmacy application on MVC Model 2</span><span>Java EE · Servlet/JSP · MySQL</span></div>
+      <div><span><b>Srećna šapa</b></span><span>veterinary clinic, three roles, PDO throughout</span><span>PHP 8 · MySQL</span></div>
+      <div><span><b>Video-game database</b></span><span>19 entities · 3 views · 3 functions · 3 procedures</span><span>ER/PMOV · T-SQL</span></div>
+    </div>
+    <p class="prose" style="margin-top:26px;color:var(--ink-dim)">No agents in any of them. They are here as provenance, not as the argument.</p>
+  </div>
+</section>
+
+<!-- ============ 05 / CONSTRUCT (white) ============ -->
+<section id="s05" class="wrap" aria-labelledby="h-void">
+  <div>
+    <span class="sect-no">05</span>
+    <h2 class="void__line" id="h-void">Load what you need.</h2>
+    <div class="contact">
+      <a href="mailto:jocaspinjo@gmail.com">jocaspinjo@gmail.com</a>
+      <a href="cv.pdf">CV (PDF)</a>
+      <a href="https://github.com/kaizennnnnnnnn" rel="me noopener">github.com/kaizennnnnnnnn</a>
+      <a href="https://linkedin.com/in/jovanspinjo" rel="me noopener">linkedin.com/in/jovanspinjo</a>
+      <span>Belgrade, or remote.</span>
+    </div>
+    <p class="colophon">One HTML file. No build step, no framework, no dependencies. Three typefaces, one canvas, and a grade that cools as you descend. Written by hand — which, on this page, is a claim I have to be able to stand behind.</p>
+  </div>
+</section>
+
+</main>
+
+<button class="rack" id="rack" type="button" aria-pressed="false">
+  <span class="rack__ring"><i></i></span>
+  <span class="rack__txt"><b>PULL FOCUS [F]</b><small id="rackRead">no object in frame</small></span>
+</button>
+
+<script>
+(function(){
+  var html = document.documentElement;
+  html.classList.remove('no-js');
+  var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ---------- grade ramp: --t quantised to 20 steps, written only on change ---------- */
+  var seam = document.getElementById('s03');
+  var lastT = -1, ticking = false;
+
+  function computeT(){
+    var r = seam.getBoundingClientRect();
+    var vh = innerHeight;
+    var raw = (vh * 0.5 - r.top) / (r.height || 1);
+    return Math.max(0, Math.min(1, raw));
+  }
+  function applyGrade(){
+    ticking = false;
+    var t = Math.round(computeT() * 20) / 20;
+    if (t === lastT) return;
+    lastT = t;
+    html.style.setProperty('--t', t);
+    var g = html.dataset.grade;
+    if (g !== 'void') html.dataset.grade = t > 0.5 ? 'real' : 'construct';
+  }
+  function onScroll(){ if (!ticking){ ticking = true; requestAnimationFrame(applyGrade); } }
+  addEventListener('scroll', onScroll, {passive:true});
+  addEventListener('resize', onScroll, {passive:true});
+  applyGrade();
+
+  /* ---------- section ticks ---------- */
+  var ticks = [].slice.call(document.querySelectorAll('.ticks a'));
+  var secs = ticks.map(function(a){ return document.querySelector(a.getAttribute('href')); });
+  var tickObs = new IntersectionObserver(function(es){
+    es.forEach(function(e){
+      if (!e.isIntersecting) return;
+      var i = secs.indexOf(e.target);
+      if (i < 0) return;
+      ticks.forEach(function(a, j){ a.setAttribute('aria-current', j === i ? 'true' : 'false'); });
+    });
+  }, {rootMargin:'-45% 0px -45% 0px', threshold:0});
+  secs.forEach(function(s){ if (s) tickObs.observe(s); });
+
+  /* ---------- seam lines wipe in once ---------- */
+  var lines = [].slice.call(seam.querySelectorAll('.seam > p'));
+  var seamObs = new IntersectionObserver(function(es){
+    es.forEach(function(e){
+      if (!e.isIntersecting) return;
+      lines.forEach(function(p, i){
+        setTimeout(function(){ p.classList.add('in'); }, reduce ? 0 : i * 90);
+      });
+      seamObs.disconnect();
+    });
+  }, {threshold:0.25});
+  seamObs.observe(seam);
+
+  /* ---------- void: hard cut to the light surface ---------- */
+  var voidSec = document.getElementById('s05');
+  new IntersectionObserver(function(es){
+    es.forEach(function(e){
+      html.dataset.grade = e.isIntersecting ? 'void' : (lastT > 0.5 ? 'real' : 'construct');
+    });
+  }, {rootMargin:'-20% 0px 0px 0px', threshold:0}).observe(voidSec);
+
+  /* ---------- focus band ---------- */
+  var objs = [].slice.call(document.querySelectorAll('.obj[data-object]'));
+  var rack = document.getElementById('rack');
+  var read = document.getElementById('rackRead');
+  var band = null;
+
+  var bandObs = new IntersectionObserver(function(es){
+    es.forEach(function(e){
+      if (e.isIntersecting) band = e.target;
+      else if (band === e.target) band = null;
+    });
+    objs.forEach(function(o){ o.classList.toggle('is-band', o === band); });
+    var name = band ? band.dataset.object : 'none';
+    html.dataset.object = name;
+    if (name === 'murmur'){
+      read.textContent = 'no substrate — object is one thing';
+      rack.setAttribute('aria-disabled','true');
+    } else if (name === 'none'){
+      read.textContent = 'no object in frame';
+      rack.setAttribute('aria-disabled','true');
+    } else {
+      read.textContent = 'object — ' + name;
+      rack.removeAttribute('aria-disabled');
+    }
+    if (html.dataset.focus === 'pulled' && (name === 'none' || name === 'murmur')) release();
+  }, {rootMargin:'-38% 0px -38% 0px', threshold:0});
+  objs.forEach(function(o){ bandObs.observe(o); });
+
+  /* ---------- PULL FOCUS ---------- */
+  var bloomTimer = null;
+  function engage(){
+    html.dataset.focus = 'pulled';
+    rack.setAttribute('aria-pressed','true');
+    if (band) { var r = band.querySelector('.rendered'); if (r) r.style.willChange = 'filter'; }
+    html.style.setProperty('--t', Math.min(1, (lastT < 0 ? 0 : lastT) + 0.12));
+  }
+  function release(){
+    if (html.dataset.focus !== 'pulled') return;
+    html.dataset.focus = 'released';
+    rack.setAttribute('aria-pressed','false');
+    html.style.setProperty('--t', lastT < 0 ? 0 : lastT);
+    objs.forEach(function(o){
+      var r = o.querySelector('.rendered'); if (r) r.style.willChange = '';
+      var s = o.querySelector('.sub');
+      if (s && o === band && !reduce){
+        s.classList.add('bloom');
+        clearTimeout(bloomTimer);
+        bloomTimer = setTimeout(function(){ s.classList.remove('bloom'); }, 500);
+      }
+    });
+  }
+  function toggle(){
+    if (rack.getAttribute('aria-disabled') === 'true'){
+      rack.classList.add('pulse');
+      setTimeout(function(){ rack.classList.remove('pulse'); }, 180);
+      return;
+    }
+    html.dataset.focus === 'pulled' ? release() : engage();
+  }
+  rack.addEventListener('click', toggle);
+  addEventListener('keydown', function(e){
+    if (e.key !== 'f' && e.key !== 'F') return;
+    var t = e.target.tagName;
+    if (t === 'INPUT' || t === 'TEXTAREA' || e.target.isContentEditable) return;
+    e.preventDefault(); toggle();
+  });
+
+  /* ---------- rain: one frozen frame above the seam, falling below it ---------- */
+  var cv = document.getElementById('rain'), ctx = cv.getContext('2d');
+  var dpr = Math.min(2, devicePixelRatio || 1);
+  var W = 0, H = 0, streaks = [], raf = null, falling = false;
+  var N = innerWidth < 900 ? 55 : 110;
+
+  function size(){
+    W = cv.width = Math.floor(innerWidth * dpr);
+    H = cv.height = Math.floor(innerHeight * dpr);
+    cv.style.width = innerWidth + 'px'; cv.style.height = innerHeight + 'px';
+  }
+  function seed(){
+    streaks = [];
+    for (var i = 0; i < N; i++){
+      var depth = i % 3;
+      streaks.push({
+        x: Math.random() * W,
+        y: Math.random() * H,
+        len: (14 + depth * 22 + Math.random() * 30) * dpr,
+        v: (1.1 + depth * 1.5 + Math.random() * 1.4) * dpr,
+        a: 0.10 + depth * 0.09
+      });
+    }
+  }
+  function paint(){
+    ctx.clearRect(0, 0, W, H);
+    ctx.lineWidth = dpr;
+    for (var i = 0; i < streaks.length; i++){
+      var s = streaks[i];
+      ctx.strokeStyle = 'rgba(230,242,255,' + s.a + ')';
+      ctx.beginPath(); ctx.moveTo(s.x, s.y); ctx.lineTo(s.x, s.y + s.len); ctx.stroke();
+      if (falling){
+        s.y += s.v;
+        if (s.y > H){ s.y = -s.len; s.x = Math.random() * W; }
+      }
+    }
+    if (falling && !reduce) raf = requestAnimationFrame(paint);
+  }
+  size(); seed(); paint();
+  addEventListener('resize', function(){ size(); seed(); paint(); }, {passive:true});
+
+  new IntersectionObserver(function(es){
+    es.forEach(function(e){
+      var wantFall = e.isIntersecting || e.boundingClientRect.top < 0;
+      if (wantFall === falling) return;
+      falling = wantFall;
+      cancelAnimationFrame(raf);
+      if (falling && !reduce) raf = requestAnimationFrame(paint); else paint();
+    });
+  }, {rootMargin:'0px 0px -12% 0px', threshold:0}).observe(document.getElementById('s04'));
+})();
+</script>
+</body>
+</html>

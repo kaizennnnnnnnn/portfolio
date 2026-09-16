@@ -1,806 +1,1812 @@
 <!doctype html>
-<html lang="en" class="no-js" data-grade="construct" data-object="none" data-focus="released">
+<html lang="en" class="no-js">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Jovan Špinjo — Junior AI integration & data/BI</title>
-<meta name="description" content="Belgrade. Final-year at ITS. I own the data model, the security model and the LLM integration in everything here — and this page says which parts I wrote by hand.">
-<meta name="color-scheme" content="dark">
-<meta property="og:title" content="Jovan Špinjo — Junior AI integration & data/BI">
-<meta property="og:description" content="Two products built by directing coding agents. One written entirely by hand. This page says which.">
-<meta property="og:type" content="website">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23171A10'/%3E%3Ccircle cx='16' cy='16' r='9' fill='none' stroke='%23C8912F' stroke-width='2.5'/%3E%3Ccircle cx='16' cy='16' r='2.5' fill='%23C8912F'/%3E%3C/svg%3E">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@500..800&family=IBM+Plex+Mono&family=IBM+Plex+Sans:wght@400;600&display=swap">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Jovan Špinjo — Junior AI integration, data &amp; BI</title>
+<meta name="description" content="Belgrade. I direct coding agents, and I own the data model, the security boundary and the LLM integration. Three projects, one of them running in your browser.">
+<meta name="theme-color" content="#08090B">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%2308090B'/%3E%3Ccircle cx='16' cy='16' r='9' fill='none' stroke='%236FE6A0' stroke-width='2'/%3E%3Ccircle cx='16' cy='16' r='2.5' fill='%236FE6A0'/%3E%3C/svg%3E">
+
+<link rel="preload" href="fonts/archivo-n-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/azeret-n-latin.woff2" as="font" type="font/woff2" crossorigin>
+
 <style>
-/* ============================================================
-   GRADE A — CONSTRUCT. Lifted warm green-black, tungsten practical.
-   ============================================================ */
+/* ================================================================ FONTS */
+/* Self-hosted: zero third-party requests. The latin-ext files are subset to
+   the Serbian diacritics only — 84 KB down to 7 KB — because the only thing
+   this page needs from that range is the caron in his own name. */
+@font-face{font-family:Archivo;font-style:normal;font-weight:100 900;font-stretch:62% 125%;font-display:swap;
+  src:url(fonts/archivo-n-latinext.woff2) format('woff2');
+  unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+1E00-1E9F,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:Archivo;font-style:normal;font-weight:100 900;font-stretch:62% 125%;font-display:swap;
+  src:url(fonts/archivo-n-latin.woff2) format('woff2');
+  unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+20AC,U+2122,U+2212,U+FEFF,U+FFFD}
+@font-face{font-family:'Instrument Serif';font-style:normal;font-weight:400;font-display:swap;
+  src:url(fonts/instrument-n-latinext.woff2) format('woff2');unicode-range:U+0100-02BA,U+1E00-1E9F,U+2C60-2C7F}
+@font-face{font-family:'Instrument Serif';font-style:normal;font-weight:400;font-display:swap;
+  src:url(fonts/instrument-n-latin.woff2) format('woff2');
+  unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+20AC,U+2122,U+2212,U+FEFF,U+FFFD}
+@font-face{font-family:'Instrument Serif';font-style:italic;font-weight:400;font-display:swap;
+  src:url(fonts/instrument-i-latinext.woff2) format('woff2');unicode-range:U+0100-02BA,U+1E00-1E9F,U+2C60-2C7F}
+@font-face{font-family:'Instrument Serif';font-style:italic;font-weight:400;font-display:swap;
+  src:url(fonts/instrument-i-latin.woff2) format('woff2');
+  unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+20AC,U+2122,U+2212,U+FEFF,U+FFFD}
+@font-face{font-family:Azeret;font-style:normal;font-weight:400;font-display:swap;
+  src:url(fonts/azeret-n-latinext.woff2) format('woff2');unicode-range:U+0100-02BA,U+1E00-1E9F,U+2C60-2C7F}
+@font-face{font-family:Azeret;font-style:normal;font-weight:400;font-display:swap;
+  src:url(fonts/azeret-n-latin.woff2) format('woff2');
+  unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+20AC,U+2122,U+2212,U+FEFF,U+FFFD}
+
+/* ======================================================= AMBIENT ENGINE */
+/* Registered so the browser genuinely interpolates the colour rather than
+   snapping between values. Unsupporting browsers snap; nothing breaks. */
+@property --amb-1{syntax:'<color>';inherits:true;initial-value:#E5A56A}
+@property --amb-2{syntax:'<color>';inherits:true;initial-value:#E9A0B8}
+
+/* =============================================================== TOKENS */
 :root{
-  --c-ground:#171A10; --c-ground-2:#1E2216; --c-rule:#2C3223;
-  --c-ink:#D6DBC2; --c-ink-dim:#8E9880;
-  --c-accent:#C8912F; --c-accent-dim:#6B4E1C;
+  --ink-0:#08090B; --ink-1:#101216; --ink-2:#181B20;
+  --rule:#262A31; --bone:#E8E6E1; --mute:#8B9199; --faint:#545A62;
 
-  /* GRADE B — REAL. Crushed blue-steel, arc specular. */
-  --r-ground:#0A0E13; --r-ground-2:#10161D; --r-rule:#1E2932;
-  --r-ink:#C3D2DC; --r-ink-dim:#7E929E; --r-accent:#E6F2FF;
+  --terms-bg:#F2F1EC; --terms-ink:#0B0C0E; --terms-rule:#C6C3BA;
 
-  /* Cross-grade semantics — identical hex in both worlds. */
-  --oxide:#B8452E;
-  --void:#ECEFE8; --void-ink:#10140C; --void-rule:#C7CDC0;
+  --mur-bg:#070A09; --mur-trace:#6FE6A0; --mur-dim:#1E5A3E;
+  --mur-clip:#FF6B4A; --mur-alt:#7FA8FF;
 
-  --t:0;
-  --ground:  color-mix(in oklab, var(--c-ground)   calc((1 - var(--t)) * 100%), var(--r-ground));
-  --ground-2:color-mix(in oklab, var(--c-ground-2) calc((1 - var(--t)) * 100%), var(--r-ground-2));
-  --rule:    color-mix(in oklab, var(--c-rule)     calc((1 - var(--t)) * 100%), var(--r-rule));
-  --ink:     color-mix(in oklab, var(--c-ink)      calc((1 - var(--t)) * 100%), var(--r-ink));
-  --ink-dim: color-mix(in oklab, var(--c-ink-dim)  calc((1 - var(--t)) * 100%), var(--r-ink-dim));
-  --accent:  color-mix(in oklab, var(--c-accent)   calc((1 - var(--t)) * 100%), var(--r-accent));
+  --steel-bg:#0A0F13; --steel-ink:#C3D2D9; --steel-rule:#1C2830;
+  --steel-flow:#7FA8FF; --steel-fact:#E8E6E1;
 
-  --ease-wipe:cubic-bezier(.16,1,.3,1);
-  --dur-wipe:220ms; --dur-decay:420ms;
-  --gutter:clamp(20px,3.2vw,44px);
-  --max:1320px;
+  --page-bg:var(--ink-0); --page-ink:var(--bone);
 
-  --fs-name:clamp(56px,11.2vw,148px);
-  --fs-title:clamp(34px,5.4vw,76px);
-  --fs-figure:clamp(32px,4.4vw,62px);
-  --fs-seam:clamp(22px,3vw,38px);
-  --fs-lead:clamp(18px,1.55vw,24px);
-  --fs-body:clamp(15px,calc(0.45vw + 13.3px),17px);
-  --fs-body-s:15px; --fs-label:13px; --fs-mono:14px; --fs-token:12px;
+  --t-tick:10px; --t-slug:11px; --t-data:13px;
+  --t-body:clamp(15px,14px + .25vw,16.5px);
+  --t-lead:clamp(17px,15px + .55vw,21px);
+  --t-sub:clamp(22px,1.4vw + 17px,28px);
+  --t-sect:clamp(34px,4.4vw,62px);
+  --t-name:clamp(44px,9.4vw,108px);
+  --t-speech:clamp(30px,6.2vw,68px);
+
+  --gut:clamp(16px,4vw,56px);
+  --bar-h:52px;
+  --plate-w:calc(min(56vh,600px) * .4962);  /* 922/1858 — width driven, so the whole screen always fits */
+  --ease:cubic-bezier(.16,1,.3,1);
 }
-@supports not (color: color-mix(in oklab,#000 50%,#fff)){
-  :root{--ground:var(--c-ground);--ground-2:var(--c-ground-2);--rule:var(--c-rule);
-        --ink:var(--c-ink);--ink-dim:var(--c-ink-dim);--accent:var(--c-accent);}
-  html[data-grade="real"]{--ground:var(--r-ground);--ground-2:var(--r-ground-2);--rule:var(--r-rule);
-        --ink:var(--r-ink);--ink-dim:var(--r-ink-dim);--accent:var(--r-accent);}
-}
-html[data-grade="void"]{--ground:var(--void);--ground-2:#E2E6DC;--ink:var(--void-ink);
-  --rule:var(--void-rule);--ink-dim:#5A6153;--accent:#8A5A12;}
 
-*{box-sizing:border-box}
-html{scroll-behavior:smooth}
-@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+*,*::before,*::after{box-sizing:border-box}
 
-/* Ground lives on <html> so the fixed rain canvas at z-index:-1 paints ABOVE it
-   but still behind every scrap of body content. A background on body would
-   propagate to the viewport and bury the canvas. */
-html{background:var(--ground);transition:background 160ms linear}
+html{background:var(--ink-0);-webkit-text-size-adjust:100%}
 body{
-  margin:0; background:transparent; color:var(--ink);
-  font-family:"IBM Plex Sans",system-ui,sans-serif; font-size:var(--fs-body); line-height:1.55;
+  margin:0; overflow-x:clip;
+  background:var(--page-bg); color:var(--page-ink);
+  font-family:Archivo,'Helvetica Neue',Arial,sans-serif;
+  font-size:var(--t-body); line-height:1.65;
+  font-variation-settings:'wdth' 100,'wght' 400;
   -webkit-font-smoothing:antialiased;
-  transition:background 160ms linear,color 160ms linear;
-  overflow-x:hidden;
+  transition:background-color 420ms cubic-bezier(.4,0,.2,1),color 420ms cubic-bezier(.4,0,.2,1);
+  padding-bottom:calc(var(--bar-h) + env(safe-area-inset-bottom,0px));
 }
-/* The green world is airless. The canvas is tied to the grade ramp, so it is invisible
-   above the seam, materialises across it, and is cut off entirely in the white construct. */
-#rain{position:fixed;inset:0;z-index:-1;pointer-events:none;display:block;opacity:var(--t)}
-html[data-grade="void"] #rain{opacity:0}
+img{max-width:100%;display:block;image-rendering:auto}
+[hidden]{display:none!important}
+::selection{background:var(--mur-trace);color:var(--ink-0)}
+a{color:inherit}
+button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer}
 
-.wrap{max-width:var(--max);margin:0 auto;padding-left:var(--gutter);padding-right:var(--gutter)}
+:focus-visible{outline:2px solid var(--mur-trace);outline-offset:3px;border-radius:2px}
+.s01 :focus-visible{outline-color:var(--terms-ink);box-shadow:0 0 0 5px var(--terms-bg)}
+
+.skip{position:absolute;left:-9999px;top:0;z-index:100;padding:12px 18px;background:var(--bone);color:var(--ink-0)}
+.skip:focus{left:8px;top:8px}
+
+/* ================================================================= GRID */
+.wrap{width:100%;max-width:1340px;margin-inline:auto;padding-inline:var(--gut)}
+.sec{padding-block:clamp(72px,11vh,136px);position:relative}
 .grid{display:grid;grid-template-columns:repeat(12,1fr);gap:24px}
-@media (max-width:900px){.grid{grid-template-columns:repeat(6,1fr);gap:16px}}
 
-a{color:var(--accent);text-underline-offset:3px;text-decoration-thickness:1px}
-a:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
-h1,h2,h3{margin:0;font-weight:800;font-family:"Big Shoulders Display","Arial Narrow",sans-serif}
-p{margin:0}
-.mono{font-family:"IBM Plex Mono",ui-monospace,monospace}
-.label{font-size:var(--fs-label);letter-spacing:.13em;text-transform:uppercase;color:var(--ink-dim);
-  font-family:"IBM Plex Mono",monospace}
-.tok{font-family:"IBM Plex Mono",monospace;font-size:var(--fs-token);letter-spacing:.16em;
-  text-transform:uppercase;color:var(--oxide)}
-.fig{font-family:"Big Shoulders Display","Arial Narrow",sans-serif;font-weight:800;
-  font-size:var(--fs-figure);line-height:.92;letter-spacing:-.012em;font-variant-numeric:tabular-nums}
-.sect-no{font-family:"IBM Plex Mono",monospace;font-size:var(--fs-token);letter-spacing:.16em;
-  color:var(--ink-dim);display:block;margin-bottom:10px}
-.sect-title{font-size:var(--fs-title);line-height:.9;letter-spacing:-.016em}
-.prose{max-width:62ch}
-.prose + .prose{margin-top:1.1em}
+/* =========================================================== TYPE ROLES */
+.tick{font-family:Azeret,ui-monospace,Menlo,Consolas,monospace;font-size:var(--t-tick);
+  letter-spacing:.18em;text-transform:uppercase;color:var(--amb-1);margin:0 0 1.4em;
+  transition:color 420ms cubic-bezier(.4,0,.2,1)}
+.slug{font-family:Azeret,ui-monospace,Menlo,Consolas,monospace;font-size:var(--t-slug);
+  letter-spacing:.10em;text-transform:uppercase;color:var(--mute);margin:0}
+.data,code{font-family:Azeret,ui-monospace,Menlo,Consolas,monospace;font-size:var(--t-data);line-height:1.6}
+.lead{font-size:var(--t-lead);line-height:1.45;font-variation-settings:'wdth' 104,'wght' 500;margin:0 0 1em;max-width:56ch}
+p{margin:0 0 1em;max-width:62ch}
 
-/* ---------------- rail ---------------- */
-.rail{position:sticky;top:0;z-index:40;background:var(--ground);
-  border-bottom:1px solid var(--rule);transition:background 160ms linear}
-.rail__in{max-width:var(--max);margin:0 auto;padding:0 var(--gutter);min-height:44px;
-  display:flex;align-items:center;gap:22px}
-.rail__name{font-family:"Big Shoulders Display","Arial Narrow",sans-serif;font-weight:500;
-  font-size:16px;letter-spacing:.02em;white-space:nowrap;color:var(--ink)}
-.ticks{display:flex;gap:14px;overflow-x:auto;scrollbar-width:none;flex:1}
-.ticks::-webkit-scrollbar{display:none}
-.ticks a{font-family:"IBM Plex Mono",monospace;font-size:var(--fs-label);color:var(--ink-dim);
-  text-decoration:none;padding:12px 0;border-bottom:2px solid transparent;white-space:nowrap}
-.ticks a[aria-current="true"]{color:var(--ink);border-bottom-color:var(--accent)}
-.rail__cta{display:flex;gap:16px;align-items:center;font-size:var(--fs-body-s);white-space:nowrap}
-.rail__cta a{text-decoration:none;color:var(--ink-dim)}
-.rail__cta a.mail{color:var(--accent)}
-.rail__cta a:hover{color:var(--ink)}
+/* Section titles power on: the width axis plus tracking plus lift.
+   Every component of that is well over 8px of visible change. */
+.sect-title{
+  font-size:var(--t-sect);line-height:1.02;margin:0 0 .35em;
+  font-variation-settings:'wdth' 88,'wght' 700;letter-spacing:.02em;
+  padding-block-start:.12em;
+  transform:translateY(28px);opacity:0;
+  transition:transform 420ms var(--ease),opacity 420ms var(--ease),
+             font-variation-settings 420ms var(--ease),letter-spacing 420ms var(--ease);
+}
+.lit .sect-title{transform:none;opacity:1;font-variation-settings:'wdth' 115,'wght' 700;letter-spacing:-.02em}
+
+/* ============================================================= §00 HERO */
+.hero{min-height:100svh;display:flex;align-items:center;padding-block:clamp(56px,9vh,110px)}
+.hero .grid{width:100%;align-items:center}
+.hero-txt{grid-column:1/7}
+.hero-plate{grid-column:8/13;--plate-w:calc(min(62vh,620px) * .4962)}
+.name{
+  font-size:var(--t-name);line-height:.92;margin:.22em 0 .3em;
+  font-variation-settings:'wdth' 118,'wght' 800;letter-spacing:-.025em;
+  display:flex;flex-direction:column;
+}
+.name span{padding-block-start:.12em}   /* the caron on Š needs its own room */
+.keywords{margin:1.5em 0 1.9em;display:flex;flex-direction:column;gap:.55em}
+.keywords span{color:var(--mute);font-family:Azeret,ui-monospace,monospace;font-size:var(--t-slug);
+  letter-spacing:.1em;text-transform:uppercase;line-height:1.55}
+.cta{display:flex;gap:12px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:0 22px;
+  font-family:Azeret,ui-monospace,monospace;font-size:var(--t-slug);letter-spacing:.12em;text-transform:uppercase;
+  border-radius:2px;text-decoration:none;
+  transition:transform 180ms var(--ease),background 180ms,color 180ms,border-color 180ms}
+.btn-fill{background:var(--bone);color:var(--ink-0)}
+.btn-line{border:2px solid var(--rule);color:var(--bone)}
+.btn:hover,.btn:focus-visible{transform:translateY(-3px)}
+.btn-line:hover,.btn-line:focus-visible{border-color:var(--amb-1)}
+
+/* ============================================================ THE PLATE */
+/* A bench rig, not a glossy phone mockup. Width is derived from the target
+   height through the real aspect ratio, so the whole screen always shows. */
+.plate{margin:0;max-width:min(100%,var(--plate-w))}
+.plate-rig{position:relative;border:1px solid var(--rule);border-radius:14px;background:var(--ink-1);
+  padding:10px;isolation:isolate}
+.plate-rig::before{content:'';position:absolute;left:50%;top:4px;width:46px;height:1px;
+  background:var(--rule);transform:translateX(-50%)}
+.plate-rig::after{content:'';position:absolute;left:12px;bottom:5px;width:3px;height:1px;
+  background:var(--faint);box-shadow:5px 0 0 var(--faint)}
+.screen{position:relative;border:3px solid #070809;border-radius:14px;overflow:hidden;
+  aspect-ratio:922/1858;background:#070809;width:100%}
+.screen img{width:100%;height:100%;object-fit:cover;border-radius:11px}
+.plate-slug{margin-top:10px;font-family:Azeret,ui-monospace,monospace;font-size:10px;
+  letter-spacing:.06em;text-transform:uppercase;color:var(--mute);line-height:1.5}
+.plate-slug b{font-weight:400;color:var(--amb-1);transition:color 420ms cubic-bezier(.4,0,.2,1)}
+.plate-slug .dim{color:var(--faint)}
+
+/* Painted bloom — never a blurred duplicate of the image. */
+.bloom{position:absolute;inset:-16% -14%;z-index:-1;pointer-events:none;border-radius:50%;
+  background:radial-gradient(60% 45% at 50% 38%,
+    color-mix(in oklab,var(--amb-1) 30%,transparent) 0%,
+    color-mix(in oklab,var(--amb-2) 18%,transparent) 46%,
+    transparent 72%);
+  animation:breathe 6.5s ease-in-out infinite}
+@keyframes breathe{0%,100%{opacity:.82}50%{opacity:1}}
+
+/* ========================================================== ANNOTATIONS */
+/* A dot pinned at a percentage inside the image's own aspect box, a short
+   connector, and the caption locked to the same row beside it. Percentages
+   scale exactly at every width, so nothing drifts off its target. */
+.plate-wrap{display:grid;grid-template-columns:min(100%,var(--plate-w)) minmax(0,1fr);
+  gap:clamp(20px,2.6vw,38px);align-items:start}
+.dot{position:absolute;left:var(--x);top:var(--y);width:22px;height:22px;margin:-11px 0 0 -11px;
+  border-radius:999px;display:grid;place-items:center;z-index:3;
+  font-family:Azeret,ui-monospace,monospace;font-size:9px;color:var(--ink-0);
+  background:var(--amb-1);box-shadow:0 0 0 3px color-mix(in oklab,var(--ink-0) 62%,transparent);
+  transform:scale(0);transition:transform 320ms var(--ease)}
+.lit .dot{transform:scale(1)}
+.lit .dot:nth-of-type(2){transition-delay:90ms}
+.lit .dot:nth-of-type(3){transition-delay:180ms}
+.notes{display:flex;flex-direction:column;gap:18px;padding-block-start:4px;min-width:0}
+.note{position:relative;padding-left:28px;opacity:0;transform:translateX(-12px);
+  transition:opacity 340ms var(--ease),transform 340ms var(--ease)}
+.lit .note{opacity:1;transform:none}
+.lit .note:nth-child(2){transition-delay:90ms}
+.lit .note:nth-child(3){transition-delay:180ms}
+.note-n{position:absolute;left:0;top:1px;font-family:Azeret,ui-monospace,monospace;font-size:10px;
+  color:var(--amb-1);letter-spacing:.08em;transition:color 420ms cubic-bezier(.4,0,.2,1)}
+.note::before{content:'';position:absolute;left:16px;top:9px;width:0;height:1px;background:var(--rule);
+  transition:width 420ms var(--ease) 140ms}
+.lit .note::before{width:8px}
+.note p{font-family:Azeret,ui-monospace,monospace;font-size:var(--t-slug);letter-spacing:.01em;
+  line-height:1.7;color:var(--mute);margin:0;max-width:46ch}
+.note p em{font-style:normal;color:var(--bone)}
+.note p code{font-size:inherit;color:var(--bone)}
+
+/* ======================================================= §01 THE TERMS */
+.s01{background:var(--terms-bg);color:var(--terms-ink)}
+.s01 .tick{color:var(--terms-ink);opacity:.55}
+.terms-grid{display:grid;grid-template-columns:repeat(12,1fr);gap:clamp(24px,3vw,48px);align-items:start}
+.terms-txt{grid-column:1/6}
+/* A real patch bay: sources on the left, destinations on the right, and the
+   cables are measured from the actual boxes at runtime — never hand-authored,
+   so they stay connected at every width. */
+.patchbay{grid-column:6/13;position:relative;
+  display:grid;grid-template-columns:auto minmax(0,1fr);gap:clamp(40px,5vw,78px);align-items:center}
+.rails{position:relative;z-index:1;display:flex;flex-direction:column;gap:12px}
+.rail{position:relative;z-index:1;border:1px solid var(--terms-rule);border-radius:2px;
+  padding:15px 17px;background:var(--terms-bg);text-align:left;width:100%;color:inherit;
+  transform:translateY(40px);opacity:0;
+  transition:transform 380ms var(--ease),opacity 380ms var(--ease),background 200ms}
+.lit .rail{transform:none;opacity:1}
+.lit .rail:nth-child(2){transition-delay:60ms}
+.lit .rail:nth-child(3){transition-delay:120ms}
+.rail-owned{background:var(--terms-ink);color:var(--terms-bg);border-color:var(--terms-ink);padding:21px 17px}
+.rail h3{margin:0 0 .6em;font-family:Azeret,ui-monospace,monospace;font-size:var(--t-slug);
+  letter-spacing:.12em;text-transform:uppercase;font-weight:400}
+.rail-owned h3{font-size:var(--t-data)}
+.rail ul{margin:0;padding:0;list-style:none;display:flex;flex-wrap:wrap;gap:3px 16px}
+.rail li{font-family:Azeret,ui-monospace,monospace;font-size:var(--t-data);opacity:.74;
+  position:relative;padding-left:12px}
+.rail li::before{content:'';position:absolute;left:2px;top:.66em;width:3px;height:3px;
+  background:currentColor;opacity:.55}
+.rail-owned li{opacity:.94}
+.chips{display:flex;flex-direction:column;gap:9px;align-items:stretch}
+.chip{position:relative;z-index:1;border:1px solid var(--terms-rule);border-radius:2px;padding:9px 13px;
+  background:var(--terms-bg);color:inherit;text-align:left;
+  font-family:Azeret,ui-monospace,monospace;font-size:var(--t-slug);letter-spacing:.08em;text-transform:uppercase;
+  transition:background 180ms,color 180ms,border-color 180ms}
+.chip[aria-pressed="true"]{background:var(--terms-ink);color:var(--terms-bg);border-color:var(--terms-ink)}
+/* the cable layer floats over the two columns; every path is generated from
+   measured geometry in JS, so nothing can drift out of alignment */
+/* the cable layer sits BEHIND the panels, so a lead running to a lower rail
+   disappears behind the one above it — which is what a real patch bay does */
+.cables{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:0;overflow:visible}
+.cables path{fill:none;stroke:var(--terms-ink);stroke-width:1.25;opacity:.42;
+  transition:opacity 220ms,stroke-width 220ms}
+.cables path.dim{opacity:.1}
+.cables path.hot{opacity:1;stroke-width:2.2}
+.cables circle{fill:var(--terms-ink);opacity:.5}
+
+/* ========================================================== §02 MURMUR */
+.s02{background:var(--mur-bg)}
+.rack{border:1px solid var(--rule);border-radius:2px;background:#050706;overflow:hidden}
+.chain{display:flex;flex-wrap:wrap;gap:1px;background:var(--rule)}
+.stage{flex:1 1 96px;background:#080C0A;padding:13px 9px;min-width:0;position:relative;
+  transition:opacity 260ms}
+.stage.alt{box-shadow:inset 0 2px 0 -1px var(--mur-alt)}
+.led{display:block;width:8px;height:8px;border-radius:999px;background:var(--mur-dim);margin-bottom:9px;
+  transition:background 160ms,box-shadow 160ms}
+.stage.on .led{background:var(--mur-trace);box-shadow:0 0 9px var(--mur-trace)}
+.stage.alt.on .led{background:var(--mur-alt);box-shadow:0 0 9px var(--mur-alt)}
+.stage h4{margin:0 0 4px;font-family:Azeret,ui-monospace,monospace;font-size:var(--t-slug);
+  letter-spacing:.07em;text-transform:uppercase;font-weight:400;color:var(--bone)}
+.stage small{display:block;font-family:Azeret,ui-monospace,monospace;font-size:10px;color:var(--mute);line-height:1.55}
+.scopes{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--rule)}
+.scope{background:var(--mur-bg);padding:12px}
+/* height is declared up front so the scopes never resize when JS sizes the
+   backing store — a canvas defaults to 300x150 and would shift the page */
+.scope canvas{width:100%;height:260px;display:block;background:var(--mur-bg)}
+.scope .slug{margin-bottom:8px;display:flex;justify-content:space-between;gap:8px}
+.readout{color:var(--mur-trace)}
+.ptt-row{display:flex;gap:12px;align-items:stretch;padding:14px;border-top:1px solid var(--rule);flex-wrap:wrap}
+.ptt{flex:0 0 auto;min-height:52px;padding:0 24px;border:2px solid var(--mur-trace);border-radius:2px;
+  color:var(--mur-trace);background:#0A1310;box-shadow:4px 4px 0 #0C3524;
+  font-family:Azeret,ui-monospace,monospace;font-size:var(--t-slug);letter-spacing:.14em;text-transform:uppercase;
+  transition:transform 90ms,box-shadow 90ms,background 90ms;touch-action:none;-webkit-user-select:none;user-select:none}
+.ptt:active,.ptt.armed{transform:translate(4px,4px);box-shadow:0 0 0 #0C3524}
+.ptt.armed{background:var(--mur-trace);color:#06130D}
+.toggle{border:1px solid var(--rule);border-radius:2px;padding:0 16px;min-height:52px;
+  font-family:Azeret,ui-monospace,monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--mute);
+  transition:border-color 180ms,color 180ms}
+.toggle[aria-pressed="true"]{border-color:var(--mur-alt);color:var(--mur-alt)}
+.ptt-note{flex:1 1 240px;font-family:Azeret,ui-monospace,monospace;font-size:10px;color:var(--mute);
+  line-height:1.65;align-self:center;margin:0;max-width:none}
+.cuda{margin-top:16px;border:1px solid var(--rule);border-left:2px solid var(--mur-trace);
+  padding:11px 13px;font-family:Azeret,ui-monospace,monospace;font-size:10px;color:var(--mute);line-height:1.65}
+
+/* ========================================================= §03/§05 RAILS */
+.rail-track{display:flex;gap:clamp(20px,3vw,44px);overflow-x:auto;scroll-snap-type:x mandatory;
+  touch-action:pan-y;             /* never steal the vertical thumb */
+  padding-block:8px 22px;
+  scrollbar-width:thin;scrollbar-color:var(--rule) transparent}
+.rail-track::-webkit-scrollbar{height:3px}
+.rail-track::-webkit-scrollbar-thumb{background:var(--rule);border-radius:2px}
+.rail-track::-webkit-scrollbar-track{background:transparent}
+.rail-hint{margin:2px 0 0;font-family:Azeret,ui-monospace,monospace;font-size:10px;
+  letter-spacing:.14em;text-transform:uppercase;color:var(--faint)}
+.rail-item{flex:0 0 auto;width:min(88vw,720px);scroll-snap-align:center}
+
+/* =========================================================== LIFTED HUD */
+/* Eren's own HUD, rebuilt in live DOM on the bench above the plate. */
+.hud{border:2px solid #C79A3B;border-radius:2px;background:#16110D;box-shadow:3px 3px 0 #AA6957;
+  padding:8px 10px;display:flex;align-items:center;gap:10px;margin-bottom:12px;position:relative;flex-wrap:wrap;
+  max-width:min(100%,var(--plate-w))}
+.hud::before,.hud::after{content:'';position:absolute;width:2px;height:2px;background:#E7C15E}
+.hud::before{left:3px;top:3px}
+.hud::after{right:3px;bottom:3px}
+.hud-lvl{font-family:Azeret,ui-monospace,monospace;font-size:9px;color:#E7C15E;
+  border:1px solid #C79A3B;border-radius:999px;width:28px;height:28px;display:grid;place-items:center;flex:0 0 auto;line-height:1}
+.hud-xp{flex:1 1 74px;min-width:60px}
+.hud-xp i{display:block;height:7px;background:#2A1F16;border:1px solid #6E5426;overflow:hidden}
+.hud-xp i b{display:block;height:100%;background:#E7C15E;width:78%}
+.hud-xp span{display:block;font-family:Azeret,ui-monospace,monospace;font-size:8px;color:#C79A3B;letter-spacing:.05em;margin-bottom:2px}
+.gauges{display:flex;gap:5px;flex:0 0 auto}
+.gauge{width:32px;text-align:center;padding:0}
+.gauge i{display:block;height:7px;background:#2A1F16;border:1px solid #6E5426;overflow:hidden}
+.gauge i b{display:block;height:100%;background:#E7857F;transition:width 300ms steps(12)}
+.gauge span{display:block;font-family:Azeret,ui-monospace,monospace;font-size:8px;color:#9C8358;letter-spacing:.03em;margin-top:2px}
+.toast{position:absolute;right:10px;top:-13px;font-family:Azeret,ui-monospace,monospace;font-size:9px;
+  color:#E7C15E;opacity:0}
+.toast.go{animation:pop 900ms steps(1) forwards}
+@keyframes pop{0%{opacity:1;transform:translateY(0)}99%{opacity:1;transform:translateY(-11px)}100%{opacity:0}}
+
+/* =============================================================== SPEECH */
+.speech{margin:clamp(40px,7vh,86px) 0 0}
+.speech q{display:block;quotes:none;font-family:'Instrument Serif',Georgia,serif;font-style:italic;
+  font-size:var(--t-speech);line-height:1.04;letter-spacing:-.015em;color:var(--bone);
+  padding-block-start:.1em;max-width:14em}
+.speech .two{display:block;font-size:.52em;margin-top:.34em;opacity:0;transition:opacity 420ms}
+.speech.done .two{opacity:1}
+.caret{color:var(--mur-trace);animation:blink 530ms steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+.speech-src{margin-top:20px;font-family:Azeret,ui-monospace,monospace;font-size:var(--t-slug);
+  letter-spacing:.1em;text-transform:uppercase;color:var(--mute);max-width:62ch}
+
+/* ======================================================== §04 COMTRADE */
+.s04{background:var(--steel-bg);color:var(--steel-ink)}
+.s04 .sect-title{color:var(--steel-fact)}
+.schema-scroll{overflow-x:auto;padding-bottom:10px}
+.schema{min-width:560px;width:100%;height:auto;display:block}
+.schema .box{fill:#0D161C;stroke:var(--steel-rule);stroke-width:1}
+.schema .fact{fill:#111C22;stroke:var(--steel-fact);stroke-width:1.5}
+.schema text{font-family:Azeret,ui-monospace,monospace;fill:var(--steel-ink)}
+.schema .t-h{font-size:12px;fill:var(--steel-fact);letter-spacing:.07em}
+.schema .t-s{font-size:9.5px;fill:#7C8F99}
+.schema .pk{fill:var(--steel-flow)}
+.schema .join{stroke:#2E4250;stroke-width:1;fill:none}
+.sql{background:#070C10;border:1px solid var(--steel-rule);border-radius:2px;padding:15px;overflow-x:auto;margin:18px 0 0}
+.sql code{color:#93A7B2;white-space:pre;display:block;font-size:12px;line-height:1.75}
+.sql .k{color:#7FA8FF}.sql .f{color:var(--steel-fact)}.sql .s{color:#8FBF9F}.sql .c{color:#4A5C66}
+.ssis{display:flex;gap:1px;background:var(--steel-rule);border:1px solid var(--steel-rule);margin:20px 0 0}
+.ssis div{flex:1;background:#0C141A;padding:10px 6px;text-align:center;
+  font-family:Azeret,ui-monospace,monospace;font-size:9px;letter-spacing:.05em;color:#6B7C86;text-transform:uppercase;
+  transition:color 200ms,background 200ms}
+.ssis div.on{color:var(--steel-fact);background:#13212A}
+
+/* ========================================================= §05 OUTRANK */
+.tarot{display:flex;gap:14px;margin-top:12px;perspective:900px}
+.card{width:120px;aspect-ratio:1/1.62;position:relative;transform-style:preserve-3d;flex:0 0 auto;
+  transition:transform 520ms var(--ease);border-radius:6px}
+.card.flip{transform:rotateY(180deg)}
+.card .f,.card .b{position:absolute;inset:0;backface-visibility:hidden;border-radius:6px;overflow:hidden;
+  border:1px solid var(--rule)}
+.card .f{background-size:cover;background-position:center}
+.card .b{transform:rotateY(180deg);background:var(--ink-2);padding:11px;display:flex;flex-direction:column;
+  justify-content:flex-end;gap:5px}
+.card .b span{font-family:Azeret,ui-monospace,monospace;font-size:9px;letter-spacing:.05em;color:var(--mute);line-height:1.55}
+.card .b span:first-child{color:var(--bone)}
+.card .glare{position:absolute;inset:0;border-radius:6px;pointer-events:none;backface-visibility:hidden;
+  background:linear-gradient(18deg,transparent 42%,rgba(255,255,255,.26) 50%,transparent 58%);
+  background-size:280% 100%;background-position:130% 0;transition:background-position 620ms linear}
+.card.flip .glare{background-position:-70% 0}
+
+/* ========================================================= §06 TAKE LOG */
+.log{width:100%;border-collapse:collapse;font-family:Azeret,ui-monospace,monospace;font-size:var(--t-data)}
+.log th,.log td{text-align:left;padding:13px 16px 13px 0;border-bottom:1px solid var(--rule);vertical-align:top}
+.log th{color:var(--mute);font-weight:400;font-size:10px;letter-spacing:.12em;text-transform:uppercase}
+.log td{color:var(--bone)}
+.log td.s{color:var(--mute)}
+.log td.h{color:var(--mur-trace);text-align:center;width:54px}
+.log tbody tr{opacity:0;transform:translateY(14px);transition:opacity 340ms var(--ease),transform 340ms var(--ease)}
+.lit .log tbody tr{opacity:1;transform:none}
+.lit .log tbody tr:nth-child(2){transition-delay:45ms}
+.lit .log tbody tr:nth-child(3){transition-delay:90ms}
+.lit .log tbody tr:nth-child(4){transition-delay:135ms}
+
+/* ============================================================= §07 END */
+.outs{display:flex;flex-direction:column;align-items:flex-start;gap:8px;
+  margin:0 0 clamp(36px,6vh,64px);padding:0;list-style:none}
+.outs a{display:inline-block;max-width:100%;overflow-wrap:anywhere;
+  font-size:clamp(17px,4.4vw,28px);font-variation-settings:'wdth' 112,'wght' 700;
+  text-decoration:none;border-bottom:2px solid var(--rule);padding-bottom:3px;
+  transition:border-color 200ms,border-bottom-width 200ms,transform 200ms var(--ease)}
+.outs a:hover,.outs a:focus-visible{border-bottom-width:4px;border-color:var(--amb-1);transform:translateX(6px)}
+.colophon{font-family:Azeret,ui-monospace,monospace;font-size:var(--t-slug);letter-spacing:.09em;
+  text-transform:uppercase;color:var(--mute);line-height:2.1;margin:0;max-width:76ch}
+
+/* ====================================================== BENCH INDEX BAR */
+.bench{position:fixed;left:0;right:0;bottom:0;z-index:40;
+  height:calc(var(--bar-h) + env(safe-area-inset-bottom,0px));padding-bottom:env(safe-area-inset-bottom,0px);
+  background:color-mix(in oklab,var(--ink-1) 92%,transparent);backdrop-filter:blur(10px);
+  border-top:1px solid var(--rule);display:flex;align-items:center;gap:10px;
+  padding-inline:clamp(10px,2vw,20px);
+  transform:translateY(54px);transition:transform 300ms var(--ease) 120ms}
+.ready .bench{transform:none}
+.bench-prog{position:absolute;left:0;top:-1px;height:2px;background:var(--amb-1);width:0;
+  transition:background-color 420ms cubic-bezier(.4,0,.2,1)}
+.slivers{display:flex;gap:6px;flex:1 1 auto;min-width:0;overflow:hidden;margin:0;padding:0;list-style:none}
+.sliver{flex:0 0 auto;width:34px;height:40px;border-radius:3px;overflow:hidden;border:1px solid var(--rule);
+  display:block;position:relative;filter:brightness(.55);
+  transition:filter 220ms,border-color 220ms,transform 220ms}
+.sliver img{width:100%;height:100%;object-fit:cover;object-position:center 30%}
+.sliver[aria-current="true"]{filter:brightness(1);border-color:var(--amb-1)}
+.sliver:hover,.sliver:focus-visible{filter:brightness(1);transform:translateY(-3px)}
+.sliver b{position:absolute;left:50%;bottom:calc(100% + 9px);transform:translateX(-50%);
+  background:var(--ink-2);border:1px solid var(--rule);border-radius:2px;padding:4px 8px;white-space:nowrap;
+  font-family:Azeret,ui-monospace,monospace;font-size:9px;letter-spacing:.07em;text-transform:uppercase;
+  color:var(--bone);opacity:0;pointer-events:none;transition:opacity 160ms}
+.sliver:hover b,.sliver:focus-visible b{opacity:1}
+.bench-cta{display:flex;gap:8px;flex:0 0 auto}
+.bench-cta a{min-height:32px;padding:0 14px;display:inline-flex;align-items:center;border-radius:2px;
+  border:1px solid var(--rule);text-decoration:none;
+  font-family:Azeret,ui-monospace,monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase}
+.bench-cta a.fill{background:var(--bone);color:var(--ink-0);border-color:var(--bone)}
+.index-btn{display:none;min-height:32px;padding:0 13px;border:1px solid var(--rule);border-radius:2px;
+  align-items:center;text-decoration:none;
+  font-family:Azeret,ui-monospace,monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase}
+
+/* ================================================================= PEEK */
+.peek{position:fixed;inset:0;z-index:60;display:none;place-items:center;
+  background:color-mix(in oklab,var(--ink-0) 90%,transparent);padding:clamp(12px,3vw,40px)}
+.peek.open{display:grid}
+.peek-fig{position:relative;margin:0;--plate-w:calc(min(84vh,860px) * .4962);max-width:min(92vw,470px)}
+.peek-close{position:absolute;right:0;top:-42px;min-height:34px;padding:0 13px;border:1px solid var(--rule);
+  border-radius:2px;font-family:Azeret,ui-monospace,monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase}
+.loupe{position:absolute;width:180px;height:180px;border-radius:999px;border:1px solid var(--bone);
+  pointer-events:none;display:none;z-index:5;
+  box-shadow:0 0 0 4px color-mix(in oklab,var(--ink-0) 70%,transparent)}
+.loupe.on{display:block}
+
+/* =========================================================== RESPONSIVE */
+@media (max-width:1100px){ .rail-item{width:min(90vw,640px)} }
 @media (max-width:900px){
-  .rail__in{flex-wrap:wrap;padding-block:6px;gap:8px 16px;min-height:68px}
-  .ticks{order:3;flex-basis:100%;gap:16px}
-  .ticks a{padding:6px 0}
-  .rail__cta{margin-left:auto}
+  .hero-txt,.hero-plate,.terms-txt,.patchbay{grid-column:1/13}
+  .hero .grid{row-gap:44px}
+  .hero-plate{--plate-w:calc(min(58vh,470px) * .4962)}
+  .rail-item{width:min(92vw,520px)}
+  .sec .grid > div[style*="grid-column"]{grid-column:1/13!important}
+}
+@media (max-width:720px){
+  /* The rails stack, but the argument survives: the chips sit in a row above
+     and Eren and Outrank still visibly send two cables each, one down into
+     DIRECTED and one up into OWNED. A plain vertical list would kill the whole
+     persuasive mechanism at exactly the width most recruiters meet it. */
+  .patchbay{grid-template-columns:1fr;gap:56px}
+  .chips{flex-direction:row;flex-wrap:wrap;gap:8px}
+  .chip{padding:7px 11px}
+  /* open the rail gaps so the leads running to the lower rails stay legible
+     between the panels instead of vanishing entirely behind the first one */
+  .rails{gap:24px}
+  .plate-wrap{grid-template-columns:1fr;gap:20px}
+  .notes{padding-block-start:0}
+  .note::before{display:none}        /* leaders drop; the numbered dots carry the link */
+  .note{padding-left:26px}
+  .scopes{grid-template-columns:1fr}
+  .scope canvas{height:160px}
+  .slivers{display:none}
+  .index-btn{display:inline-flex}
+  .bench-cta{flex:1 1 auto;justify-content:flex-end}
+  .rail-item{width:88vw}
+  :root{--plate-w:calc(min(64vh,470px) * .4962)}
+}
+@media (max-width:520px){
+  .stage{flex:1 1 100%}
+  .card{width:104px}
 }
 
-/* ---------------- 00 plate ---------------- */
-#s00{padding-block:clamp(28px,4vh,56px) clamp(40px,7vh,96px)}
-.pos{grid-column:1/7;font-size:var(--fs-body-s);color:var(--ink-dim);max-width:46ch;margin-bottom:14px}
-/* Two block lines rather than a <br>: at line-height .82 the caron on Š collides with
-   the descender line above it. Each line keeps the tight .82; the gap is added between
-   them, so the lockup stays tight and the diacritic still clears. */
-.name{grid-column:1/9;font-size:var(--fs-name);line-height:.82;letter-spacing:-.022em;
-  margin:0 0 26px;display:flex;flex-direction:column}
-.name span{display:block}
-.name span + span{margin-top:.12em}
-.claim{grid-column:1/8;font-size:var(--fs-lead);line-height:1.34;max-width:46ch;color:var(--ink)}
-.figs{grid-column:1/10;margin-top:46px;padding-top:18px;border-top:1px solid var(--rule);
-  display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
-.figs div p{font-size:var(--fs-label);letter-spacing:.06em;color:var(--ink-dim);margin-top:8px;
-  font-family:"IBM Plex Mono",monospace;line-height:1.35}
-.hook{grid-column:8/13;margin-top:46px;padding-top:18px;border-top:1px solid var(--c-accent);
-  font-size:var(--fs-lead);line-height:1.34;max-width:34ch}
-@media (max-width:900px){
-  .pos,.name,.claim,.figs,.hook{grid-column:1/-1}
-  .figs{grid-template-columns:1fr 1fr;gap:26px 20px;margin-top:34px}
-  .hook{margin-top:30px}
-}
-
-/* ---------------- 01 manifest ---------------- */
-#s01{padding-block:clamp(24px,3vh,40px)}
-.man{border-top:1px solid var(--rule);margin-top:14px}
-.man__head,.man__row{display:grid;grid-template-columns:34px 1.1fr 2.4fr 1.2fr 92px 96px;gap:16px;
-  align-items:baseline;padding:14px 8px;border-bottom:1px solid var(--rule)}
-.man__head span{font-size:var(--fs-label);letter-spacing:.13em;text-transform:uppercase;
-  color:var(--ink-dim);font-family:"IBM Plex Mono",monospace}
-.man__row{text-decoration:none;color:inherit;transition:background 120ms linear}
-.man__row:hover,.man__row:focus-within{background:var(--ground-2);border-bottom-color:var(--c-accent)}
-.man__n{font-family:"IBM Plex Mono",monospace;font-size:var(--fs-token);color:var(--ink-dim)}
-.man__name{font-family:"Big Shoulders Display","Arial Narrow",sans-serif;font-weight:500;
-  font-size:22px;letter-spacing:.01em;color:var(--ink)}
-.man__what,.man__scale{font-size:var(--fs-body-s);color:var(--ink-dim)}
-.man__auth{text-align:right}
-.man__state{font-family:"IBM Plex Mono",monospace;font-size:var(--fs-token);letter-spacing:.1em;
-  text-align:right;color:var(--ink-dim)}
-@media (max-width:900px){
-  .man__head{display:none}
-  .man__row{grid-template-columns:1fr auto;gap:6px 12px;padding:16px 4px}
-  .man__n{display:none}
-  .man__name{grid-column:1;grid-row:1}
-  .man__auth{grid-column:2;grid-row:1;text-align:right}
-  .man__what{grid-column:1/-1;grid-row:2}
-  .man__scale{grid-column:1;grid-row:3;font-size:var(--fs-label)}
-  .man__state{grid-column:2;grid-row:3}
-}
-
-/* ---------------- 02 construct ---------------- */
-#s02{padding-block:clamp(88px,13vh,190px)}
-.obj{margin-top:64px}
-.plate{background:var(--ground-2);border:1px solid var(--rule);padding:8px;position:relative}
-.plate img{display:block;width:100%;height:auto;filter:saturate(.88) contrast(1.02)}
-html[data-grade="real"] .plate img{filter:saturate(.72) contrast(1.1)}
-.plate__empty{aspect-ratio:16/10;display:flex;flex-direction:column;justify-content:flex-end;
-  padding:16px;border:1px dashed var(--rule);gap:4px}
-.plate__empty b{font-family:"IBM Plex Mono",monospace;font-size:var(--fs-token);letter-spacing:.14em;
-  color:var(--oxide);font-weight:400}
-.plate__empty span{font-family:"IBM Plex Mono",monospace;font-size:var(--fs-label);color:var(--ink-dim)}
-.obj__name{font-size:var(--fs-title);line-height:.9;letter-spacing:-.016em;margin-bottom:14px}
-.obj__head{font-size:var(--fs-lead);line-height:1.34;max-width:40ch;margin-bottom:20px;color:var(--ink)}
-.obj__stats{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;margin-top:26px;
-  padding-top:16px;border-top:1px solid var(--rule)}
-.obj__stats p{font-size:var(--fs-label);color:var(--ink-dim);margin-top:6px;
-  font-family:"IBM Plex Mono",monospace}
-.sub{margin-top:34px;padding-top:16px;border-top:1px solid var(--c-accent-dim);
-  transition:border-color 260ms linear}
-.sub__label{font-family:"IBM Plex Mono",monospace;font-size:var(--fs-token);letter-spacing:.16em;
-  color:var(--ink-dim);display:block;margin-bottom:12px;transition:color 260ms linear}
-.sub__body{color:var(--ink-dim);transition:color 260ms linear}
-.rendered{transition:opacity 260ms linear,filter 260ms linear}
-
-/* PULL FOCUS engaged: recede the rendered plane, promote the substrate. */
-html[data-focus="pulled"] .obj.is-band .rendered{opacity:.3;filter:brightness(.48) saturate(.32)}
-@media (pointer:fine) and (min-width:900px){
-  html[data-focus="pulled"] .obj.is-band .rendered{filter:blur(6px) brightness(.48) saturate(.32)}
-}
-html[data-focus="pulled"] .obj.is-band .sub{border-top-color:var(--accent)}
-html[data-focus="pulled"] .obj.is-band .sub__label{color:var(--oxide)}
-html[data-focus="pulled"] .obj.is-band .sub__body{color:var(--ink)}
-.sub.bloom .sub__body{color:var(--r-accent)}
-.sub.bloom{border-top-color:var(--r-accent)}
-.sub.bloom .sub__body,.sub.bloom{transition-duration:var(--dur-decay)}
-
-/* Eren + Outrank: deliberately different rhythms, never a repeated card. */
-.obj--eren .plate{grid-column:1/8}
-.obj--eren .obj__text{grid-column:8/13;padding-top:120px}
-.obj--eren .sub{grid-column:1/8}
-.obj--out .plate{grid-column:8/13;margin-top:-60px}
-.obj--out .obj__text{grid-column:1/7}
-.obj--out .sub{grid-column:1/7}
-.divider{border:0;border-top:1px solid var(--rule);margin:clamp(70px,11vh,150px) 0 0}
-@media (max-width:900px){
-  .obj--eren .plate,.obj--eren .obj__text,.obj--eren .sub,
-  .obj--out .plate,.obj--out .obj__text,.obj--out .sub{grid-column:1/-1;padding-top:0;margin-top:0}
-  .obj__text{margin-top:22px}
-  .plate{margin-inline:calc(var(--gutter) * -1);border-left:0;border-right:0}
-  .sub{border-top-color:var(--c-accent)}
-}
-
-/* ---------------- 03 seam ---------------- */
-#s03{min-height:88svh;padding-block:clamp(72px,10vh,120px);display:flex;flex-direction:column;
-  justify-content:center}
-.seam{max-width:900px}
-.seam p{font-size:var(--fs-seam);line-height:1.24;letter-spacing:-.008em;max-width:19ch;
-  color:var(--r-accent);margin-bottom:18px;clip-path:inset(0 0 100% 0);
-  transition:clip-path var(--dur-wipe) var(--ease-wipe)}
-.seam p.in{clip-path:inset(0 0 0 0)}
-.ledger{margin-top:56px;padding-top:18px;border-top:1px solid var(--r-accent);max-width:62ch}
-.ledger div{display:grid;grid-template-columns:200px 1fr;gap:18px;padding:12px 0;
-  border-bottom:1px solid var(--rule)}
-.ledger div:last-child{border-bottom:0}
-@media (max-width:900px){.ledger div{grid-template-columns:1fr;gap:6px}}
-
-/* ---------------- 04 real ---------------- */
-#s04{padding-block:clamp(88px,13vh,190px)}
-.murmur__name{grid-column:1/7;font-size:var(--fs-title);line-height:.9;letter-spacing:-.016em}
-.murmur__plate{grid-column:7/13}
-.murmur__prose{grid-column:1/8;margin-top:clamp(70px,10vh,120px)}
-.chain{grid-column:1/11;margin-block:clamp(70px,10vh,120px)}
-.chain svg{width:100%;height:auto;display:block}
-.chain .vert{display:none}
-.closing{grid-column:1/9;font-size:var(--fs-seam);line-height:1.24;max-width:24ch;
-  padding-top:18px;border-top:1px solid var(--r-accent);margin-top:40px}
-.schema{grid-column:1/6}
-.schema svg{width:100%;height:auto;display:block}
-.comtrade__text{grid-column:6/11}
-@media (max-width:900px){
-  .murmur__name,.murmur__plate,.murmur__prose,.chain,.closing,.schema,.comtrade__text{grid-column:1/-1}
-  .murmur__plate{margin-top:22px}
-  .murmur__prose,.chain{margin-block:44px}
-  .chain .horiz{display:none}
-  .chain .vert{display:block}
-  .comtrade__text{margin-top:26px}
-  .schema{overflow-x:auto}
-  .schema svg{min-width:420px}
-}
-.idx{margin-top:22px;border-top:1px solid var(--rule)}
-.idx div{display:grid;grid-template-columns:2fr 2.2fr 1.4fr;gap:18px;padding:14px 4px;
-  border-bottom:1px solid var(--rule);font-size:var(--fs-body-s)}
-.idx b{font-weight:600;color:var(--ink)}
-.idx span:last-child{color:var(--ink-dim);font-family:"IBM Plex Mono",monospace;font-size:var(--fs-label)}
-@media (max-width:900px){.idx div{grid-template-columns:1fr;gap:5px}}
-
-/* ---------------- 05 void ---------------- */
-#s05{padding-block:clamp(96px,16vh,220px) clamp(60px,8vh,110px);min-height:96vh;
-  display:flex;flex-direction:column;justify-content:flex-end}
-.void__line{font-size:var(--fs-title);line-height:.9;letter-spacing:-.016em;margin-bottom:40px}
-.contact{max-width:520px;border-top:1px solid var(--rule)}
-.contact a,.contact span{display:block;padding:14px 0;border-bottom:1px solid var(--rule);
-  font-size:var(--fs-lead);text-decoration:none}
-.contact span{color:var(--ink-dim)}
-.colophon{margin-top:56px;font-size:var(--fs-body-s);color:var(--ink-dim);max-width:62ch}
-@media (max-width:900px){#s05{min-height:72vh}}
-
-/* ---------------- pull focus ring ---------------- */
-/* It is fixed, so content will always scroll beneath it. It carries its own ground
-   or it sits illegibly on top of the ledger. */
-.rack{position:fixed;left:var(--gutter);bottom:calc(20px + env(safe-area-inset-bottom));z-index:50;
-  display:flex;align-items:center;gap:14px;background:var(--ground);border:1px solid var(--rule);
-  padding:8px 16px 8px 8px;cursor:pointer;
-  color:var(--ink);font-family:"IBM Plex Mono",monospace;text-align:left;
-  transition:background 160ms linear,border-color 180ms linear}
-.rack__ring{width:56px;height:56px;min-width:56px;border:1px solid var(--rule);border-radius:50%;
-  display:grid;place-items:center;transition:border-color 180ms linear,box-shadow 180ms linear}
-.rack__ring i{width:8px;height:8px;background:var(--ink-dim);border-radius:50%;
-  transition:background 180ms linear,transform 180ms linear}
-.rack[aria-pressed="true"] .rack__ring{border-color:var(--accent)}
-.rack[aria-pressed="true"] .rack__ring i{background:var(--accent);transform:scale(1.5)}
-.rack[aria-disabled="true"] .rack__ring{border-color:var(--oxide)}
-.rack.pulse .rack__ring{box-shadow:0 0 0 2px var(--r-accent)}
-.rack__txt b{display:block;font-size:var(--fs-label);letter-spacing:.14em;font-weight:400;color:var(--ink)}
-.rack__txt small{display:block;font-size:var(--fs-token);letter-spacing:.1em;color:var(--ink-dim);
-  margin-top:4px;max-width:26ch}
-@media (max-width:900px){
-  .rack{left:auto;right:var(--gutter);bottom:calc(16px + env(safe-area-inset-bottom));
-    flex-direction:row-reverse;background:var(--ground);border:1px solid var(--rule);padding:8px}
-  .rack__ring{width:48px;height:48px;min-width:48px}
-  .rack__txt small{display:none}
-}
-html[data-grade="void"] .rack{display:none}
-
+/* ====================================================== REDUCED MOTION */
+/* Art-directed, not a checkbox. The page still changes temperature, the
+   hard cut still lands, and the instrument still draws its full trace. */
 @media (prefers-reduced-motion:reduce){
-  .rendered,.sub,.sub__label,.sub__body,.seam p,.rack__ring,.rack__ring i{transition-duration:0ms !important}
-  html[data-focus="pulled"] .obj.is-band .rendered{filter:brightness(.48) saturate(.32) !important}
-  .seam p{clip-path:inset(0 0 0 0)}
+  *,*::before,*::after{
+    animation-duration:.001ms!important;animation-iteration-count:1!important;
+    transition-duration:.001ms!important;scroll-behavior:auto!important}
+  .bloom{animation:none;opacity:1}
+  .sect-title{transform:none;opacity:1;font-variation-settings:'wdth' 115,'wght' 700;letter-spacing:-.02em}
+  .dot{transform:scale(1)}
+  .note{opacity:1;transform:none}
+  .note::before{width:8px}
+  .rail{transform:none;opacity:1}
+  .log tbody tr{opacity:1;transform:none}
+  .bench{transform:none}
+  .speech .two{opacity:1}
 }
-/* No-JS: every plane is already visible; just ensure the seam lines are not clipped. */
-html.no-js .seam p{clip-path:none}
-html.no-js .rack{display:none}
+
+/* ================================================================ NO JS */
+/* The diagram and the scopes are enhancements; without them the argument and
+   the parameters are carried in words, so nothing is actually lost but motion. */
+.nojs-note{margin:14px 0 0;font-family:Azeret,ui-monospace,monospace;font-size:var(--t-slug);
+  line-height:1.7;color:var(--terms-ink);border-left:2px solid var(--terms-ink);padding-left:12px;max-width:52ch}
+.nojs-note b{font-weight:400;text-decoration:underline}
+.nojs-note.mur{color:var(--mute);border-left-color:var(--mur-trace);margin:0;padding:14px 14px 0 12px}
+.no-js .scope canvas{display:none}
+.no-js .sect-title{transform:none;opacity:1;font-variation-settings:'wdth' 115,'wght' 700;letter-spacing:-.02em}
+.no-js .dot{transform:scale(1)}
+.no-js .note{opacity:1;transform:none}
+.no-js .note::before{width:8px}
+.no-js .rail{transform:none;opacity:1}
+.no-js .log tbody tr{opacity:1;transform:none}
+.no-js .bench{transform:none}
+.no-js .speech .two{opacity:1}
+.no-js .caret{display:none}
 </style>
 </head>
 <body>
-<canvas id="rain" aria-hidden="true"></canvas>
+<a class="skip" href="#main">Skip to content</a>
 
-<header class="rail">
-  <div class="rail__in">
-    <span class="rail__name">ŠPINJO / J</span>
-    <nav class="ticks" aria-label="Sections">
-      <a href="#s00">00</a><a href="#s01">01</a><a href="#s02">02</a>
-      <a href="#s03">03</a><a href="#s04">04</a><a href="#s05">05</a>
-    </nav>
-    <div class="rail__cta">
-      <a class="mail" href="mailto:jocaspinjo@gmail.com">jocaspinjo@gmail.com</a>
-      <a href="cv.pdf">CV (PDF)</a>
-      <a href="https://github.com/kaizennnnnnnnn" rel="me noopener">GitHub</a>
-    </div>
-  </div>
-</header>
+<main id="main">
 
-<main>
-
-<!-- ============ 00 / PLATE ============ -->
-<section id="s00" class="wrap" aria-labelledby="h-name">
+<!-- ==================================================== §00 LEVEL SET -->
+<section class="sec hero wrap" id="s00" data-amb="#E5A56A,#E9A0B8" data-sliver="0">
   <div class="grid">
-    <p class="pos">Belgrade. Final-year at ITS. Junior AI integration and data/BI.</p>
-    <h1 class="name" id="h-name"><span>JOVAN</span><span>ŠPINJO</span></h1>
-    <p class="claim">In everything on this page I own the data model, the security model and the LLM integration.</p>
-    <div class="figs">
-      <div><span class="fig">1,121</span><p>commits, Apr–Sep 2026</p></div>
-      <div><span class="fig">73</span><p>SQL migrations</p></div>
-      <div><span class="fig">93</span><p>row-level-security policies</p></div>
-      <div><span class="fig">7,315</span><p>lines written by hand</p></div>
-    </div>
-    <p class="hook">Two of the things here were built by directing coding agents. One was written by hand. This page says which, in the table you are about to read, and it does not soften it anywhere after that.</p>
-  </div>
-</section>
-
-<!-- ============ 01 / MANIFEST ============ -->
-<section id="s01" class="wrap" aria-labelledby="h-man">
-  <span class="sect-no">01</span>
-  <h2 class="sect-title" id="h-man">MANIFEST</h2>
-  <div class="man">
-    <div class="man__head">
-      <span>#</span><span>Name</span>
-      <span>What it is</span><span>Scale</span>
-      <span style="text-align:right">Authorship</span>
-      <span style="text-align:right">State</span>
-    </div>
-    <a class="man__row" href="#s04">
-      <span class="man__n">01</span><span class="man__name">MURMUR</span>
-      <span class="man__what">push-to-talk dictation that works with the network off</span>
-      <span class="man__scale">32 modules · 7,315 lines</span>
-      <span class="man__auth tok">Hand</span><span class="man__state">not on GitHub</span>
-    </a>
-    <a class="man__row" href="#s02">
-      <span class="man__n">02</span><span class="man__name">EREN</span>
-      <span class="man__what">a cat-care PWA two people have used daily since April</span>
-      <span class="man__scale">73 migrations · 93 policies</span>
-      <span class="man__auth tok">Directed</span><span class="man__state">live</span>
-    </a>
-    <a class="man__row" href="#s02">
-      <span class="man__n">03</span><span class="man__name">OUTRANK</span>
-      <span class="man__what">a habit tracker whose assistant runs on a seconds budget</span>
-      <span class="man__scale">56 routes · 3 budget tiers</span>
-      <span class="man__auth tok">Directed</span><span class="man__state">live</span>
-    </a>
-    <a class="man__row" href="#s04">
-      <span class="man__n">04</span><span class="man__name">COMTRADE</span>
-      <span class="man__what">a sales data warehouse, its ETL and its reports</span>
-      <span class="man__scale">1 star schema · 80 hours</span>
-      <span class="man__auth tok">Contract</span><span class="man__state">delivered</span>
-    </a>
-    <a class="man__row" href="#s04">
-      <span class="man__n">05</span><span class="man__name">FACULTY</span>
-      <span class="man__what">four coursework builds in four stacks</span>
-      <span class="man__scale">19 entities · 4 builds</span>
-      <span class="man__auth tok">Academic</span><span class="man__state">archived</span>
-    </a>
-  </div>
-</section>
-
-<!-- ============ 02 / CONSTRUCT ============ -->
-<section id="s02" class="wrap" aria-labelledby="h-con">
-  <span class="sect-no">02</span>
-  <h2 class="sect-title" id="h-con">CONSTRUCT</h2>
-
-  <article class="obj obj--eren grid" data-object="eren">
-    <div class="plate rendered">
-      <div class="plate__empty"><b>plate 01</b><span>eren — home screen · 16:10</span></div>
-    </div>
-    <div class="obj__text rendered">
-      <h3 class="obj__name">EREN</h3>
-      <p class="obj__head">A cat-care app two people have used every day since April, and a chat endpoint that stopped paying twice for the same 2,900 tokens.</p>
-      <p class="prose">Live at <a href="https://eren-care-app.vercel.app" rel="noopener">eren-care-app.vercel.app</a>. A progressive web app for a two-person household: stats that decay in real time, a shared journal, an arcade, a shop, and a chat companion running on Claude Sonnet 5 over a streaming endpoint.</p>
-      <p class="prose">Push notifications come from a database-backed cron sweep, because the hosting tier has no hourly scheduler and the client ping alone is not a guarantee.</p>
-      <div class="obj__stats">
-        <div><span class="fig">1,121</span><p>commits</p></div>
-        <div><span class="fig">73</span><p>SQL migrations</p></div>
-        <div><span class="fig">14</span><p>API routes</p></div>
-        <div><span class="fig">37</span><p>tables</p></div>
+    <div class="hero-txt">
+      <p class="tick">Belgrade · Final-year IT · Available 2026</p>
+      <h1 class="name"><span>JOVAN</span><span>ŠPINJO</span></h1>
+      <p class="lead">Junior AI-integration / data &amp; BI. I direct coding agents, and I own the data model, the security boundary and the LLM integration.</p>
+      <div class="keywords">
+        <span>SQL · T-SQL · SSIS · Power BI · Star schema · Postgres · Row-level security</span>
+        <span>Python · LLM APIs · Prompt &amp; cost design · DWH/ETL internship, Comtrade System Integration</span>
+      </div>
+      <div class="cta">
+        <a class="btn btn-fill" href="cv.pdf">CV.pdf</a>
+        <a class="btn btn-line" href="mailto:jocaspinjo@gmail.com">Email</a>
       </div>
     </div>
-    <div class="sub">
-      <span class="sub__label">Substrate — what is mine, layer by layer</span>
-      <div class="sub__body">
-        <p class="prose">The schema is mine: 37 tables, 93 row-level-security policies, 27 security-definer RPCs. I designed the access model, and I read and modified every policy written for it. The LLM integration is mine. I did not write the React or the TypeScript. I read it, I change it, I debug it, and I ship it.</p>
-        <p class="prose">Three decisions in here that nobody handed me. The prompt prefix is split at two cache breakpoints by how often each part changes — persona daily, memories the moment one is saved — so saving a memory stopped rewriting a roughly 2,900-token prefix at the 1.25× cache-write rate.</p>
-        <p class="prose">The daily spend ceiling is an integer ledger in micro-USD, written in a <span class="mono">finally</span> block, so a stream the user cancels halfway is still billed and the ceiling still means something.</p>
-        <p class="prose">And the multi-tenant decay sweep pages by keyset on <span class="mono">id</span>, not <span class="mono">OFFSET</span>, because the sweep mutates <span class="mono">last_decay_at</span> — the very column an <span class="mono">OFFSET</span> would have ordered on, which silently skips households once the table outgrows one page.</p>
+    <div class="hero-plate">
+      <div class="hud" aria-hidden="true">
+        <span class="hud-lvl">3</span>
+        <span class="hud-xp"><span>XP 235/300</span><i><b></b></i></span>
+        <span class="gauges">
+          <button class="gauge" data-g="0" type="button" title="Refill"><i><b style="width:85%"></b></i><span>FED</span></button>
+          <button class="gauge" data-g="1" type="button" title="Refill"><i><b style="width:79%"></b></i><span>REST</span></button>
+          <button class="gauge" data-g="2" type="button" title="Refill"><i><b style="width:83%"></b></i><span>PLAY</span></button>
+          <button class="gauge" data-g="3" type="button" title="Refill"><i><b style="width:92%"></b></i><span>WASH</span></button>
+        </span>
+        <span class="toast">+1</span>
       </div>
-    </div>
-  </article>
-
-  <hr class="divider">
-
-  <article class="obj obj--out grid" data-object="outrank">
-    <div class="plate rendered">
-      <div class="plate__empty"><b>plate 02</b><span>outrank — habit board · 16:10</span></div>
-    </div>
-    <div class="obj__text rendered">
-      <h3 class="obj__name">OUTRANK</h3>
-      <p class="obj__head">A habit tracker whose voice assistant is allowed to cost exactly sixty, two hundred and forty, or six hundred seconds a day.</p>
-      <p class="prose">A progressive web app for building and holding habits, with a text and voice assistant behind the Anthropic SDK. Next.js 16 and React 19 on Firebase — the stack it runs on, stated as a fact about the repository and not as a claim about me.</p>
-      <div class="obj__stats">
-        <div><span class="fig">462</span><p>commits</p></div>
-        <div><span class="fig">56</span><p>routes</p></div>
-      </div>
-    </div>
-    <div class="sub">
-      <span class="sub__label">Substrate — where the money stops</span>
-      <div class="sub__body">
-        <p class="prose">The budget model is mine. Each tier gets a daily allowance in seconds — 60, 240, 600 — and the allowance is checked before a realtime session is ever minted, not after it ends, so an exhausted account is refused with <span class="mono">HTTP 429</span> instead of running up a bill and getting reconciled later.</p>
-        <p class="prose">The quota increment happens inside a Firestore transaction, because two tabs opening a session at the same moment is not a hypothetical. The application code around it was written by coding agents I directed.</p>
-      </div>
-    </div>
-  </article>
-</section>
-
-<!-- ============ 03 / THE SEAM ============ -->
-<section id="s03" class="wrap" aria-labelledby="h-seam">
-  <div class="seam">
-    <span class="sect-no">03</span>
-    <h2 class="sect-title" id="h-seam" style="margin-bottom:44px">THE SEAM</h2>
-    <p>Nobody chose the cache breakpoints for me.</p>
-    <p>Nobody told me an interrupted stream still costs money.</p>
-    <p>Nobody warned me that an <span class="mono" style="font-size:.86em">OFFSET</span> orders on the column the sweep is mutating.</p>
-    <div class="ledger">
-      <div><span class="tok">Written by hand</span><span>Murmur. Python, 32 modules, 7,315 lines. No agents.</span></div>
-      <div><span class="tok">Owned, not delegated</span><span>Every schema, access model and LLM integration on this page.</span></div>
-      <div><span class="tok">Directed, not authored</span><span>The React and TypeScript in Eren and Outrank.</span></div>
+      <figure class="plate">
+        <div class="plate-rig">
+          <div class="bloom"></div>
+          <div class="screen">
+            <img src="shots/eren-living-461.webp" width="461" height="929" fetchpriority="high" decoding="async"
+                 alt="Eren, a pixel-art cat-care app: a cosy living room with a bookshelf, plants and a sofa, a grey-and-white cat wearing a green frog hat, and a speech bubble reading &quot;i love u sm&quot;.">
+          </div>
+        </div>
+        <figcaption class="plate-slug"><span><b>Eren</b> · 01 Living room <span class="dim">· 922&times;1858</span></span></figcaption>
+      </figure>
     </div>
   </div>
 </section>
 
-<!-- ============ 04 / REAL ============ -->
-<section id="s04" class="wrap" aria-labelledby="h-real">
-  <span class="sect-no">04</span>
-  <h2 class="sect-title" id="h-real">REAL</h2>
-
-  <article class="obj grid" data-object="murmur" style="margin-top:70px">
-    <h3 class="murmur__name">MURMUR</h3>
-    <div class="murmur__plate plate">
-      <div class="plate__empty"><b>plate 03</b><span>murmur — listening overlay · 16:10</span></div>
+<!-- ==================================================== §01 THE TERMS -->
+<section class="sec s01" id="s01" data-amb="#0B0C0E,#C6C3BA">
+  <div class="wrap">
+    <p class="tick">The terms</p>
+    <div class="terms-grid">
+      <div class="terms-txt">
+        <h2 class="sect-title">WHO TYPED IT</h2>
+        <p>Eren and Outrank were built by directing coding agents. I don't write React by hand and I won't pretend to in an interview.</p>
+        <p>What I designed, debugged and can defend is on the top rail. The next section is one I typed myself — and it runs in your browser.</p>
+      </div>
+      <div class="patchbay">
+        <div class="chips">
+          <button class="chip" type="button" aria-pressed="false" data-chip="eren">Eren</button>
+          <button class="chip" type="button" aria-pressed="false" data-chip="outrank">Outrank</button>
+          <button class="chip" type="button" aria-pressed="false" data-chip="murmur">Murmur</button>
+          <button class="chip" type="button" aria-pressed="false" data-chip="comtrade">Comtrade</button>
+          <button class="chip" type="button" aria-pressed="false" data-chip="faculty">Coursework</button>
+        </div>
+        <svg class="cables" id="cables" aria-hidden="true" focusable="false"></svg>
+        <noscript><p class="nojs-note">Eren and Outrank each run two leads: one into <b>Directed</b>, one into <b>Owned</b>. Being built by agents and being owned by me are not the same claim, and both are true at once.</p></noscript>
+        <div class="rails">
+          <button class="rail rail-owned" type="button" data-rail="owned" aria-pressed="false">
+            <h3>Owned — regardless of who typed it</h3>
+            <ul><li>data models &amp; star schemas</li><li>auth &amp; row-level security</li><li>LLM integration, context &amp; cost</li><li>product decisions</li><li>debugging in production</li></ul>
+          </button>
+          <button class="rail" type="button" data-rail="hand" aria-pressed="false">
+            <h3>Written by hand</h3>
+            <ul><li>Murmur</li><li>SSIS &amp; T-SQL</li><li>.NET 8 MVC</li><li>Java EE servlets + JSP</li><li>PHP 8 + PDO</li><li>19-entity ER model</li></ul>
+          </button>
+          <button class="rail" type="button" data-rail="directed" aria-pressed="false">
+            <h3>Directed — built by instructing coding agents</h3>
+            <ul><li>Eren</li><li>Outrank</li></ul>
+          </button>
+        </div>
+      </div>
     </div>
-
-    <div class="chain" aria-label="Murmur signal chain: hotkey, trim, high-pass filter, normalise, local inference, fallback to Groq">
-      <svg class="horiz" viewBox="0 0 1200 130" preserveAspectRatio="xMinYMid meet" role="img"
-           aria-label="Signal chain diagram">
-        <g fill="none" stroke="currentColor" stroke-width="1" opacity=".55">
-          <path d="M92 52 H150 M300 52 H358 M508 52 H566 M690 52 H748 M900 52 H958"/>
-        </g>
-        <g font-family="IBM Plex Mono, monospace" font-size="11" fill="currentColor">
-          <g stroke="currentColor" stroke-width="1" fill="none" opacity=".45">
-            <rect x="2" y="34" width="90" height="36"/><rect x="150" y="34" width="150" height="36"/>
-            <rect x="358" y="34" width="150" height="36"/><rect x="566" y="34" width="124" height="36"/>
-            <rect x="748" y="34" width="152" height="36"/>
-          </g>
-          <text x="14" y="56">hotkey</text>
-          <text x="162" y="50">trim 200 ms head</text><text x="162" y="64">100 ms tail</text>
-          <text x="370" y="50">Butterworth HP</text><text x="370" y="64">4th order · 100 Hz</text>
-          <text x="578" y="56">normalise 0.8</text>
-          <text x="760" y="50">faster-whisper</text><text x="760" y="64">small.en · local GPU</text>
-          <text x="970" y="56">text</text>
-        </g>
-        <g stroke="#B8452E" stroke-width="1" fill="none">
-          <path d="M824 70 V104 H1056"/>
-          <rect x="1056" y="86" width="142" height="36"/>
-        </g>
-        <g font-family="IBM Plex Mono, monospace" font-size="11" fill="#B8452E">
-          <text x="832" y="98">empty result</text>
-          <text x="1066" y="102">Groq whisper</text><text x="1066" y="116">large-v3-turbo</text>
-        </g>
-      </svg>
-      <svg class="vert" viewBox="0 0 340 620" preserveAspectRatio="xMinYMin meet" role="img"
-           aria-label="Signal chain diagram, vertical">
-        <g font-family="IBM Plex Mono, monospace" font-size="12" fill="currentColor">
-          <g stroke="currentColor" stroke-width="1" fill="none" opacity=".45">
-            <rect x="2" y="2" width="180" height="40"/><rect x="2" y="92" width="180" height="52"/>
-            <rect x="2" y="194" width="180" height="52"/><rect x="2" y="296" width="180" height="40"/>
-            <rect x="2" y="386" width="180" height="52"/>
-          </g>
-          <g stroke="currentColor" stroke-width="1" opacity=".55" fill="none">
-            <path d="M92 42 V92 M92 144 V194 M92 246 V296 M92 336 V386 M92 438 V520"/>
-          </g>
-          <text x="14" y="27">hotkey</text>
-          <text x="14" y="113">trim 200 ms head</text><text x="14" y="130">100 ms tail</text>
-          <text x="14" y="215">Butterworth HP</text><text x="14" y="232">4th order · 100 Hz</text>
-          <text x="14" y="321">normalise 0.8</text>
-          <text x="14" y="407">faster-whisper</text><text x="14" y="424">small.en · local GPU</text>
-          <text x="14" y="536">text</text>
-        </g>
-        <g stroke="#B8452E" stroke-width="1" fill="none">
-          <path d="M92 460 H232 V520"/><rect x="152" y="520" width="160" height="52"/>
-        </g>
-        <g font-family="IBM Plex Mono, monospace" font-size="12" fill="#B8452E">
-          <text x="100" y="454">empty result</text>
-          <text x="164" y="541">Groq whisper</text><text x="164" y="558">large-v3-turbo</text>
-        </g>
-      </svg>
-    </div>
-
-    <div class="murmur__prose">
-      <p class="obj__head">You hold a key, you talk, and the text is in the editor before you have finished thinking the next sentence. Every line of it is mine.</p>
-      <p class="prose">A push-to-talk dictation app for Windows. Python 3.12, PySide6 on Qt6, 32 modules, 7,315 lines, written by hand.</p>
-      <p class="prose"><span class="mono">faster-whisper small.en</span> runs locally on the GPU. Getting there meant fixing CUDA DLL loading on Windows: the <span class="mono">nvidia-cu12</span> wheels place cuBLAS and cuDNN outside the directories Windows searches, so the loader is corrected at process start. When local inference comes back empty the request falls through to Groq's <span class="mono">whisper-large-v3-turbo</span> — the only branch on this page drawn in rust, because it is the only path that exists conditionally.</p>
-      <p class="prose">Before the model sees anything, the audio is cleaned: 200 milliseconds off the head and 100 off the tail to kill the transient of the hotkey itself, a 4th-order Butterworth high-pass at 100 Hz, then peak normalisation to 0.8. A guard on silence, because a model handed near-silence will confidently invent a sentence. And a 282-line watcher that learns the corrections I keep making and stops making me make them.</p>
-      <p class="prose">It is not on GitHub. I am saying so here rather than leaving you to find out.</p>
-    </div>
-    <p class="closing">7,315 lines. 32 modules. Not on GitHub. Every line is mine.</p>
-  </article>
-
-  <div class="grid" style="margin-top:clamp(80px,12vh,170px)">
-    <div class="schema">
-      <svg viewBox="0 0 420 330" role="img" aria-label="Star schema: one fact table with four dimensions, SSIS packages feeding it, Power BI reports reading it">
-        <g stroke="currentColor" stroke-width="1" fill="none" opacity=".5">
-          <path d="M210 92 V126 M210 204 V238 M128 165 H92 M292 165 H328"/>
-        </g>
-        <g stroke="currentColor" stroke-width="1" fill="none" opacity=".75">
-          <rect x="128" y="126" width="164" height="78"/>
-        </g>
-        <g stroke="currentColor" stroke-width="1" fill="none" opacity=".45">
-          <rect x="140" y="40" width="140" height="52"/><rect x="140" y="238" width="140" height="52"/>
-          <rect x="0" y="139" width="92" height="52"/><rect x="328" y="139" width="92" height="52"/>
-        </g>
-        <g font-family="IBM Plex Mono, monospace" font-size="11" fill="currentColor">
-          <text x="140" y="154">FACT</text><text x="140" y="170">sales</text>
-          <text x="140" y="188" opacity=".7">measures · keys</text>
-          <text x="152" y="62" opacity=".8">DIM date</text><text x="152" y="78" opacity=".55">calendar grain</text>
-          <text x="152" y="260" opacity=".8">DIM product</text><text x="152" y="276" opacity=".55">hierarchy</text>
-          <text x="10" y="162" opacity=".8">DIM customer</text><text x="10" y="178" opacity=".55">geography</text>
-          <text x="338" y="162" opacity=".8">DIM store</text><text x="338" y="178" opacity=".55">region</text>
-          <text x="0" y="316" opacity=".75">SSIS packages →</text>
-          <text x="300" y="316" opacity=".75">→ Power BI</text>
-        </g>
-        <g stroke="currentColor" stroke-width="1" fill="none" opacity=".3">
-          <path d="M96 306 H128 V204"/><path d="M292 204 V306 H296"/>
-        </g>
-      </svg>
-    </div>
-    <div class="comtrade__text">
-      <h3 class="obj__name">COMTRADE</h3>
-      <p class="obj__head">Eighty hours in Belgrade, modelling somebody else's sales data until it answered questions.</p>
-      <p class="prose">System Integration, Belgrade. May to June 2026, 80 hours. I modelled a data warehouse over sales data in MS SQL Server, built the SSIS packages that load it, and wrote the Power BI reports that read it. The schema beside this paragraph is the deliverable, drawn as it was designed: one fact table, its dimensions, the packages feeding it from the left and the reports hanging off it on the right.</p>
-      <p class="prose">This sits in the cold half of the page next to Murmur on purpose. These are the two things nobody helped me with.</p>
-    </div>
-  </div>
-
-  <div style="margin-top:clamp(80px,12vh,170px)">
-    <h3 class="obj__name">FACULTY</h3>
-    <p class="obj__head">Four coursework builds in four stacks, each one written the slow way.</p>
-    <div class="idx">
-      <div><span><b>Ručna Radinost</b></span><span>multi-vendor marketplace, three roles, Identity</span><span>C# · .NET 8 · EF Core 9</span></div>
-      <div><span><b>Apoteka „Vita"</b></span><span>pharmacy application on MVC Model 2</span><span>Java EE · Servlet/JSP · MySQL</span></div>
-      <div><span><b>Srećna šapa</b></span><span>veterinary clinic, three roles, PDO throughout</span><span>PHP 8 · MySQL</span></div>
-      <div><span><b>Video-game database</b></span><span>19 entities · 3 views · 3 functions · 3 procedures</span><span>ER/PMOV · T-SQL</span></div>
-    </div>
-    <p class="prose" style="margin-top:26px;color:var(--ink-dim)">No agents in any of them. They are here as provenance, not as the argument.</p>
   </div>
 </section>
 
-<!-- ============ 05 / CONSTRUCT (white) ============ -->
-<section id="s05" class="wrap" aria-labelledby="h-void">
-  <div>
-    <span class="sect-no">05</span>
-    <h2 class="void__line" id="h-void">Load what you need.</h2>
-    <div class="contact">
-      <a href="mailto:jocaspinjo@gmail.com">jocaspinjo@gmail.com</a>
-      <a href="cv.pdf">CV (PDF)</a>
-      <a href="https://github.com/kaizennnnnnnnn" rel="me noopener">github.com/kaizennnnnnnnn</a>
-      <a href="https://linkedin.com/in/jovanspinjo" rel="me noopener">linkedin.com/in/jovanspinjo</a>
-      <span>Belgrade, or remote.</span>
+<!-- ======================================================= §02 MURMUR -->
+<section class="sec s02" id="s02" data-amb="#6FE6A0,#1E5A3E" data-sliver="-1">
+  <div class="wrap">
+    <p class="tick">Written by hand · running here</p>
+    <div class="grid" style="align-items:start">
+      <div style="grid-column:1/5">
+        <h2 class="sect-title">MURMUR</h2>
+        <p class="lead">Hold a key, talk, and the text is in the editor before you've finished thinking the next sentence.</p>
+        <p>A push-to-talk dictation app for Windows. Python 3.12, PySide6 on Qt6. <code>faster-whisper small.en</code> runs locally on the GPU; when local inference comes back empty it falls through to Groq's <code>whisper-large-v3-turbo</code>.</p>
+        <p>Before the model sees anything the audio is cleaned: 200&nbsp;ms off the head and 100&nbsp;ms off the tail to kill the transient of the hotkey itself, a 4th-order Butterworth high-pass at 100&nbsp;Hz, then peak normalisation to 0.8. There is a silence guard, because a model handed near-silence will confidently invent a sentence.</p>
+        <p class="data" style="color:var(--mur-trace)">7,315 lines, written by hand, line by line.</p>
+        <p class="cuda"><code>os.add_dll_directory(…)</code> — the nvidia-cu12 wheels put cuBLAS and cuDNN outside the directories Windows searches, so the loader is corrected at process start.</p>
+      </div>
+      <div style="grid-column:5/13">
+        <div class="rack">
+          <div class="chain" id="chain">
+            <div class="stage" data-st="0"><i class="led"></i><h4>Mic in</h4><small>16 kHz mono</small></div>
+            <div class="stage" data-st="1"><i class="led"></i><h4>Gate</h4><small>push-to-talk<br>−42 dBFS · 120 ms hold</small></div>
+            <div class="stage" data-st="2"><i class="led"></i><h4>HPF</h4><small>Butterworth 4th<br>100 Hz · Q 0.707</small></div>
+            <div class="stage" data-st="3"><i class="led"></i><h4>Normalise</h4><small>peak → 0.8</small></div>
+            <div class="stage" data-st="4"><i class="led"></i><h4>whisper</h4><small>small.en · local<br>CUDA</small></div>
+            <div class="stage alt" data-st="5"><i class="led"></i><h4>Groq</h4><small>large-v3-turbo<br>fallback only</small></div>
+            <div class="stage" data-st="6"><i class="led"></i><h4>Text out</h4><small>to the caret</small></div>
+          </div>
+          <div class="scopes">
+            <div class="scope">
+              <p class="slug"><span>Spectrogram · mel</span><span class="readout" id="ro-peak">peak −∞ dB</span></p>
+              <canvas id="cv-spec" aria-hidden="true"></canvas>
+            </div>
+            <div class="scope">
+              <p class="slug"><span>Magnitude response</span><span class="readout" id="ro-gain">×1.0</span></p>
+              <canvas id="cv-resp" aria-hidden="true"></canvas>
+            </div>
+          </div>
+          <noscript><p class="nojs-note mur">The scopes above are live: a mel spectrogram and the real magnitude response of the 4th-order Butterworth high-pass, drawn from its actual coefficients. They need JavaScript. Every parameter in the chain is printed above regardless.</p></noscript>
+          <div class="ptt-row">
+            <button class="ptt" id="ptt" type="button">Hold to speak</button>
+            <button class="toggle" id="nogpu" type="button" aria-pressed="false">Simulate: no GPU</button>
+            <p class="ptt-note">No audio leaves this page. No network call. This is the front half of the chain — the model runs on my machine. Until you press, the trace is a synthetic demo signal, not a recording.</p>
+          </div>
+        </div>
+      </div>
     </div>
-    <p class="colophon">One HTML file. No build step, no framework, no dependencies. Three typefaces, one canvas, and a grade that cools as you descend. Written by hand — which, on this page, is a claim I have to be able to stand behind.</p>
+  </div>
+</section>
+
+<!-- ========================================================= §03 EREN -->
+<section class="sec" id="s03" data-amb="#E5A56A,#E9A0B8">
+  <div class="wrap">
+    <p class="tick">Directed · owned · live</p>
+    <h2 class="sect-title">EREN</h2>
+    <p class="lead">A cat-care app two people have used every day since April. Next.js and Supabase, with a chat companion that answers in its own voice.</p>
+  </div>
+  <div class="wrap">
+    <div class="rail-track" id="rail-eren" tabindex="0" role="group" aria-label="Eren screens — scroll, drag, or use the arrow keys">
+
+      <div class="rail-item" data-amb="#E5A56A,#E9A0B8" data-sliver="1">
+        <div class="plate-wrap">
+          <figure class="plate">
+            <div class="plate-rig"><div class="bloom"></div>
+              <div class="screen">
+                <img src="shots/eren-living-461.webp" width="461" height="929" loading="lazy" decoding="async" data-full="shots/eren-living.webp" data-peek
+                     alt="Eren living room: pixel-art sofa, bookshelf and rug, the cat in a frog hat, a gold HUD strip along the top.">
+                <span class="dot" style="--x:50%;--y:7%">1</span>
+                <span class="dot" style="--x:18%;--y:59%">2</span>
+              </div>
+            </div>
+            <figcaption class="plate-slug"><span><b>Eren</b> · 01 Living room <span class="dim">· 922&times;1858</span></span></figcaption>
+          </figure>
+          <div class="notes">
+            <div class="note"><span class="note-n">01</span><p>Stat decay is client-side — every action resets the clock, so active care isn't punished.</p></div>
+            <div class="note"><span class="note-n">02</span><p>Two-user household; every stat is realtime-synced across both phones.</p></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="rail-item" data-amb="#CE874E,#7C8A93" data-sliver="2">
+        <div class="plate-wrap">
+          <figure class="plate">
+            <div class="plate-rig"><div class="bloom"></div>
+              <div class="screen">
+                <img src="shots/eren-kitchen-461.webp" width="461" height="929" loading="lazy" decoding="async" data-full="shots/eren-kitchen.webp" data-peek
+                     alt="Eren kitchen: wooden cabinets, a kettle and toaster, herb pots on the windowsill with rain outside, the cat eating from a bowl.">
+                <span class="dot" style="--x:50%;--y:7%">1</span>
+                <span class="dot" style="--x:50%;--y:33%">2</span>
+              </div>
+            </div>
+            <figcaption class="plate-slug"><span><b>Eren</b> · 02 Kitchen <span class="dim">· 922&times;1858</span></span></figcaption>
+          </figure>
+          <div class="notes">
+            <div class="note"><span class="note-n">01</span><p>Push cooldown is DB-backed, two hours per tag. Without it a stat sitting on a boundary re-fires forever.</p></div>
+            <div class="note"><span class="note-n">02</span><p>That toast crossed devices: one realtime channel per household, and it needs a unique suffix per mount or it silently fails to subscribe.</p></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="rail-item" data-amb="#F2D98B,#6E5A86" data-sliver="3">
+        <div class="plate-wrap">
+          <figure class="plate">
+            <div class="plate-rig"><div class="bloom"></div>
+              <div class="screen">
+                <img src="shots/eren-bedroom-461.webp" width="461" height="929" loading="lazy" decoding="async" data-full="shots/eren-bedroom.webp" data-peek
+                     alt="Eren bedroom at night: a crescent moon and shooting stars through an arched window, fairy lights, a lit bedside lamp, the cat with a yellow chick on its head.">
+                <span class="dot" style="--x:57%;--y:19%">1</span>
+                <span class="dot" style="--x:50%;--y:80%">2</span>
+              </div>
+            </div>
+            <figcaption class="plate-slug"><span><b>Eren</b> · 03 Bedroom <span class="dim">· 922&times;1858</span></span></figcaption>
+          </figure>
+          <div class="notes">
+            <div class="note"><span class="note-n">01</span><p>The hosting tier has no hourly cron — the decay sweep runs from Postgres and the client pings on focus.</p></div>
+            <div class="note"><span class="note-n">02</span><p>That sweep pages by keyset on <code>id</code>, not <code>OFFSET</code> — it mutates the very column an offset would have ordered on.</p></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="rail-item" data-amb="#F5E9D2,#7A6C5F" data-sliver="4">
+        <div class="plate-wrap">
+          <figure class="plate">
+            <div class="plate-rig"><div class="bloom"></div>
+              <div class="screen">
+                <img src="shots/eren-talk-461.webp" width="461" height="929" loading="lazy" decoding="async" data-full="shots/eren-talk.webp" data-peek
+                     alt="Eren attic: exposed beams, hanging stars and string lights, the cat in a bear costume, and a chat bubble holding the app's LLM reply.">
+                <span class="dot" style="--x:50%;--y:53%">1</span>
+                <span class="dot" style="--x:45%;--y:88%">2</span>
+              </div>
+            </div>
+            <figcaption class="plate-slug"><span><b>Eren</b> · 04 Attic — chat <span class="dim">· 922&times;1858</span></span></figcaption>
+          </figure>
+          <div class="notes">
+            <div class="note"><span class="note-n">01</span><p>LLM chat with a tool-calling memory — per user, capped at 60 items.</p></div>
+            <div class="note"><span class="note-n">02</span><p>The cached prefix rotates per sitting, not per message. Per-message caching is how you burn money.</p></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <p class="rail-hint">Drag, scroll, or use ← → · four rooms</p>
+  </div>
+  <div class="wrap">
+    <div class="speech" id="speech">
+      <q id="speech-q" aria-hidden="true"></q>
+      <p style="position:absolute;left:-9999px;top:auto">“you've fed me fifteen times today and still forgot my name. odd day for you huh.”</p>
+      <p class="speech-src">Eren · attic · unedited reply · this is the app talking to its own author.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===================================================== §04 COMTRADE -->
+<section class="sec s04" id="s04" data-amb="#7FA8FF,#1C2830" data-sliver="-1">
+  <div class="wrap">
+    <p class="tick">Professional · Belgrade</p>
+    <div class="grid" style="align-items:start">
+      <div style="grid-column:1/5">
+        <h2 class="sect-title">COMTRADE</h2>
+        <p class="lead">Eighty hours modelling somebody else's sales data until it answered questions.</p>
+        <p>Comtrade System Integration, Belgrade. May–June 2026. I modelled a data warehouse over sales data in MS SQL Server, built the SSIS packages that load it, and wrote the Power BI reports that read it.</p>
+        <p>The expensive part isn't the load, it's the history. A slowly-changing dimension means every customer row you "update" is really a close-out and an insert — get it wrong and last year's revenue silently moves to this year's region.</p>
+        <div class="ssis" id="ssis" aria-hidden="true">
+          <div>Extract</div><div>Cleanse</div><div>Conform</div><div>SCD type 2</div><div>Load</div>
+        </div>
+      </div>
+      <div style="grid-column:5/13">
+        <div class="schema-scroll">
+          <svg class="schema" viewBox="0 0 900 430" id="schema" role="img" aria-label="Star schema: a central FACT_SALES table joined to five dimensions — date, customer, product, store and employee.">
+            <g fill="none">
+              <path class="join" id="j1" d="M330 215 L250 100"></path>
+              <path class="join" id="j2" d="M330 235 L250 340"></path>
+              <path class="join" id="j3" d="M570 215 L650 100"></path>
+              <path class="join" id="j4" d="M570 235 L650 340"></path>
+              <path class="join" id="j5" d="M450 155 L450 90"></path>
+            </g>
+            <rect class="fact" x="330" y="155" width="240" height="140" rx="2"></rect>
+            <text class="t-h" x="348" y="180">FACT_SALES</text>
+            <text class="t-s" x="348" y="202">qty</text>
+            <text class="t-s" x="348" y="218">net_amount</text>
+            <text class="t-s" x="348" y="234">discount</text>
+            <text class="t-s" x="348" y="250">margin</text>
+            <text class="t-s pk" x="446" y="202">date_key</text>
+            <text class="t-s pk" x="446" y="218">customer_key</text>
+            <text class="t-s pk" x="446" y="234">product_key</text>
+            <text class="t-s pk" x="446" y="250">store_key</text>
+            <text class="t-s pk" x="446" y="266">employee_key</text>
+            <text class="t-s" x="348" y="284" id="rowcount">0 rows</text>
+
+            <rect class="box" x="55" y="62" width="195" height="72" rx="2"></rect>
+            <text class="t-h" x="71" y="88">DIM_DATE</text><text class="t-s" x="71" y="108">day · month · quarter · fy</text>
+            <rect class="box" x="55" y="306" width="195" height="72" rx="2"></rect>
+            <text class="t-h" x="71" y="332">DIM_CUSTOMER</text><text class="t-s" x="71" y="352">scd 2 · valid_from / to</text>
+            <rect class="box" x="650" y="62" width="195" height="72" rx="2"></rect>
+            <text class="t-h" x="666" y="88">DIM_PRODUCT</text><text class="t-s" x="666" y="108">category → line → sku</text>
+            <rect class="box" x="650" y="306" width="195" height="72" rx="2"></rect>
+            <text class="t-h" x="666" y="332">DIM_STORE</text><text class="t-s" x="666" y="352">region · city</text>
+            <rect class="box" x="355" y="18" width="190" height="60" rx="2"></rect>
+            <text class="t-h" x="371" y="42">DIM_EMPLOYEE</text><text class="t-s" x="371" y="62">seller · team</text>
+          </svg>
+        </div>
+        <pre class="sql"><code><span class="c">-- close the old version, open the new one, in one pass</span>
+<span class="k">MERGE</span> dim_customer <span class="k">AS</span> t
+<span class="k">USING</span> stg_customer <span class="k">AS</span> s <span class="k">ON</span> t.customer_id = s.customer_id <span class="k">AND</span> t.is_current = 1
+<span class="k">WHEN MATCHED AND</span> (t.city &lt;&gt; s.city <span class="k">OR</span> t.segment &lt;&gt; s.segment) <span class="k">THEN</span>
+  <span class="k">UPDATE SET</span> t.valid_to = <span class="f">DATEADD</span>(<span class="s">day</span>, -1, s.load_date), t.is_current = 0
+<span class="k">WHEN NOT MATCHED BY TARGET THEN</span>
+  <span class="k">INSERT</span> (customer_id, city, segment, valid_from, valid_to, is_current)
+  <span class="k">VALUES</span> (s.customer_id, s.city, s.segment, s.load_date, <span class="s">'9999-12-31'</span>, 1)
+<span class="k">OUTPUT</span> $action, inserted.customer_key <span class="k">INTO</span> #scd_audit;</code></pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ====================================================== §05 OUTRANK -->
+<section class="sec" id="s05" data-amb="#F4F3F1,#7FA8FF">
+  <div class="wrap">
+    <p class="tick">Directed · owned</p>
+    <h2 class="sect-title">OUTRANK</h2>
+    <p class="lead">A habit tracker whose voice assistant is allowed to cost exactly sixty, two hundred and forty, or six hundred seconds a day.</p>
+  </div>
+  <div class="wrap">
+    <div class="rail-track" id="rail-outrank" tabindex="0" role="group" aria-label="Outrank screens — scroll, drag, or use the arrow keys">
+
+      <div class="rail-item" data-amb="#F4F3F1,#7FA8FF" data-sliver="5">
+        <div class="plate-wrap">
+          <figure class="plate">
+            <div class="plate-rig"><div class="bloom"></div>
+              <div class="screen">
+                <img src="shots/outrank-home-461.webp" width="461" height="929" loading="lazy" decoding="async" data-full="shots/outrank-home.webp" data-peek
+                     alt="Outrank home: a large serif &quot;Day 1.&quot; headline over a radial diagram of five habit nodes on dashed orbital rings around a dense particle orb.">
+                <canvas class="orb" data-orb="50,47,17" aria-hidden="true"></canvas>
+                <span class="dot" style="--x:50%;--y:14%">1</span>
+                <span class="dot" style="--x:50%;--y:72%">2</span>
+              </div>
+            </div>
+            <figcaption class="plate-slug"><span><b>Outrank</b> · 01 Home <span class="dim">· 922&times;1858</span></span></figcaption>
+          </figure>
+          <div class="notes">
+            <div class="note"><span class="note-n">01</span><p>The budget model is mine. Each tier gets a daily allowance in seconds — 60, 240, 600 — checked <em>before</em> a realtime session is minted, so an exhausted account is refused with a 429 instead of running up a bill.</p></div>
+            <div class="note"><span class="note-n">02</span><p>The quota increment happens inside a Firestore transaction. Two tabs opening a session at the same moment is not hypothetical.</p></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="rail-item" data-amb="#F4F3F1,#E8E3D8" data-sliver="6">
+        <div class="plate-wrap">
+          <figure class="plate">
+            <div class="plate-rig"><div class="bloom"></div>
+              <div class="screen">
+                <img src="shots/outrank-explore-461.webp" width="461" height="929" loading="lazy" decoding="async" data-full="shots/outrank-explore.webp" data-peek
+                     alt="Outrank explore: white cards on black for Compete, Ranks, Shop and Directory, above a row of ornate black-and-cream tarot habit cards.">
+                <span class="dot" style="--x:50%;--y:72%">1</span>
+              </div>
+            </div>
+            <figcaption class="plate-slug"><span><b>Outrank</b> · 02 Explore <span class="dim">· 922&times;1858</span></span></figcaption>
+          </figure>
+          <div class="notes">
+            <div class="note"><span class="note-n">01</span><p>Tarot habit-cards. The art is the least of it — the economy and the unlock rules are schema, not decoration.</p></div>
+            <div class="note">
+              <span class="note-n">↺</span>
+              <p style="margin-bottom:12px">Two of them, lifted off the screen — hover or tap to turn:</p>
+              <div class="tarot">
+                <button class="card" type="button" aria-label="Turn over: the Lifter">
+                  <span class="f" style="background-image:url(shots/tarot-lifter.webp)"></span>
+                  <span class="glare"></span>
+                  <span class="b"><span>I — THE LIFTER</span><span>Unlocks on a seven-day gym streak. Server-derived; the client cannot grant it.</span></span>
+                </button>
+                <button class="card" type="button" aria-label="Turn over: the Adventurer">
+                  <span class="f" style="background-image:url(shots/tarot-adventurer.webp)"></span>
+                  <span class="glare"></span>
+                  <span class="b"><span>I — THE ADVENTURER</span><span>Step goal held for thirty days. Same rule, a different dimension.</span></span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="rail-item" data-amb="#EDEBE6,#5A80A6" data-sliver="7">
+        <div class="plate-wrap">
+          <figure class="plate">
+            <div class="plate-rig"><div class="bloom"></div>
+              <div class="screen">
+                <img src="shots/outrank-diet-461.webp" width="461" height="929" loading="lazy" decoding="async" data-full="shots/outrank-diet.webp" data-peek
+                     alt="Outrank diet: a large serif zero, a dark ring gauge crossed by dashed elliptical orbits, and protein, carbs and fat bars beneath.">
+                <span class="dot" style="--x:50%;--y:45%">1</span>
+              </div>
+            </div>
+            <figcaption class="plate-slug"><span><b>Outrank</b> · 03 Diet <span class="dim">· 922&times;1858</span></span></figcaption>
+          </figure>
+          <div class="notes">
+            <div class="note"><span class="note-n">01</span><p>Macro targets derive from one stored profile. No duplicated client state — the number on this screen and the number in the assistant's context come from the same row.</p></div>
+            <div class="note"><span class="note-n">02</span><p>Next.js 16 · React 19 · Firebase. That is a fact about the repository, not a claim about me.</p></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <p class="rail-hint">Drag, scroll, or use ← → · three screens</p>
+  </div>
+</section>
+
+<!-- ===================================================== §06 TAKE LOG -->
+<section class="sec" id="s06" data-amb="#8B9199,#545A62" data-sliver="-1">
+  <div class="wrap">
+    <p class="tick">Coursework</p>
+    <h2 class="sect-title">THE SLOW WAY</h2>
+    <table class="log">
+      <thead><tr><th>What</th><th>Stack</th><th>What it proved</th><th class="h">Hand</th></tr></thead>
+      <tbody>
+        <tr><td>Ručna Radinost</td><td class="s">C# · .NET 8 MVC · EF Core 9</td><td class="s">Multi-vendor marketplace, three roles on Identity</td><td class="h">✓</td></tr>
+        <tr><td>Apoteka „Vita“</td><td class="s">Java EE · Servlet / JSP · MySQL</td><td class="s">MVC Model 2 with no framework doing it for you</td><td class="h">✓</td></tr>
+        <tr><td>Srećna šapa</td><td class="s">PHP 8 · PDO · MySQL</td><td class="s">Veterinary clinic, three roles, prepared statements throughout</td><td class="h">✓</td></tr>
+        <tr><td>Video-game IS</td><td class="s">ER / PMOV · T-SQL</td><td class="s">19 entities, 3 views, 3 table-valued functions, 3 procedures</td><td class="h">✓</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ========================================================== §07 END -->
+<section class="sec" id="s07" data-amb="#E8E6E1,#545A62" data-sliver="-1">
+  <div class="wrap">
+    <p class="tick">Outputs</p>
+    <h2 class="sect-title">GET IN TOUCH</h2>
+    <ul class="outs">
+      <li><a href="cv.pdf">cv.pdf</a></li>
+      <li><a href="mailto:jocaspinjo@gmail.com">jocaspinjo@gmail.com</a></li>
+      <li><a href="https://github.com/kaizennnnnnnnn" rel="me noopener">github.com/kaizennnnnnnnn</a></li>
+      <li><a href="https://linkedin.com/in/jovanspinjo" rel="me noopener">linkedin.com/in/jovanspinjo</a></li>
+    </ul>
+    <p class="colophon">
+      Built by hand for this page — no framework, no build step, no runtime dependency.<br>
+      The spec, the measurements, the annotations and the argument are mine.<br>
+      The typing was directed — same as Eren and Outrank. That's the point.
+    </p>
   </div>
 </section>
 
 </main>
 
-<button class="rack" id="rack" type="button" aria-pressed="false">
-  <span class="rack__ring"><i></i></span>
-  <span class="rack__txt"><b>PULL FOCUS [F]</b><small id="rackRead">no object in frame</small></span>
-</button>
+<!-- ==================================================== BENCH INDEX BAR -->
+<nav class="bench" aria-label="Screens">
+  <span class="bench-prog" id="prog" aria-hidden="true"></span>
+  <ul class="slivers" id="slivers">
+    <li><a class="sliver" href="#s00" data-i="0"><img src="shots/eren-living-461.webp" alt="" width="461" height="929" loading="lazy"><b>Eren · living room</b></a></li>
+    <li><a class="sliver" href="#s03" data-i="1"><img src="shots/eren-living-461.webp" alt="" width="461" height="929" loading="lazy"><b>Eren · living room</b></a></li>
+    <li><a class="sliver" href="#s03" data-i="2"><img src="shots/eren-kitchen-461.webp" alt="" width="461" height="929" loading="lazy"><b>Eren · kitchen</b></a></li>
+    <li><a class="sliver" href="#s03" data-i="3"><img src="shots/eren-bedroom-461.webp" alt="" width="461" height="929" loading="lazy"><b>Eren · bedroom</b></a></li>
+    <li><a class="sliver" href="#s03" data-i="4"><img src="shots/eren-talk-461.webp" alt="" width="461" height="929" loading="lazy"><b>Eren · attic chat</b></a></li>
+    <li><a class="sliver" href="#s05" data-i="5"><img src="shots/outrank-home-461.webp" alt="" width="461" height="929" loading="lazy"><b>Outrank · home</b></a></li>
+    <li><a class="sliver" href="#s05" data-i="6"><img src="shots/outrank-explore-461.webp" alt="" width="461" height="929" loading="lazy"><b>Outrank · explore</b></a></li>
+    <li><a class="sliver" href="#s05" data-i="7"><img src="shots/outrank-diet-461.webp" alt="" width="461" height="929" loading="lazy"><b>Outrank · diet</b></a></li>
+  </ul>
+  <a class="index-btn" href="#s00">Index</a>
+  <span class="bench-cta">
+    <a href="cv.pdf" class="fill">CV</a>
+    <a href="mailto:jocaspinjo@gmail.com">Email</a>
+  </span>
+</nav>
+
+<!-- =============================================================== PEEK -->
+<div class="peek" id="peek" role="dialog" aria-modal="true" aria-label="Full-size screen">
+  <figure class="peek-fig">
+    <button class="peek-close" id="peek-close" type="button">Close · Esc</button>
+    <div class="plate-rig"><div class="screen"><img id="peek-img" alt=""></div></div>
+    <figcaption class="plate-slug"><span id="peek-slug"></span><span>Move to magnify · 1:1 pixels</span></figcaption>
+    <canvas class="loupe" id="loupe" width="180" height="180"></canvas>
+  </figure>
+</div>
 
 <script>
 (function(){
-  var html = document.documentElement;
-  html.classList.remove('no-js');
-  var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+'use strict';
+var D = document, root = D.documentElement;
+root.classList.remove('no-js');
+var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+var coarse = matchMedia('(pointer: coarse)').matches;
 
-  /* ---------- grade ramp: --t quantised to 20 steps, written only on change ---------- */
-  var seam = document.getElementById('s03');
-  var lastT = -1, ticking = false;
+/* ----------------------------------------------- one shared rAF loop */
+var tasks = [], running = false;
+function anyOn(){ for (var i = 0; i < tasks.length; i++) if (tasks[i].on) return true; return false; }
+function tick(){
+  running = false;
+  for (var i = 0; i < tasks.length; i++) if (tasks[i].on) tasks[i].fn();
+  if (anyOn()) start();
+}
+function start(){ if (!running && !D.hidden && anyOn()) { running = true; requestAnimationFrame(tick); } }
+function addTask(fn){ var t = {fn: fn, on: false}; tasks.push(t); return t; }
+D.addEventListener('visibilitychange', function(){ if (!D.hidden) start(); });
 
-  function computeT(){
-    var r = seam.getBoundingClientRect();
-    var vh = innerHeight;
-    var raw = (vh * 0.5 - r.top) / (r.height || 1);
-    return Math.max(0, Math.min(1, raw));
+/* ----------------------------------------------------- bench index bar */
+var slivers = [].slice.call(D.querySelectorAll('.sliver'));
+function markSliver(i){
+  for (var n = 0; n < slivers.length; n++)
+    slivers[n].setAttribute('aria-current', n === i ? 'true' : 'false');
+}
+
+/* -------------------------------------------------- the ambient engine */
+/* One observer sets --amb-1/--amb-2 on :root from whatever is docked.
+   No runtime canvas sampling: area-averaging these files returns brown mud,
+   and saturating the dark Outrank shots returns indigo. Hand-authored. */
+var curAmb = '';
+var ambObs = new IntersectionObserver(function(es){
+  var best = null, bestR = 0;
+  es.forEach(function(e){
+    if (e.isIntersecting && e.intersectionRatio > bestR) { bestR = e.intersectionRatio; best = e.target; }
+  });
+  if (!best) return;
+  var v = best.getAttribute('data-amb');
+  if (v && v !== curAmb) {
+    curAmb = v;
+    var p = v.split(',');
+    root.style.setProperty('--amb-1', p[0].trim());
+    root.style.setProperty('--amb-2', p[1].trim());
   }
-  function applyGrade(){
-    ticking = false;
-    var t = Math.round(computeT() * 20) / 20;
-    if (t === lastT) return;
-    lastT = t;
-    html.style.setProperty('--t', t);
-    var g = html.dataset.grade;
-    if (g !== 'void') html.dataset.grade = t > 0.5 ? 'real' : 'construct';
-  }
-  function onScroll(){ if (!ticking){ ticking = true; requestAnimationFrame(applyGrade); } }
-  addEventListener('scroll', onScroll, {passive:true});
-  addEventListener('resize', onScroll, {passive:true});
-  applyGrade();
+  var s = best.getAttribute('data-sliver');
+  if (s !== null) markSliver(+s);
+}, {threshold: [.25, .5, .75], rootMargin: '-8% 0px -28% 0px'});
+[].forEach.call(D.querySelectorAll('[data-amb]'), function(el){ ambObs.observe(el); });
 
-  /* ---------- section ticks ---------- */
-  var ticks = [].slice.call(document.querySelectorAll('.ticks a'));
-  var secs = ticks.map(function(a){ return document.querySelector(a.getAttribute('href')); });
-  var tickObs = new IntersectionObserver(function(es){
-    es.forEach(function(e){
-      if (!e.isIntersecting) return;
-      var i = secs.indexOf(e.target);
-      if (i < 0) return;
-      ticks.forEach(function(a, j){ a.setAttribute('aria-current', j === i ? 'true' : 'false'); });
-    });
-  }, {rootMargin:'-45% 0px -45% 0px', threshold:0});
-  secs.forEach(function(s){ if (s) tickObs.observe(s); });
-
-  /* ---------- seam lines wipe in once ---------- */
-  var lines = [].slice.call(seam.querySelectorAll('.seam > p'));
-  var seamObs = new IntersectionObserver(function(es){
-    es.forEach(function(e){
-      if (!e.isIntersecting) return;
-      lines.forEach(function(p, i){
-        setTimeout(function(){ p.classList.add('in'); }, reduce ? 0 : i * 90);
-      });
-      seamObs.disconnect();
-    });
-  }, {threshold:0.25});
-  seamObs.observe(seam);
-
-  /* ---------- void: hard cut to the light surface ---------- */
-  var voidSec = document.getElementById('s05');
+/* The §01 light surface is a hard 90 ms cut, never a fade: a fade to white
+   reads as a broken dark mode, a cut reads as a projector changing reels. */
+(function(){
+  var s01 = D.getElementById('s01');
   new IntersectionObserver(function(es){
     es.forEach(function(e){
-      html.dataset.grade = e.isIntersecting ? 'void' : (lastT > 0.5 ? 'real' : 'construct');
+      D.body.style.transitionDuration = (e.isIntersecting && e.intersectionRatio > .45) ? '90ms' : '420ms';
     });
-  }, {rootMargin:'-20% 0px 0px 0px', threshold:0}).observe(voidSec);
+  }, {threshold: [.45]}).observe(s01);
+})();
 
-  /* ---------- focus band ---------- */
-  var objs = [].slice.call(document.querySelectorAll('.obj[data-object]'));
-  var rack = document.getElementById('rack');
-  var read = document.getElementById('rackRead');
-  var band = null;
+/* ------------------------------------------------------ section reveal */
+var litObs = new IntersectionObserver(function(es){
+  es.forEach(function(e){ if (e.isIntersecting) { e.target.classList.add('lit'); litObs.unobserve(e.target); } });
+}, {threshold: .15, rootMargin: '0px 0px -6% 0px'});
+[].forEach.call(D.querySelectorAll('.sec, .rail-item'), function(el){ litObs.observe(el); });
 
-  var bandObs = new IntersectionObserver(function(es){
-    es.forEach(function(e){
-      if (e.isIntersecting) band = e.target;
-      else if (band === e.target) band = null;
-    });
-    objs.forEach(function(o){ o.classList.toggle('is-band', o === band); });
-    var name = band ? band.dataset.object : 'none';
-    html.dataset.object = name;
-    if (name === 'murmur'){
-      read.textContent = 'no substrate — object is one thing';
-      rack.setAttribute('aria-disabled','true');
-    } else if (name === 'none'){
-      read.textContent = 'no object in frame';
-      rack.setAttribute('aria-disabled','true');
-    } else {
-      read.textContent = 'object — ' + name;
-      rack.removeAttribute('aria-disabled');
-    }
-    if (html.dataset.focus === 'pulled' && (name === 'none' || name === 'murmur')) release();
-  }, {rootMargin:'-38% 0px -38% 0px', threshold:0});
-  objs.forEach(function(o){ bandObs.observe(o); });
+/* --------------------------------------------------- scroll progress */
+var prog = D.getElementById('prog'), sy = 0, dirty = true;
+var progTask = addTask(function(){
+  if (!dirty) { progTask.on = false; return; }
+  dirty = false;
+  var h = D.documentElement.scrollHeight - innerHeight;
+  prog.style.width = (h > 0 ? Math.min(1, sy / h) * 100 : 0) + '%';
+  progTask.on = false;
+});
+addEventListener('scroll', function(){ sy = pageYOffset; dirty = true; progTask.on = true; start(); }, {passive: true});
+progTask.on = true; start();
+requestAnimationFrame(function(){ root.classList.add('ready'); });
 
-  /* ---------- PULL FOCUS ---------- */
-  var bloomTimer = null;
-  function engage(){
-    html.dataset.focus = 'pulled';
-    rack.setAttribute('aria-pressed','true');
-    if (band) { var r = band.querySelector('.rendered'); if (r) r.style.willChange = 'filter'; }
-    html.style.setProperty('--t', Math.min(1, (lastT < 0 ? 0 : lastT) + 0.12));
-  }
-  function release(){
-    if (html.dataset.focus !== 'pulled') return;
-    html.dataset.focus = 'released';
-    rack.setAttribute('aria-pressed','false');
-    html.style.setProperty('--t', lastT < 0 ? 0 : lastT);
-    objs.forEach(function(o){
-      var r = o.querySelector('.rendered'); if (r) r.style.willChange = '';
-      var s = o.querySelector('.sub');
-      if (s && o === band && !reduce){
-        s.classList.add('bloom');
-        clearTimeout(bloomTimer);
-        bloomTimer = setTimeout(function(){ s.classList.remove('bloom'); }, 500);
+/* ------------------------------------------------------ §01 patchbay */
+/* Eren and Outrank each run TWO cables — one into DIRECTED and one up into
+   OWNED. That visual fact is the whole argument: you see the directed work
+   land on the owned rail before you read a word. Geometry is measured from
+   the real boxes so it survives every width and every font fallback. */
+(function(){
+  var pb = D.querySelector('.patchbay');
+  var svg = D.getElementById('cables');
+  if (!pb || !svg) return;
+  var NS = 'http://www.w3.org/2000/svg';
+  var LINKS = [
+    ['eren','owned'], ['eren','directed'],
+    ['outrank','owned'], ['outrank','directed'],
+    ['murmur','owned'], ['murmur','hand'],
+    ['comtrade','owned'], ['comtrade','hand'],
+    ['faculty','hand']
+  ];
+  var cables = [], drawn = false;
+
+  function build(){
+    var box = pb.getBoundingClientRect();
+    if (!box.width) return false;
+    svg.setAttribute('viewBox', '0 0 ' + box.width + ' ' + box.height);
+    while (svg.firstChild) svg.removeChild(svg.firstChild);
+    cables = [];
+    var vertical = getComputedStyle(pb).gridTemplateColumns.split(' ').length < 2;
+
+    /* give every cable its own port on the destination rail, so they arrive
+       spread across its edge instead of piling onto one point */
+    var perRail = {}, seen = {};
+    LINKS.forEach(function(L){ perRail[L[1]] = (perRail[L[1]] || 0) + 1; });
+
+    LINKS.forEach(function(L){
+      var a = pb.querySelector('.chip[data-chip="' + L[0] + '"]');
+      var b = pb.querySelector('.rail[data-rail="' + L[1] + '"]');
+      if (!a || !b) return;
+      var ra = a.getBoundingClientRect(), rb = b.getBoundingClientRect();
+      var n = perRail[L[1]], k = (seen[L[1]] = (seen[L[1]] || 0) + 1) - 1;
+      var frac = n > 1 ? (0.22 + 0.56 * (k / (n - 1))) : 0.5;
+      var x1, y1, x2, y2, d;
+      if (vertical) {
+        x1 = ra.left + ra.width / 2 - box.left; y1 = ra.bottom - box.top;
+        x2 = rb.left + rb.width * frac - box.left; y2 = rb.top - box.top;
+        var sag = Math.abs(y2 - y1) * 0.45;
+        d = 'M' + x1 + ' ' + y1 + ' C' + x1 + ' ' + (y1 + sag) + ' ' + x2 + ' ' + (y2 - sag) + ' ' + x2 + ' ' + y2;
+      } else {
+        x1 = ra.right - box.left; y1 = ra.top + ra.height / 2 - box.top;
+        x2 = rb.left - box.left;  y2 = rb.top + rb.height * frac - box.top;
+        var run = (x2 - x1) * 0.55;
+        /* a downward sag on the control points, so they hang like patch leads */
+        var sg = Math.abs(y2 - y1) * 0.10 + 7;
+        d = 'M' + x1 + ' ' + y1 + ' C' + (x1 + run) + ' ' + (y1 + sg) + ' ' + (x2 - run) + ' ' + (y2 + sg) + ' ' + x2 + ' ' + y2;
       }
+      var p = D.createElementNS(NS, 'path');
+      p.setAttribute('d', d);
+      p.setAttribute('data-from', L[0]);
+      p.setAttribute('data-to', L[1]);
+      svg.appendChild(p);
+      cables.push(p);
+      [[x1, y1], [x2, y2]].forEach(function(pt){
+        var c = D.createElementNS(NS, 'circle');
+        c.setAttribute('cx', pt[0]); c.setAttribute('cy', pt[1]); c.setAttribute('r', '2.5');
+        svg.appendChild(c);
+      });
+    });
+    return true;
+  }
+
+  function draw(){
+    if (reduce) return;
+    cables.forEach(function(p, i){
+      var L = p.getTotalLength();
+      p.style.strokeDasharray = L;
+      p.style.strokeDashoffset = L;
+      p.style.transition = 'stroke-dashoffset 520ms cubic-bezier(.16,1,.3,1),opacity 220ms,stroke-width 220ms';
+      setTimeout(function(){ p.style.strokeDashoffset = 0; }, i * 40);
     });
   }
-  function toggle(){
-    if (rack.getAttribute('aria-disabled') === 'true'){
-      rack.classList.add('pulse');
-      setTimeout(function(){ rack.classList.remove('pulse'); }, 180);
-      return;
-    }
-    html.dataset.focus === 'pulled' ? release() : engage();
+
+  build();
+  new IntersectionObserver(function(es){
+    es.forEach(function(e){
+      if (e.isIntersecting && !drawn) { drawn = true; draw(); }
+    });
+  }, {threshold: .2}).observe(pb);
+
+  var rt = null;
+  addEventListener('resize', function(){
+    clearTimeout(rt);
+    rt = setTimeout(function(){ if (build() && drawn) cables.forEach(function(p){ p.style.strokeDashoffset = 0; }); }, 150);
+  }, {passive: true});
+
+  function trace(key, kind){
+    cables.forEach(function(p){
+      var hit = key !== null && p.getAttribute(kind) === key;
+      p.classList.toggle('hot', hit);
+      p.classList.toggle('dim', key !== null && !hit);
+    });
   }
-  rack.addEventListener('click', toggle);
-  addEventListener('keydown', function(e){
-    if (e.key !== 'f' && e.key !== 'F') return;
-    var t = e.target.tagName;
-    if (t === 'INPUT' || t === 'TEXTAREA' || e.target.isContentEditable) return;
-    e.preventDefault(); toggle();
+  function wire(sel, attr, kind){
+    [].forEach.call(D.querySelectorAll(sel), function(b){
+      var k = b.getAttribute(attr);
+      function on(){ trace(k, kind); b.setAttribute('aria-pressed', 'true'); }
+      function off(){ trace(null, kind); b.setAttribute('aria-pressed', 'false'); }
+      b.addEventListener('mouseenter', on);
+      b.addEventListener('focus', on);
+      b.addEventListener('mouseleave', off);
+      b.addEventListener('blur', off);
+      b.addEventListener('click', on);
+    });
+  }
+  wire('.chip', 'data-chip', 'data-from');
+  wire('.rail[data-rail]', 'data-rail', 'data-to');
+})();
+
+/* ----------------------------------------------------- the lifted HUD */
+(function(){
+  var hud = D.querySelector('.hud');
+  if (!hud) return;
+  var bars = [].slice.call(hud.querySelectorAll('.gauge b'));
+  var toast = hud.querySelector('.toast');
+  var vals = [85, 79, 83, 92];
+  if (!reduce) setInterval(function(){
+    if (D.hidden) return;
+    var i = (Math.random() * vals.length) | 0;
+    vals[i] = Math.max(14, vals[i] - 1);
+    bars[i].style.width = vals[i] + '%';
+  }, 2600);
+  hud.addEventListener('click', function(e){
+    var g = e.target.closest ? e.target.closest('.gauge') : null;
+    if (!g) return;
+    var i = +g.getAttribute('data-g');
+    vals[i] = 100;
+    bars[i].style.width = '100%';
+    toast.classList.remove('go');
+    void toast.offsetWidth;
+    toast.classList.add('go');
+  });
+})();
+
+/* ------------------------------------------------- rail drag inertia */
+/* Layered over a real scroll-snap container: if this never runs, the rail
+   still works. Engages only past 10 px of clearly horizontal intent. */
+[].forEach.call(D.querySelectorAll('.rail-track'), function(track){
+  /* Step item to item. Both scrollBy and scrollIntoView with behavior:'smooth'
+     are swallowed by scroll-snap-type: mandatory here, so tween scrollLeft on
+     the shared loop instead — the same mechanism the drag inertia uses. */
+  /* scroll-snap-type: mandatory yanks any INCREMENTAL programmatic scroll
+     straight back to the nearest snap point, which silently killed both the
+     arrow keys and the drag-release glide. Both now suspend snapping while
+     they animate and restore it on the last frame, so the rail still snaps. */
+  var snapOff = 0;
+  function suspendSnap(){ if (!snapOff++) track.style.scrollSnapType = 'none'; }
+  function resumeSnap(){ if (snapOff && !--snapOff) track.style.scrollSnapType = ''; }
+
+  var tween = null, tTo = 0;
+  track.addEventListener('keydown', function(e){
+    var dir = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0;
+    if (!dir) return;
+    e.preventDefault();
+    var items = [].slice.call(track.children).filter(function(n){ return n.classList.contains('rail-item'); });
+    if (!items.length) return;
+    var mid = track.scrollLeft + track.clientWidth / 2, cur = 0, best = Infinity;
+    items.forEach(function(it, i){
+      var d = Math.abs(it.offsetLeft + it.offsetWidth / 2 - mid);
+      if (d < best) { best = d; cur = i; }
+    });
+    var n = items[Math.max(0, Math.min(items.length - 1, cur + dir))];
+    tTo = Math.max(0, Math.min(track.scrollWidth - track.clientWidth,
+                   n.offsetLeft + n.offsetWidth / 2 - track.clientWidth / 2));
+    if (reduce) { track.scrollLeft = tTo; return; }
+    /* a fixed-duration tween, not an asymptotic lerp: it is guaranteed to
+       finish, so snapping can never be left switched off */
+    var from = track.scrollLeft, t0 = performance.now(), DUR = 420;
+    if (!tween) tween = addTask(function(){
+      var k = Math.min(1, (performance.now() - t0) / DUR);
+      var e = 1 - Math.pow(1 - k, 3);
+      track.scrollLeft = from + (tTo - from) * e;
+      if (k >= 1) { tween.on = false; resumeSnap(); }
+    });
+    if (!tween.on) suspendSnap();
+    tween.on = true; start();
   });
 
-  /* ---------- rain: one frozen frame above the seam, falling below it ---------- */
-  var cv = document.getElementById('rain'), ctx = cv.getContext('2d');
-  var dpr = Math.min(2, devicePixelRatio || 1);
-  var W = 0, H = 0, streaks = [], raf = null, falling = false;
-  var N = innerWidth < 900 ? 55 : 110;
-
-  function size(){
-    W = cv.width = Math.floor(innerWidth * dpr);
-    H = cv.height = Math.floor(innerHeight * dpr);
-    cv.style.width = innerWidth + 'px'; cv.style.height = innerHeight + 'px';
-  }
-  function seed(){
-    streaks = [];
-    for (var i = 0; i < N; i++){
-      var depth = i % 3;
-      streaks.push({
-        x: Math.random() * W,
-        y: Math.random() * H,
-        len: (14 + depth * 22 + Math.random() * 30) * dpr,
-        v: (1.1 + depth * 1.5 + Math.random() * 1.4) * dpr,
-        a: 0.10 + depth * 0.09
-      });
+  if (reduce) return;
+  var down = false, sx = 0, sy2 = 0, sl = 0, lock = 0, last = 0, vel = 0, pid = null, glide = null;
+  track.addEventListener('pointerdown', function(e){
+    if (e.pointerType === 'mouse' && e.button !== 0) return;
+    down = true; lock = 0; pid = e.pointerId;
+    sx = e.clientX; sy2 = e.clientY; sl = track.scrollLeft; last = e.clientX; vel = 0;
+    if (glide && glide.on) { glide.on = false; resumeSnap(); }
+  });
+  track.addEventListener('pointermove', function(e){
+    if (!down || e.pointerId !== pid) return;
+    var dx = e.clientX - sx, dy = e.clientY - sy2;
+    if (!lock) {
+      if (Math.abs(dx) > 10 && Math.abs(dx) > Math.abs(dy)) {
+        lock = 1;
+        try { track.setPointerCapture(pid); } catch (err) {}
+      } else if (Math.abs(dy) > 10) { lock = -1; }
     }
+    if (lock !== 1) return;
+    e.preventDefault();
+    track.scrollLeft = sl - dx;
+    vel = e.clientX - last;
+    last = e.clientX;
+  });
+  function release(e){
+    if (!down || (e && e.pointerId !== pid)) return;
+    down = false;
+    if (lock !== 1) return;
+    try { track.releasePointerCapture(pid); } catch (err) {}
+    var v = -vel * 1.8;
+    if (Math.abs(v) < 1) return;
+    var gEnd = performance.now() + 1200;    /* hard cap, so snap is always restored */
+    if (!glide) glide = addTask(function(){
+      track.scrollLeft += v;
+      v *= 0.94;
+      if (Math.abs(v) < 0.4 || performance.now() > gEnd) { glide.on = false; resumeSnap(); }
+    });
+    if (!glide.on) suspendSnap();
+    glide.on = true; start();
+  }
+  track.addEventListener('pointerup', release);
+  track.addEventListener('pointercancel', release);
+});
+
+/* ---------------------------------------------------------- the orb */
+/* A live particle field registered in the still screenshot's own
+   normalized coordinates, so the PNG appears to be running. */
+[].forEach.call(D.querySelectorAll('.orb'), function(cv){
+  var p = cv.getAttribute('data-orb').split(',').map(Number);
+  var ctx = cv.getContext('2d');
+  var N = innerWidth < 900 ? 260 : 520;
+  var dpr = Math.min(devicePixelRatio || 1, innerWidth < 900 ? 1 : 1.5);
+  var COL = ['#69D96B','#4FC3E8','#E86FA8','#F0C750','#7B6FE8','#E8724F','#58E0B0','#D45FE0','#9CE85A'];
+  var ps = [], W = 0, H = 0, cx = 0, cy = 0, R = 0, T = 0;
+  cv.style.cssText = 'position:absolute;left:0;top:0;width:100%;height:100%;pointer-events:none;z-index:2';
+  function seed(){
+    var r = cv.parentNode.getBoundingClientRect();
+    if (!r.width) return false;
+    W = r.width; H = r.height;
+    cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    cx = W * p[0] / 100; cy = H * p[1] / 100; R = W * p[2] / 100;
+    if (ps.length) return true;
+    for (var i = 0; i < N; i++) ps.push({
+      a: Math.random() * 6.283, r: Math.sqrt(Math.random()),
+      s: 2 + Math.random() * 4, c: COL[(Math.random() * COL.length) | 0],
+      va: (Math.random() - .5) * .012, vr: (Math.random() - .5) * .004,
+      ph: Math.random() * 6.283
+    });
+    return true;
   }
   function paint(){
     ctx.clearRect(0, 0, W, H);
-    ctx.lineWidth = dpr;
-    for (var i = 0; i < streaks.length; i++){
-      var s = streaks[i];
-      ctx.strokeStyle = 'rgba(230,242,255,' + s.a + ')';
-      ctx.beginPath(); ctx.moveTo(s.x, s.y); ctx.lineTo(s.x, s.y + s.len); ctx.stroke();
-      if (falling){
-        s.y += s.v;
-        if (s.y > H){ s.y = -s.len; s.x = Math.random() * W; }
-      }
+    ctx.globalCompositeOperation = 'lighter';
+    T += .016;
+    for (var i = 0; i < ps.length; i++){
+      var q = ps[i];
+      q.a += q.va + .0006;
+      q.r += q.vr;
+      if (q.r > 1) { q.r = 1; q.vr = -Math.abs(q.vr); }
+      if (q.r < .05) { q.r = .05; q.vr = Math.abs(q.vr); }
+      var wob = Math.sin(T * 1.6 + q.ph) * .03;
+      var x = cx + Math.cos(q.a) * (q.r + wob) * R;
+      var y = cy + Math.sin(q.a) * (q.r + wob) * R * 1.02;
+      ctx.globalAlpha = .5 + .38 * Math.sin(T * 2 + q.ph);
+      ctx.fillStyle = q.c;
+      ctx.beginPath(); ctx.arc(x, y, q.s * .5, 0, 6.283); ctx.fill();
     }
-    if (falling && !reduce) raf = requestAnimationFrame(paint);
+    ctx.globalAlpha = 1;
+    ctx.globalCompositeOperation = 'source-over';
   }
-  size(); seed(); paint();
-  addEventListener('resize', function(){ size(); seed(); paint(); }, {passive:true});
+  var task = addTask(paint);
+  new IntersectionObserver(function(es){
+    es.forEach(function(e){
+      if (e.isIntersecting) {
+        if (!seed()) return;
+        if (reduce) { paint(); return; }
+        task.on = true; start();
+      } else { task.on = false; }
+    });
+  }, {threshold: .08}).observe(cv);
+  addEventListener('resize', function(){ if (seed() && reduce) paint(); }, {passive: true});
+});
+
+/* --------------------------------------------------------- tarot flip */
+[].forEach.call(D.querySelectorAll('.card'), function(c){
+  c.addEventListener('click', function(){ c.classList.toggle('flip'); });
+  if (!coarse) {
+    c.addEventListener('mouseenter', function(){ c.classList.add('flip'); });
+    c.addEventListener('mouseleave', function(){ c.classList.remove('flip'); });
+    c.addEventListener('focus', function(){ c.classList.add('flip'); });
+    c.addEventListener('blur', function(){ c.classList.remove('flip'); });
+  }
+});
+
+/* ---------------------------------------------------- Comtrade schema */
+/* SMIL inside the SVG's own coordinate space via mpath, so the packets
+   scale exactly with a responsive viewBox. offset-path would desync. */
+(function(){
+  var svg = D.getElementById('schema');
+  if (!svg) return;
+  var NS = 'http://www.w3.org/2000/svg';
+  var PER = innerWidth < 720 ? 3 : 6;
+  var g = D.createElementNS(NS, 'g');
+  ['j1','j2','j3','j4','j5'].forEach(function(jid){
+    for (var i = 0; i < PER; i++){
+      var c = D.createElementNS(NS, 'circle');
+      c.setAttribute('r', '3');
+      c.setAttribute('fill', '#7FA8FF');
+      var am = D.createElementNS(NS, 'animateMotion');
+      am.setAttribute('dur', '2.6s');
+      am.setAttribute('repeatCount', 'indefinite');
+      am.setAttribute('begin', (i * 2.6 / PER).toFixed(2) + 's');
+      var mp = D.createElementNS(NS, 'mpath');
+      mp.setAttributeNS('http://www.w3.org/1999/xlink', 'href', '#' + jid);
+      mp.setAttribute('href', '#' + jid);
+      am.appendChild(mp); c.appendChild(am); g.appendChild(c);
+    }
+  });
+  svg.appendChild(g);
+
+  var rc = D.getElementById('rowcount');
+  var stages = [].slice.call(D.getElementById('ssis').children);
+  var n = 0, si = 0, timer = null;
+
+  if (reduce) {
+    try { svg.setCurrentTime(1.3); svg.pauseAnimations(); } catch (err) {}
+    rc.textContent = '2,418,904 rows';
+    stages.forEach(function(s){ s.classList.add('on'); });
+    return;
+  }
+  new IntersectionObserver(function(es){
+    es.forEach(function(e){
+      if (e.isIntersecting) {
+        try { svg.unpauseAnimations(); } catch (err) {}
+        if (!timer) timer = setInterval(function(){
+          if (D.hidden) return;
+          n += 1200 + ((Math.random() * 900) | 0);
+          rc.textContent = n.toLocaleString('en-US') + ' rows';
+          stages.forEach(function(s, i){ s.classList.toggle('on', i === si); });
+          si = (si + 1) % stages.length;
+        }, 900);
+      } else {
+        try { svg.pauseAnimations(); } catch (err) {}
+        if (timer) { clearInterval(timer); timer = null; }
+      }
+    });
+  }, {threshold: .12}).observe(svg);
+})();
+
+/* ------------------------------------------------------- the cat line */
+/* The only typing effect on the site. No scramble, no misrecognition —
+   that is the 2016 decoder effect and it is the loudest cheap tell there is. */
+(function(){
+  var box = D.getElementById('speech'), q = D.getElementById('speech-q');
+  if (!box || !q) return;
+  var L1 = "you've fed me fifteen times today and still forgot my name.";
+  var L2 = "odd day for you huh.";
+  var TWO = '<span class="two">' + L2 + '</span>';
+  function finish(){ q.innerHTML = L1 + TWO; box.classList.add('done'); }
+  if (reduce) { finish(); return; }
+
+  /* render the finished string first and lock the height, so nothing below jumps */
+  q.innerHTML = L1 + TWO;
+  requestAnimationFrame(function(){
+    q.style.minHeight = q.getBoundingClientRect().height + 'px';
+    q.innerHTML = '';
+    var words = L1.split(' '), i = 0, out = '';
+    var o = new IntersectionObserver(function(es){
+      es.forEach(function(e){
+        if (!e.isIntersecting) return;
+        o.unobserve(e.target);
+        (function step(){
+          if (i >= words.length) { setTimeout(finish, 260); return; }
+          out += (out ? ' ' : '') + words.slice(i, i + 1 + ((Math.random() * 2) | 0)).join(' ');
+          i += 1 + ((Math.random() * 2) | 0);
+          q.innerHTML = out + '<span class="caret">▍</span>';
+          setTimeout(step, 55 + Math.random() * 55);
+        })();
+      });
+    }, {threshold: .35});
+    o.observe(box);
+  });
+})();
+
+/* --------------------------------------------------- MURMUR instrument */
+(function(){
+  var spec = D.getElementById('cv-spec'), resp = D.getElementById('cv-resp');
+  if (!spec || !resp) return;
+  var sctx = spec.getContext('2d', {alpha: false});
+  var rctx = resp.getContext('2d', {alpha: false});
+  var stages = [].slice.call(D.querySelectorAll('.stage'));
+  var roPeak = D.getElementById('ro-peak'), roGain = D.getElementById('ro-gain');
+  var ptt = D.getElementById('ptt'), nogpu = D.getElementById('nogpu');
+  var SH = innerWidth < 720 ? 160 : 260;
+  var SW = 300, RW = 300;
+
+  /* the real coefficients — scipy.signal.butter(4, 100, 'highpass', fs=16000) */
+  var SOS = [
+    [0.9499817826, -1.8999635653, 0.9499817826, 1, -1.9285084851, 0.9299964424],
+    [1, -2, 1, 1, -1.9688774974, 0.9703966018]
+  ];
+  function sectionMag(s, w){
+    var cw = Math.cos(w), sw = Math.sin(w), c2 = Math.cos(2 * w), s2 = Math.sin(2 * w);
+    var nr = s[0] + s[1] * cw + s[2] * c2, ni = -(s[1] * sw + s[2] * s2);
+    var dr = s[3] + s[4] * cw + s[5] * c2, di = -(s[4] * sw + s[5] * s2);
+    return Math.sqrt((nr * nr + ni * ni) / (dr * dr + di * di));
+  }
+  function magAt(f){
+    var w = 2 * Math.PI * f / 16000;
+    return sectionMag(SOS[0], w) * sectionMag(SOS[1], w);
+  }
+
+  function size(){
+    var a = spec.getBoundingClientRect(), b = resp.getBoundingClientRect();
+    SW = Math.max(180, Math.round(a.width)); RW = Math.max(180, Math.round(b.width));
+    SH = innerWidth < 720 ? 160 : 260;
+    spec.width = SW; spec.height = SH; spec.style.height = SH + 'px';
+    resp.width = RW; resp.height = SH; resp.style.height = SH + 'px';
+    sctx.fillStyle = '#070A09'; sctx.fillRect(0, 0, SW, SH);
+    drawResp();
+  }
+
+  /* --- the magnitude response: the actual transfer function, 128 log bins --- */
+  var evac = 0;
+  function drawResp(){
+    var pad = 28, w = RW - pad - 10, h = SH - 36;
+    function fx(f){ return pad + (Math.log10(f) - Math.log10(20)) / (Math.log10(8000) - Math.log10(20)) * w; }
+    function fy(db){ return 14 + (1 - (db + 60) / 66) * h; }
+    rctx.fillStyle = '#070A09'; rctx.fillRect(0, 0, RW, SH);
+    rctx.strokeStyle = 'rgba(111,230,160,.12)'; rctx.lineWidth = 1;
+    [20,50,100,200,500,1000,2000,5000].forEach(function(f){
+      rctx.beginPath(); rctx.moveTo(fx(f) + .5, 14); rctx.lineTo(fx(f) + .5, 14 + h); rctx.stroke();
+    });
+    [0,-12,-24,-36,-48].forEach(function(db){
+      rctx.beginPath(); rctx.moveTo(pad, fy(db) + .5); rctx.lineTo(pad + w, fy(db) + .5); rctx.stroke();
+    });
+    rctx.fillStyle = 'rgba(255,107,74,' + (0.05 + 0.11 * (1 - evac)).toFixed(3) + ')';
+    rctx.fillRect(pad, 14, fx(100) - pad, h);
+    rctx.strokeStyle = '#6FE6A0'; rctx.lineWidth = 2; rctx.beginPath();
+    for (var i = 0; i <= 128; i++){
+      var f = 20 * Math.pow(400, i / 128);
+      var db = 20 * Math.log10(Math.max(1e-6, magAt(f)));
+      var X = fx(f), Y = fy(Math.max(-60, db));
+      i ? rctx.lineTo(X, Y) : rctx.moveTo(X, Y);
+    }
+    rctx.stroke();
+    /* the cutoff, marked where it actually is: a dropped line to the axis and
+       the label clear of the curve rather than sitting on top of it */
+    rctx.strokeStyle = 'rgba(255,107,74,.55)';
+    rctx.setLineDash([2, 3]);
+    rctx.beginPath(); rctx.moveTo(fx(100), fy(-3.01)); rctx.lineTo(fx(100), 14 + h); rctx.stroke();
+    rctx.setLineDash([]);
+    rctx.fillStyle = '#FF6B4A';
+    rctx.beginPath(); rctx.arc(fx(100), fy(-3.01), 3.5, 0, 6.283); rctx.fill();
+    rctx.font = '9px Azeret, ui-monospace, monospace';
+    rctx.fillText('100 Hz · −3 dB', fx(100) + 8, fy(-3.01) + 14);
+    rctx.fillStyle = '#6B7C80';
+    rctx.fillText('20', pad - 8, SH - 10);
+    rctx.fillText('1k', fx(1000) - 6, SH - 10);
+    rctx.fillText('8k', fx(8000) - 12, SH - 10);
+    rctx.fillText('0 dB', 3, fy(0) + 3);
+    rctx.fillText('−48', 3, fy(-48) + 3);
+  }
+
+  /* --- the spectrogram: self-blitting, mel-warped, opaque context --- */
+  function mel(f){ return 2595 * Math.log10(1 + f / 700); }
+  var MELMAX = mel(8000), MELMIN = mel(20);
+  function column(getMag){
+    sctx.drawImage(spec, -2, 0);
+    for (var y = 0; y < SH; y++){
+      var m = MELMIN + (1 - y / SH) * (MELMAX - MELMIN);
+      var f = 700 * (Math.pow(10, m / 2595) - 1);
+      var v = getMag(f);
+      var c;
+      if (v < .02) c = '#070A09';
+      else if (v < .35) c = 'rgb(' + (30 + v * 60 | 0) + ',' + (90 + v * 180 | 0) + ',' + (62 + v * 90 | 0) + ')';
+      else if (v < .75) c = 'rgb(' + (111 + (v - .35) * 180 | 0) + ',230,' + (160 + (v - .35) * 120 | 0) + ')';
+      else c = '#E8E6E1';
+      sctx.fillStyle = c;
+      sctx.fillRect(SW - 2, y, 2, 1);
+    }
+  }
+
+  /* --- the synthetic demo take: labelled as such, never called a recording --- */
+  var envelope = [];
+  for (var ei = 0; ei < 620; ei++){
+    var ph = ei / 620;
+    var syl = Math.sin(ph * 34) * .5 + .5;
+    var gap = (ph < .10 || (ph > .30 && ph < .37) || (ph > .62 && ph < .68) || ph > .93) ? .05 : 1;
+    envelope.push(Math.max(0, syl * gap * (.55 + .45 * Math.sin(ph * 7.3))));
+  }
+  var seedv = 12345;
+  function rnd(){ seedv = (seedv * 1664525 + 1013904223) & 0x7fffffff; return seedv / 0x7fffffff; }
+
+  var live = null, analyser = null, freq = null, ac = null, idx = 0;
+  /* Voiced speech is a harmonic stack under a formant envelope, not a smooth
+     blob — without the comb at F0 the scope reads as a lava lamp. */
+  var f0 = 118;
+  function bakedMag(f, amp){
+    if (amp < .02) return 0;
+    var v = 0;
+    var F = [140, 420, 980, 2100, 3200];
+    for (var k = 0; k < F.length; k++)
+      v += amp * Math.exp(-Math.pow((f - F[k]) / (F[k] * .28), 2)) * (1 - k * .13);
+    if (f < 3400) {
+      var comb = Math.cos(2 * Math.PI * f / f0);
+      v *= .40 + .60 * comb * comb;
+    }
+    v += amp * .55 * Math.exp(-Math.pow((f - 45) / 38, 2));   /* the rumble the HPF exists to remove */
+    if (f > 2400) v += amp * .13 * rnd();                     /* fricative noise up top */
+    return Math.min(1, v * magAt(f));
+  }
+  /* one sample of the take: advance the clock, drift the pitch, return the level */
+  function nextSample(){
+    f0 = 112 + 15 * Math.sin(idx * .017) + 5 * Math.sin(idx * .11);
+    return envelope[idx++ % envelope.length];
+  }
+
+  /* A peak meter holds and decays — it does not read the instantaneous sample,
+     which would sit at minus infinity through every gap between syllables. */
+  var pk = 0;
+  function meter(amp){
+    pk = Math.max(amp, pk * 0.94);
+    var db = pk > .004 ? 20 * Math.log10(pk) : -Infinity;
+    roPeak.textContent = 'peak ' + (isFinite(db) ? db.toFixed(1).replace('-', '−') : '−∞') + ' dB';
+    roGain.textContent = '×' + (pk > .02 ? (0.8 / pk).toFixed(1) : '1.0');
+  }
+
+  /* advance on elapsed time, not on frame count, so the take plays at the same
+     speed on a 60 Hz panel and a 120 Hz one */
+  var lastT = 0;
+  function frameBaked(){
+    var now = performance.now();
+    var steps = lastT ? Math.min(6, Math.max(1, Math.round((now - lastT) / 16.7))) : 1;
+    lastT = now;
+    var amp = 0;
+    for (var s = 0; s < steps; s++){
+      amp = nextSample();
+      column(function(f){ return bakedMag(f, amp); });
+      pk = Math.max(amp, pk * 0.94);
+    }
+    meter(amp);
+    gate(amp > .12);
+    evac = Math.min(1, evac + .03);
+    drawResp();
+  }
+  function frameLive(){
+    analyser.getByteFrequencyData(freq);
+    var nyq = ac.sampleRate / 2, peak = 0;
+    for (var i = 0; i < freq.length; i++) if (freq[i] > peak) peak = freq[i];
+    column(function(f){
+      var bin = Math.round(f / nyq * freq.length);
+      return bin < freq.length ? freq[bin] / 255 : 0;
+    });
+    var amp = peak / 255;
+    meter(amp);
+    gate(amp > .06);
+    evac = Math.min(1, evac + .04);
+    drawResp();
+  }
+
+  /* the LED cascade is wired to measured level, not to a timer */
+  var gateOpen = false, hold = 0;
+  function gate(open){
+    if (open) hold = 8;
+    else if (hold > 0) { hold--; open = true; }
+    if (open === gateOpen) return;
+    gateOpen = open;
+    var order = nogpu.getAttribute('aria-pressed') === 'true' ? [0,1,2,3,5,6] : [0,1,2,3,4,6];
+    stages.forEach(function(s){ s.classList.remove('on'); });
+    if (open) order.forEach(function(si, k){
+      setTimeout(function(){ if (gateOpen) stages[si].classList.add('on'); }, k * 40);
+    });
+  }
+
+  var task = addTask(function(){ live ? frameLive() : frameBaked(); });
+
+  stages[5].style.opacity = '.35';
+  nogpu.addEventListener('click', function(){
+    var on = nogpu.getAttribute('aria-pressed') === 'true';
+    nogpu.setAttribute('aria-pressed', on ? 'false' : 'true');
+    stages[4].style.opacity = on ? '' : '.35';
+    stages[5].style.opacity = on ? '.35' : '';
+  });
+
+  /* live mic: strictly opt-in, inside the gesture, never auto-requested */
+  function startLive(){
+    if (live || !navigator.mediaDevices) return;
+    ptt.classList.add('armed');
+    ptt.textContent = 'Listening…';
+    navigator.mediaDevices.getUserMedia({audio: {echoCancellation: false, noiseSuppression: false}})
+      .then(function(stream){
+        ac = new (window.AudioContext || window.webkitAudioContext)();
+        ac.resume();
+        var src = ac.createMediaStreamSource(stream);
+        var b1 = ac.createBiquadFilter(), b2 = ac.createBiquadFilter();
+        b1.type = b2.type = 'highpass';
+        b1.frequency.value = b2.frequency.value = 100;
+        b1.Q.value = b2.Q.value = 0.7071;
+        analyser = ac.createAnalyser();
+        analyser.fftSize = 1024;
+        analyser.smoothingTimeConstant = 0.6;
+        freq = new Uint8Array(analyser.frequencyBinCount);
+        src.connect(b1); b1.connect(b2); b2.connect(analyser);
+        live = {stream: stream};
+      })
+      .catch(function(){
+        ptt.classList.remove('armed');
+        ptt.textContent = 'Mic unavailable';
+        setTimeout(function(){ ptt.textContent = 'Hold to speak'; }, 1600);
+      });
+  }
+  function stopLive(){
+    ptt.classList.remove('armed');
+    ptt.textContent = 'Hold to speak';
+    if (!live) return;
+    live.stream.getTracks().forEach(function(tr){ tr.stop(); });
+    if (ac) ac.close();
+    live = null; analyser = null; ac = null;
+  }
+  ptt.addEventListener('pointerdown', function(e){ e.preventDefault(); startLive(); });
+  ['pointerup','pointercancel','pointerleave'].forEach(function(ev){ ptt.addEventListener(ev, stopLive); });
+  ptt.addEventListener('contextmenu', function(e){ e.preventDefault(); });
+  ptt.addEventListener('keydown', function(e){ if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); startLive(); } });
+  ptt.addEventListener('keyup', function(e){ if (e.key === ' ' || e.key === 'Enter') stopLive(); });
+
+  /* Fill the scope before it is ever seen. Arriving at a blank canvas and
+     waiting ten seconds for the take to scroll across is the whole failure
+     this section exists to avoid — the instrument is alive on arrival. */
+  var filled = false;
+  function prefill(){
+    if (filled) return;
+    filled = true;
+    var cols = Math.ceil(SW / 2) + 4, amp = 0;
+    /* run on a little past the fill so the take lands mid-syllable rather than
+       in a gap — the chain should be lit the moment you arrive, not dark */
+    for (var i = 0; i < cols + 90; i++){
+      amp = nextSample();
+      column(function(f){ return bakedMag(f, amp); });
+      pk = Math.max(amp, pk * 0.94);
+      if (i >= cols && amp > .3) break;
+    }
+    meter(amp);
+    gate(amp > .12);
+    evac = 1;
+    drawResp();
+  }
 
   new IntersectionObserver(function(es){
     es.forEach(function(e){
-      var wantFall = e.isIntersecting || e.boundingClientRect.top < 0;
-      if (wantFall === falling) return;
-      falling = wantFall;
-      cancelAnimationFrame(raf);
-      if (falling && !reduce) raf = requestAnimationFrame(paint); else paint();
+      if (e.isIntersecting) {
+        size();
+        prefill();
+        if (reduce) { stages.forEach(function(s){ s.classList.add('on'); }); return; }
+        lastT = 0;
+        task.on = true; start();
+      } else {
+        task.on = false;
+        stopLive();
+      }
     });
-  }, {rootMargin:'0px 0px -12% 0px', threshold:0}).observe(document.getElementById('s04'));
+  }, {threshold: .1}).observe(D.querySelector('.rack'));
+  var rz = null;
+  addEventListener('resize', function(){
+    clearTimeout(rz);
+    rz = setTimeout(function(){ size(); filled = false; prefill(); }, 160);
+  }, {passive: true});
+})();
+
+/* ------------------------------------------------ peek + pixel loupe */
+(function(){
+  var peek = D.getElementById('peek'), pimg = D.getElementById('peek-img');
+  var pslug = D.getElementById('peek-slug'), pclose = D.getElementById('peek-close');
+  var loupe = D.getElementById('loupe'), lctx = loupe.getContext('2d');
+  var rig = peek.querySelector('.plate-rig');
+  var trigger = null, full = null;
+
+  function open(img){
+    trigger = img;
+    var fig = img.closest('figure');
+    pslug.textContent = fig ? fig.querySelector('.plate-slug span').textContent : '';
+    pimg.alt = img.alt;
+    pimg.src = img.currentSrc || img.src;
+    var from = img.getBoundingClientRect();
+    peek.classList.add('open');
+    D.body.style.overflow = 'hidden';
+    var to = pimg.getBoundingClientRect();
+    if (!reduce && to.width) {
+      var dx = (from.left + from.width / 2) - (to.left + to.width / 2);
+      var dy = (from.top + from.height / 2) - (to.top + to.height / 2);
+      var s = from.width / to.width;
+      rig.style.transition = 'none';
+      rig.style.transform = 'translate(' + dx + 'px,' + dy + 'px) scale(' + s + ')';
+      requestAnimationFrame(function(){
+        rig.style.transition = 'transform 420ms cubic-bezier(.16,1,.3,1)';
+        rig.style.transform = 'none';
+      });
+    }
+    pclose.focus();
+    var src = img.getAttribute('data-full');
+    if (src) {
+      var hi = new Image();
+      hi.onload = function(){ pimg.src = src; full = hi; };
+      hi.src = src;
+    }
+  }
+  function close(){
+    peek.classList.remove('open');
+    loupe.classList.remove('on');
+    rig.style.transform = '';
+    full = null;
+    D.body.style.overflow = '';
+    if (trigger) trigger.focus();
+  }
+  [].forEach.call(D.querySelectorAll('img[data-peek]'), function(img){
+    img.setAttribute('tabindex', '0');
+    img.setAttribute('role', 'button');
+    img.style.cursor = 'zoom-in';
+    img.addEventListener('click', function(){ open(img); });
+    img.addEventListener('keydown', function(e){
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(img); }
+    });
+  });
+  pclose.addEventListener('click', close);
+  peek.addEventListener('click', function(e){ if (e.target === peek) close(); });
+  addEventListener('keydown', function(e){
+    if (!peek.classList.contains('open')) return;
+    if (e.key === 'Escape') close();
+    if (e.key === 'Tab') { e.preventDefault(); pclose.focus(); }
+  });
+
+  /* the pixel loupe — the one place image-rendering is nearest-neighbour */
+  if (!coarse) peek.addEventListener('pointermove', function(e){
+    if (!full || !peek.classList.contains('open')) return;
+    var r = pimg.getBoundingClientRect();
+    if (e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom) {
+      loupe.classList.remove('on');
+      return;
+    }
+    loupe.classList.add('on');
+    var f = peek.querySelector('.peek-fig').getBoundingClientRect();
+    loupe.style.left = (e.clientX - f.left - 90) + 'px';
+    loupe.style.top = (e.clientY - f.top - 90) + 'px';
+    var u = (e.clientX - r.left) / r.width, v = (e.clientY - r.top) / r.height;
+    lctx.imageSmoothingEnabled = false;
+    lctx.fillStyle = '#070809';
+    lctx.fillRect(0, 0, 180, 180);
+    lctx.save();
+    lctx.beginPath(); lctx.arc(90, 90, 89, 0, 6.283); lctx.clip();
+    lctx.drawImage(full, u * full.naturalWidth - 45, v * full.naturalHeight - 45, 90, 90, 0, 0, 180, 180);
+    lctx.restore();
+  });
+})();
+
 })();
 </script>
 </body>
