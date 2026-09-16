@@ -286,6 +286,13 @@ p{margin:0 0 1em;max-width:62ch}
   color:var(--mur-trace);background:#0A1310;box-shadow:4px 4px 0 #0C3524;
   font-family:Azeret,ui-monospace,monospace;font-size:var(--t-slug);letter-spacing:.14em;text-transform:uppercase;
   transition:transform 90ms,box-shadow 90ms,background 90ms;touch-action:none;-webkit-user-select:none;user-select:none}
+/* Both labels share one grid cell, so pressing the button cannot resize it.
+   Swapping textContent made it jump 164px -> 138px and pushed the note
+   beside it sideways on every press. */
+.ptt{display:grid;place-items:center}
+.ptt>span{grid-area:1/1;visibility:hidden}
+.ptt[data-state="idle"]>span:first-child,
+.ptt[data-state="live"]>span:last-child{visibility:visible}
 .ptt:active,.ptt.armed{transform:translate(4px,4px);box-shadow:0 0 0 #0C3524}
 .ptt.armed{background:var(--mur-trace);color:#06130D}
 .toggle{border:1px solid var(--rule);border-radius:2px;padding:0 16px;min-height:52px;
@@ -647,7 +654,7 @@ p{margin:0 0 1em;max-width:62ch}
           </div>
           <noscript><p class="nojs-note mur">The scopes above are live: a mel spectrogram and the real magnitude response of the 4th-order Butterworth high-pass, drawn from its actual coefficients. They need JavaScript. Every parameter in the chain is printed above regardless.</p></noscript>
           <div class="ptt-row">
-            <button class="ptt" id="ptt" type="button">Hold to speak</button>
+            <button class="ptt" id="ptt" type="button" data-state="idle"><span>Hold to speak</span><span>Listening…</span></button>
             <button class="toggle" id="nogpu" type="button" aria-pressed="false">Simulate: no GPU</button>
             <p class="ptt-note">No text appears — this is the front half of the chain, and the model itself runs on my machine, not in this page. What you get is the real filter, on your own voice. No audio leaves this page and no network call is made. Until you press, the trace is a synthetic demo signal, not a recording.</p>
           </div>
@@ -1457,6 +1464,7 @@ requestAnimationFrame(function(){ root.classList.add('ready'); });
   var roPeak = D.getElementById('ro-peak'), roGain = D.getElementById('ro-gain');
   var ptt = D.getElementById('ptt'), nogpu = D.getElementById('nogpu');
   var rack = D.querySelector('.rack'), halt = D.getElementById('halt');
+  var pnote = D.querySelector('.ptt-note'), noteText = pnote.textContent;
   var SH = innerWidth < 720 ? 160 : 260;
   var SW = 300, RW = 300;
 
@@ -1528,6 +1536,26 @@ requestAnimationFrame(function(){ root.classList.add('ready'); });
     rctx.fillText('−48', 3, fy(-48) + 3);
   }
 
+  /* A continuous 256-step ramp, built once. The previous version switched
+     colour at three hard thresholds, so every blob got a crisp outline and a
+     set of contour rings through the middle -- banding that reads as an
+     artefact rather than as sound. Precomputing it also stops the inner loop
+     allocating an rgb() string per pixel per frame. */
+  var RAMP = (function(){
+    var stop = [[0, 7,10,9], [.10, 24,74,52], [.35, 48,158,110], [.70, 111,230,160], [1, 232,230,225]];
+    var out = new Array(256);
+    for (var i = 0; i < 256; i++){
+      var t = i / 255, j = 1;
+      while (j < stop.length - 1 && t > stop[j][0]) j++;
+      var a = stop[j - 1], b = stop[j], k = (t - a[0]) / (b[0] - a[0]);
+      k = k < 0 ? 0 : k > 1 ? 1 : k;
+      out[i] = 'rgb(' + (a[1] + (b[1] - a[1]) * k | 0) + ','
+                      + (a[2] + (b[2] - a[2]) * k | 0) + ','
+                      + (a[3] + (b[3] - a[3]) * k | 0) + ')';
+    }
+    return out;
+  })();
+
   /* --- the spectrogram: self-blitting, mel-warped, opaque context --- */
   function mel(f){ return 2595 * Math.log10(1 + f / 700); }
   var MELMAX = mel(8000), MELMIN = mel(20);
@@ -1537,24 +1565,36 @@ requestAnimationFrame(function(){ root.classList.add('ready'); });
       var m = MELMIN + (1 - y / SH) * (MELMAX - MELMIN);
       var f = 700 * (Math.pow(10, m / 2595) - 1);
       var v = getMag(f);
-      var c;
-      if (v < .02) c = '#070A09';
-      else if (v < .35) c = 'rgb(' + (30 + v * 60 | 0) + ',' + (90 + v * 180 | 0) + ',' + (62 + v * 90 | 0) + ')';
-      else if (v < .75) c = 'rgb(' + (111 + (v - .35) * 180 | 0) + ',230,' + (160 + (v - .35) * 120 | 0) + ')';
-      else c = '#E8E6E1';
-      sctx.fillStyle = c;
+      sctx.fillStyle = RAMP[v <= 0 ? 0 : v >= 1 ? 255 : v * 255 | 0];
       sctx.fillRect(SW - 2, y, 2, 1);
     }
   }
 
   /* --- the synthetic demo take: labelled as such, never called a recording --- */
+  /* Nine syllables in three phrases, separated by two breaths, each burst a
+     raised cosine with a quick attack and a longer decay. The old envelope
+     multiplied by a `gap` that stepped between .05 and 1 in a single sample,
+     which drew a perfectly vertical wall at every syllable edge -- the one
+     thing a real spectrogram never has. */
   var envelope = [];
-  for (var ei = 0; ei < 620; ei++){
-    var ph = ei / 620;
-    var syl = Math.sin(ph * 34) * .5 + .5;
-    var gap = (ph < .10 || (ph > .30 && ph < .37) || (ph > .62 && ph < .68) || ph > .93) ? .05 : 1;
-    envelope.push(Math.max(0, syl * gap * (.55 + .45 * Math.sin(ph * 7.3))));
-  }
+  (function(){
+    var N = 620;
+    var SYL = [[.040,.075,.72], [.125,.065,.95], [.200,.085,.83],
+               [.360,.070,.98], [.440,.065,.86], [.515,.085,1.0],
+               [.680,.070,.93], [.760,.060,.80], [.830,.090,.97]];
+    for (var i = 0; i < N; i++){
+      var ph = i / N, v = 0;
+      for (var k = 0; k < SYL.length; k++){
+        var t = (ph - SYL[k][0]) / SYL[k][1];
+        if (t <= 0 || t >= 1) continue;
+        var a = t < .30 ? .5 - .5 * Math.cos(Math.PI * t / .30)
+                        : .5 + .5 * Math.cos(Math.PI * (t - .30) / .70);
+        if (a * SYL[k][2] > v) v = a * SYL[k][2];
+      }
+      /* a breath floor, so the quiet between phrases fades rather than cuts */
+      envelope.push(v * (.85 + .15 * Math.sin(ph * 9.1)) + .006);
+    }
+  })();
   var seedv = 12345;
   function rnd(){ seedv = (seedv * 1664525 + 1013904223) & 0x7fffffff; return seedv / 0x7fffffff; }
 
@@ -1563,18 +1603,26 @@ requestAnimationFrame(function(){ root.classList.add('ready'); });
      blob — without the comb at F0 the scope reads as a lava lamp. */
   var f0 = 118;
   function bakedMag(f, amp){
-    if (amp < .02) return 0;
+    if (amp < .002) return 0;
     var v = 0;
     var F = [140, 420, 980, 2100, 3200];
     for (var k = 0; k < F.length; k++)
       v += amp * Math.exp(-Math.pow((f - F[k]) / (F[k] * .28), 2)) * (1 - k * .13);
-    if (f < 3400) {
-      var comb = Math.cos(2 * Math.PI * f / f0);
-      v *= .40 + .60 * comb * comb;
-    }
+    /* Logistic crossfades, not `if (f < 3400)` / `if (f > 2400)`. A hard
+       frequency boundary draws a perfectly horizontal seam right across the
+       scope where the harmonic comb stops and the fricative hiss starts. */
+    var comb = Math.cos(2 * Math.PI * f / f0);
+    /* Harmonics are only resolved at the bottom of the band: by a couple of
+       kHz the spacing is below the analysis resolution and they smear into a
+       continuum. Holding full comb depth to 3 kHz drew hard regular stripes
+       all the way up, which read as banding rather than as voice. */
+    var cm = 1 / (1 + Math.exp((f - 1250) / 480));
+    v *= 1 - cm + cm * (.52 + .48 * comb * comb);
     v += amp * .55 * Math.exp(-Math.pow((f - 45) / 38, 2));   /* the rumble the HPF exists to remove */
-    if (f > 2400) v += amp * .13 * rnd();                     /* fricative noise up top */
-    return Math.min(1, v * magAt(f));
+    v += amp * .13 * rnd() / (1 + Math.exp(-(f - 2600) / 460)); /* fricative noise up top */
+    /* soft knee rather than Math.min(1, ...), which flattened every loud
+       syllable into a plateau of solid white with a hard rim */
+    return 1 - Math.exp(-1.4 * v * magAt(f));
   }
   /* one sample of the take: advance the clock, drift the pitch, return the level */
   function nextSample(){
@@ -1658,12 +1706,17 @@ requestAnimationFrame(function(){ root.classList.add('ready'); });
   });
 
   /* live mic: strictly opt-in, inside the gesture, never auto-requested */
+  var wanted = false;
   function startLive(){
     if (live || !navigator.mediaDevices) return;
+    wanted = true;
     ptt.classList.add('armed');
-    ptt.textContent = 'Listening…';
+    ptt.dataset.state = 'live';
     navigator.mediaDevices.getUserMedia({audio: {echoCancellation: false, noiseSuppression: false}})
       .then(function(stream){
+        /* Released before the permission prompt came back: stop the tracks
+           now, or the mic stays open with the button showing idle. */
+        if (!wanted){ stream.getTracks().forEach(function(t){ t.stop(); }); return; }
         ac = new (window.AudioContext || window.webkitAudioContext)();
         ac.resume();
         var src = ac.createMediaStreamSource(stream);
@@ -1681,14 +1734,20 @@ requestAnimationFrame(function(){ root.classList.add('ready'); });
         relight();
       })
       .catch(function(){
+        /* the failure belongs in the note, not in the button: putting it in the
+           button would size the button for a string it shows almost never */
+        wanted = false;
         ptt.classList.remove('armed');
-        ptt.textContent = 'Mic unavailable';
-        setTimeout(function(){ ptt.textContent = 'Hold to speak'; }, 1600);
+        ptt.dataset.state = 'idle';
+        pnote.textContent = 'Microphone unavailable \u2014 permission was denied, or there is no input device.';
+        pnote.style.color = 'var(--mur-clip)';
+        setTimeout(function(){ pnote.textContent = noteText; pnote.style.color = ''; }, 2800);
       });
   }
   function stopLive(){
+    wanted = false;
     ptt.classList.remove('armed');
-    ptt.textContent = 'Hold to speak';
+    ptt.dataset.state = 'idle';
     if (!live) return;
     live.stream.getTracks().forEach(function(tr){ tr.stop(); });
     if (ac) ac.close();
@@ -1696,8 +1755,16 @@ requestAnimationFrame(function(){ root.classList.add('ready'); });
     rack.classList.remove('live'); halt.hidden = true;
     relight();
   }
-  ptt.addEventListener('pointerdown', function(e){ e.preventDefault(); startLive(); });
-  ['pointerup','pointercancel','pointerleave'].forEach(function(ev){ ptt.addEventListener(ev, stopLive); });
+  ptt.addEventListener('pointerdown', function(e){
+    e.preventDefault();
+    /* Capture the pointer for the duration of the press. The .armed state
+       translates the button 4px down-right, which can slide it out from under
+       a cursor near its top-left edge and fire pointerleave mid-press. With
+       capture, the press always ends on this element's own pointerup. */
+    try { ptt.setPointerCapture(e.pointerId); } catch (err) {}
+    startLive();
+  });
+  ['pointerup','pointercancel','lostpointercapture'].forEach(function(ev){ ptt.addEventListener(ev, stopLive); });
   ptt.addEventListener('contextmenu', function(e){ e.preventDefault(); });
   ptt.addEventListener('keydown', function(e){ if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); startLive(); } });
   ptt.addEventListener('keyup', function(e){ if (e.key === ' ' || e.key === 'Enter') stopLive(); });
