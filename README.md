@@ -1,6 +1,6 @@
 # portfolio
 
-Personal site — [jovanspinjo.github.io/portfolio](https://kaizennnnnnnnn.github.io/portfolio/)
+Personal site — **[kaizennnnnnnnn.github.io/portfolio](https://kaizennnnnnnnn.github.io/portfolio/)**
 
 One `index.html`. No build step, no framework, no dependencies. Three typefaces from
 Google Fonts, one canvas, and a colour grade that cools as the page descends.
@@ -26,8 +26,15 @@ the folder instead of opening the file directly:
 python -m http.server 8000
 ```
 
+`cv.pdf` is generated from `Desktop\CV\cv.html`, not authored separately:
+
+```
+chrome --headless=new --no-pdf-header-footer --print-to-pdf=cv.pdf http://localhost:PORT/cv.html
+```
+
+Two A4 pages. Regenerate it whenever the CV changes — the rail and section 05 both link to it.
+
 ## Still to add
 
-- `cv.pdf` at the repo root — the rail and section 05 both link to it.
 - Screenshots for the three plates: `eren.png`, `outrank.png`, `murmur.png`.
   Until they exist each plate renders a labelled placeholder rather than a broken image.
