@@ -36,6 +36,12 @@ exactly half of 922, so the pixel art halves cleanly) and `<name>.webp` is the f
 922 × 1858, fetched only when a plate is opened. The two tarot cards are cropped out
 of `outrank-explore.webp`.
 
+`sprites/` is Eren himself, lifted from the app's own art. The hero cat is two
+layers — `eren-body` and `eren-tail` — cropped to one shared frame so the tail can
+swing about the point where it meets the haunch, measured at 73%/88% of that frame.
+`eren-eyes` is an 816-byte patch covering only the eyes, because a second full copy
+of the cat just to close them would have cost 18 KB.
+
 `fonts/` is self-hosted woff2. The `-latinext` files are subset to the Serbian
 diacritics only — 84 KB down to 7 KB for Archivo — because the only thing this page
 needs from that range is the caron in his own name.
@@ -44,9 +50,10 @@ needs from that range is the caron in his own name.
 
 | | |
 |---|---|
-| First viewport | ~274 KB (index 97 KB → **27 KB gzipped**, 3 fonts, 1 image) |
+| First viewport | ~223 KB (index 113 KB → **32 KB gzipped**, 2 fonts, 1 screen, 3 sprite layers) |
 | Third-party requests | **0** |
 | Persistent canvases | 3, all IntersectionObserver-gated, one shared rAF loop |
+| Sprites | 55 KB total, 22 KB of it above the fold |
 
 ## Running it
 
@@ -76,6 +83,11 @@ Three things that are load-bearing and look like mistakes if you don't know:
   path data. The first attempt was authored by hand and connected nothing. They render
   *behind* the panels, so a lead running to a lower rail disappears behind the one above
   it, which is what a real patch bay does.
+- **The rail navigator is built in JS from the plates themselves.** Two plates fill the
+  row at desktop width, and nothing indicated rooms 03 and 04 existed — the section read
+  as "two screenshots". The chips take their labels from each plate's own `.plate-slug`,
+  so they cannot drift from the content, and building them in script rather than markup
+  means a no-JS visit gets a plain scroller instead of dead buttons.
 - **Callout dots are percentage-positioned inside the image's own aspect box.** Every one
   was verified against the rendered screenshot, not estimated. If you move one, re-check it.
 - **The two tarot crops are exactly 292 x 458, and `.card` is `aspect-ratio: 292/458`.**

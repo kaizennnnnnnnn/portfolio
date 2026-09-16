@@ -139,7 +139,7 @@ p{margin:0 0 1em;max-width:62ch}
 .keywords{margin:1.5em 0 1.9em;display:flex;flex-direction:column;gap:.55em}
 .keywords span{color:var(--mute);font-family:Azeret,ui-monospace,monospace;font-size:var(--t-slug);
   letter-spacing:.1em;text-transform:uppercase;line-height:1.55}
-.cta{display:flex;gap:12px;flex-wrap:wrap}
+.cta{display:flex;gap:12px;flex-wrap:wrap;align-items:flex-end}
 .btn{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:0 22px;
   font-family:Azeret,ui-monospace,monospace;font-size:var(--t-slug);letter-spacing:.12em;text-transform:uppercase;
   border-radius:2px;text-decoration:none;
@@ -305,6 +305,73 @@ p{margin:0 0 1em;max-width:62ch}
   padding:11px 13px;font-family:Azeret,ui-monospace,monospace;font-size:10px;color:var(--mute);line-height:1.65}
 
 /* ========================================================= §03/§05 RAILS */
+/* ------------------------------------------------------- hero entrance */
+/* Pure CSS animations with fill-mode `both`, never a JS-added class: if the
+   script fails the hero must still be visible, and a class added at the end
+   of body would show the text, hide it, then animate it. */
+@keyframes rise{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
+@keyframes riseplate{from{opacity:0;transform:translateY(30px) scale(.982)}to{opacity:1;transform:none}}
+@keyframes float-plate{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
+.hero-txt .tick{animation:rise 700ms var(--ease) both}
+.hero .name span:nth-child(1){animation:rise 820ms 80ms var(--ease) both}
+.hero .name span:nth-child(2){animation:rise 820ms 165ms var(--ease) both}
+.hero-txt .lead{animation:rise 780ms 285ms var(--ease) both}
+.hero-txt .keywords{animation:rise 780ms 375ms var(--ease) both}
+.hero-txt .cta{animation:rise 780ms 465ms var(--ease) both}
+.hero-plate{animation:riseplate 950ms 180ms var(--ease) both,
+                      float-plate 7.5s 1.2s ease-in-out infinite}
+
+/* ------------------------------------------------------------ little Eren */
+/* The cat is two layers on one shared frame cropped from the app's own
+   sprite, so the tail can swing about the point where it meets the haunch
+   (measured at 73%/88% of that frame). The box keeps the sprite's exact
+   236:320 aspect, which is what makes those percentages land. */
+@keyframes breathe{0%,100%{transform:scale(1,1)}50%{transform:scale(.991,1.015)}}
+@keyframes swish{0%,100%{transform:rotate(0deg)}28%{transform:rotate(7deg)}68%{transform:rotate(-5.5deg)}}
+@keyframes blink{0%,95.6%{opacity:0}95.8%,97.4%{opacity:1}97.6%,100%{opacity:0}}
+@keyframes hop{0%{transform:translateY(0)}28%{transform:translateY(-15px)}
+  52%{transform:translateY(0)}70%{transform:translateY(-5px)}100%{transform:translateY(0)}}
+.eren{position:relative;width:118px;height:160px;flex:0 0 auto;margin-left:auto;align-self:flex-end;
+  background:none;border:0;padding:0;cursor:pointer;touch-action:manipulation}
+.eren i{position:absolute;inset:0;background-repeat:no-repeat;background-position:bottom center;
+  background-size:contain;image-rendering:auto}
+.eren .e-t{background-image:url(sprites/eren-tail.webp);transform-origin:73% 88%;
+  animation:swish 3.1s ease-in-out infinite}
+.eren .e-b{background-image:url(sprites/eren-body.webp);transform-origin:50% 100%;
+  animation:breathe 3.6s ease-in-out infinite}
+/* Only the eyes change when he blinks, so only the eyes ship: an 816-byte
+   patch instead of a second 18 KB copy of the whole cat. It sits inside the
+   body layer, so it inherits the breathing instead of drifting against it. */
+.eren .e-k{position:absolute;left:23.31%;top:25.31%;width:37.29%;height:7.5%;
+  background:url(sprites/eren-eyes.webp) center/100% 100% no-repeat;opacity:0;
+  animation:blink 6.4s steps(1,end) infinite}
+.eren.hop{animation:hop 640ms cubic-bezier(.3,.7,.4,1)}
+.eren:focus-visible{outline:2px solid var(--bone);outline-offset:6px}
+/* the section cats: same idea, one still layer */
+.tick.has-cat{display:flex;align-items:center;gap:16px;min-height:52px}
+.cat{height:52px;width:auto;flex:0 0 auto;image-rendering:auto;transform-origin:50% 100%;
+  animation:breathe 4.2s ease-in-out infinite}
+
+/* ------------------------------------------------------- rail navigator */
+/* Two plates fill the row at desktop width, and nothing at all indicated
+   that rooms 03 and 04 were there -- the section read as "two screenshots".
+   Built entirely in JS from the plates themselves, so with no script the
+   rail is simply a scroller and there are no dead buttons. */
+.rail-nav{display:flex;align-items:center;gap:10px;margin:0 0 20px;flex-wrap:wrap}
+.rn-count{font-family:Azeret,ui-monospace,monospace;font-size:10px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--faint);flex:0 0 auto;margin-right:2px}
+.rn-list{display:flex;gap:6px;flex-wrap:wrap;flex:1 1 auto;min-width:0}
+.rn{padding:7px 12px;border:1px solid var(--rule);border-radius:2px;background:transparent;
+  font-family:Azeret,ui-monospace,monospace;font-size:10px;letter-spacing:.09em;text-transform:uppercase;
+  color:var(--faint);white-space:nowrap;cursor:pointer;
+  transition:color 200ms,border-color 200ms,background 200ms}
+.rn:hover{color:var(--bone);border-color:var(--mute)}
+.rn[aria-current="true"]{color:var(--ink-0);background:var(--bone);border-color:var(--bone)}
+.rn-a{width:34px;height:34px;border:1px solid var(--rule);border-radius:2px;background:transparent;
+  color:var(--mute);font-size:15px;line-height:1;display:grid;place-items:center;cursor:pointer;
+  transition:color 200ms,border-color 200ms,opacity 200ms}
+.rn-a:hover:not(:disabled){color:var(--bone);border-color:var(--bone)}
+.rn-a:disabled{opacity:.28;cursor:default}
 .rail-track{display:flex;gap:clamp(20px,3vw,44px);overflow-x:auto;scroll-snap-type:x mandatory;
   touch-action:pan-y;             /* never steal the vertical thumb */
   padding-block:8px 22px;
@@ -466,6 +533,11 @@ p{margin:0 0 1em;max-width:62ch}
   .rail-item{width:min(92vw,520px)}
   .sec .grid > div[style*="grid-column"]{grid-column:1/13!important}
 }
+@media (max-width:760px){
+  .eren{width:92px;height:125px}
+  .cat{height:42px}
+  .rn-count{width:100%;margin-bottom:2px}
+}
 @media (max-width:720px){
   /* The rails stack, but the argument survives: the chips sit in a row above
      and Eren and Outrank still visibly send two cables each, one down into
@@ -510,6 +582,9 @@ p{margin:0 0 1em;max-width:62ch}
   .log tbody tr{opacity:1;transform:none}
   .bench{transform:none}
   .speech .two{opacity:1}
+  .hero-txt .tick,.hero .name span,.hero-txt .lead,.hero-txt .keywords,.hero-txt .cta,
+  .hero-plate,.eren .e-t,.eren .e-b,.eren .e-k,.cat,.eren.hop{animation:none}
+  .eren .e-k{opacity:0}
 }
 
 /* ================================================================ NO JS */
@@ -550,6 +625,11 @@ p{margin:0 0 1em;max-width:62ch}
       <div class="cta">
         <a class="btn btn-fill" href="cv.pdf">CV.pdf</a>
         <a class="btn btn-line" href="mailto:jocaspinjo@gmail.com">Email</a>
+        <button class="eren" id="eren-hero" type="button"
+                title="Eren. Give him a scratch."
+                aria-label="Eren, the cat the app on the right looks after. Press to pet him.">
+          <i class="e-t"></i><i class="e-b"><b class="e-k"></b></i>
+        </button>
       </div>
     </div>
     <div class="hero-plate">
@@ -620,7 +700,7 @@ p{margin:0 0 1em;max-width:62ch}
 <!-- ======================================================= §02 MURMUR -->
 <section class="sec s02" id="s02" data-amb="#6FE6A0,#1E5A3E" data-sliver="-1">
   <div class="wrap">
-    <p class="tick">Written by hand · running here</p>
+    <p class="tick has-cat"><span>Written by hand · running here</span><img class="cat" src="sprites/eren-lab.webp" width="148" height="200" loading="lazy" decoding="async" alt="" aria-hidden="true"></p>
     <div class="grid" style="align-items:start">
       <div style="grid-column:1/5">
         <h2 class="sect-title">MURMUR</h2>
@@ -667,7 +747,7 @@ p{margin:0 0 1em;max-width:62ch}
 <!-- ========================================================= §03 EREN -->
 <section class="sec" id="s03" data-amb="#E5A56A,#E9A0B8">
   <div class="wrap">
-    <p class="tick">Directed · owned · live</p>
+    <p class="tick has-cat"><span>Directed · owned · live</span><img class="cat" src="sprites/eren-cook.webp" width="118" height="200" loading="lazy" decoding="async" alt="" aria-hidden="true"></p>
     <h2 class="sect-title">EREN</h2>
     <p class="lead">A cat-care app two people have used every day since April. Next.js and Supabase, with a chat companion that answers in its own voice.</p>
   </div>
@@ -938,7 +1018,7 @@ p{margin:0 0 1em;max-width:62ch}
 <!-- ========================================================== §07 END -->
 <section class="sec" id="s07" data-amb="#E8E6E1,#545A62" data-sliver="-1">
   <div class="wrap">
-    <p class="tick">Outputs</p>
+    <p class="tick has-cat"><span>Outputs</span><img class="cat" src="sprites/eren-sleep.webp" width="131" height="200" loading="lazy" decoding="async" alt="" aria-hidden="true"></p>
     <h2 class="sect-title">GET IN TOUCH</h2>
     <ul class="outs">
       <li><a href="cv.pdf">cv.pdf</a></li>
@@ -1206,6 +1286,33 @@ requestAnimationFrame(function(){ root.classList.add('ready'); });
   });
 })();
 
+/* ------------------------------------------------------ petting the cat */
+/* Clicking Eren refills one of the HUD gauges by synthesising a click on the
+   gauge itself, so the two share exactly one implementation. It also shows
+   in one gesture what the app actually is: you do a thing, a stat goes up. */
+(function(){
+  var eren = D.getElementById('eren-hero');
+  if (!eren) return;
+  var gauges = [].slice.call(D.querySelectorAll('.gauge'));
+  eren.addEventListener('click', function(){
+    if (gauges.length){
+      var low = gauges[0], lowV = 101;
+      gauges.forEach(function(g){
+        var v = parseFloat(g.querySelector('b').style.width) || 100;
+        if (v < lowV) { lowV = v; low = g; }
+      });
+      low.click();
+    }
+    if (reduce) return;
+    eren.classList.remove('hop');
+    void eren.offsetWidth;
+    eren.classList.add('hop');
+  });
+  eren.addEventListener('animationend', function(e){
+    if (e.animationName === 'hop') eren.classList.remove('hop');
+  });
+})();
+
 /* ------------------------------------------------- rail drag inertia */
 /* Layered over a real scroll-snap container: if this never runs, the rail
    still works. Engages only past 10 px of clearly horizontal intent. */
@@ -1222,21 +1329,24 @@ requestAnimationFrame(function(){ root.classList.add('ready'); });
   function resumeSnap(){ if (snapOff && !--snapOff) track.style.scrollSnapType = ''; }
 
   var tween = null, tTo = 0;
-  track.addEventListener('keydown', function(e){
-    var dir = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0;
-    if (!dir) return;
-    e.preventDefault();
-    var items = [].slice.call(track.children).filter(function(n){ return n.classList.contains('rail-item'); });
-    if (!items.length) return;
-    var mid = track.scrollLeft + track.clientWidth / 2, cur = 0, best = Infinity;
-    items.forEach(function(it, i){
+  function items(){
+    return [].slice.call(track.children).filter(function(n){ return n.classList.contains('rail-item'); });
+  }
+  function current(){
+    var list = items(), mid = track.scrollLeft + track.clientWidth / 2, cur = 0, best = Infinity;
+    list.forEach(function(it, i){
       var d = Math.abs(it.offsetLeft + it.offsetWidth / 2 - mid);
       if (d < best) { best = d; cur = i; }
     });
-    var n = items[Math.max(0, Math.min(items.length - 1, cur + dir))];
+    return cur;
+  }
+  function goTo(i){
+    var list = items();
+    if (!list.length) return;
+    var n = list[Math.max(0, Math.min(list.length - 1, i))];
     tTo = Math.max(0, Math.min(track.scrollWidth - track.clientWidth,
                    n.offsetLeft + n.offsetWidth / 2 - track.clientWidth / 2));
-    if (reduce) { track.scrollLeft = tTo; return; }
+    if (reduce) { track.scrollLeft = tTo; mark(); return; }
     /* a fixed-duration tween, not an asymptotic lerp: it is guaranteed to
        finish, so snapping can never be left switched off */
     var from = track.scrollLeft, t0 = performance.now(), DUR = 420;
@@ -1248,7 +1358,67 @@ requestAnimationFrame(function(){ root.classList.add('ready'); });
     });
     if (!tween.on) suspendSnap();
     tween.on = true; start();
+  }
+  track.addEventListener('keydown', function(e){
+    var dir = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0;
+    if (!dir) return;
+    e.preventDefault();
+    goTo(current() + dir);
   });
+
+  /* The navigator, built from the plates themselves so its labels can never
+     drift from what is actually in the rail. Built here rather than authored
+     in the HTML so that with no JS there is a plain scroller and no dead
+     buttons. */
+  var chips = [], arrows = [];
+  (function(){
+    var list = items();
+    if (list.length < 2) return;
+    var nav = D.createElement('div');
+    nav.className = 'rail-nav';
+    var count = D.createElement('span');
+    count.className = 'rn-count';
+    count.textContent = list.length + ' screens';
+    nav.appendChild(count);
+    var box = D.createElement('div');
+    box.className = 'rn-list';
+    list.forEach(function(it, i){
+      var slug = it.querySelector('.plate-slug span'), label = '0' + (i + 1);
+      if (slug){
+        var c = slug.cloneNode(true);
+        var b = c.querySelector('b'), dm = c.querySelector('.dim');
+        if (b) b.parentNode.removeChild(b);
+        if (dm) dm.parentNode.removeChild(dm);
+        var t = c.textContent.replace(/^[\s\u00b7]+/, '').replace(/[\s\u00b7]+$/, '');
+        if (t) label = t;
+      }
+      var btn = D.createElement('button');
+      btn.type = 'button'; btn.className = 'rn'; btn.textContent = label;
+      btn.addEventListener('click', function(){ goTo(i); });
+      box.appendChild(btn); chips.push(btn);
+    });
+    nav.appendChild(box);
+    [[-1, '\u2039', 'Previous screen'], [1, '\u203a', 'Next screen']].forEach(function(a){
+      var btn = D.createElement('button');
+      btn.type = 'button'; btn.className = 'rn-a';
+      btn.textContent = a[1];
+      btn.setAttribute('aria-label', a[2]);
+      btn.addEventListener('click', function(){ goTo(current() + a[0]); });
+      nav.appendChild(btn); arrows.push({el: btn, d: a[0]});
+    });
+    track.parentNode.insertBefore(nav, track);
+  })();
+  var markT = 0;
+  function mark(){
+    var i = current();
+    chips.forEach(function(c, k){ c.setAttribute('aria-current', k === i ? 'true' : 'false'); });
+    arrows.forEach(function(a){ a.el.disabled = a.d < 0 ? i === 0 : i >= chips.length - 1; });
+  }
+  mark();
+  track.addEventListener('scroll', function(){
+    if (markT) return;
+    markT = setTimeout(function(){ markT = 0; mark(); }, 90);
+  }, {passive: true});
 
   if (reduce) return;
   var down = false, sx = 0, sy2 = 0, sl = 0, lock = 0, last = 0, vel = 0, pid = null, glide = null;
