@@ -142,10 +142,23 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
 .tick{font-family:Azeret,ui-monospace,Menlo,Consolas,monospace;font-size:var(--t-tick);
   letter-spacing:.18em;text-transform:uppercase;color:var(--amb-1);margin:0 0 1.4em;
   transition:color 420ms cubic-bezier(.4,0,.2,1)}
+/* Typed with clip-path rather than an animated width: the tick line is
+   letter-spaced, so a width in ch would not land on character boundaries.
+   The text is fully in the DOM the whole time, so nothing is hidden from a
+   screen reader and a failed animation leaves the line readable. */
+.tick-type>span{display:inline-block;animation:tick-type 1.45s steps(41,end) .35s both}
+@keyframes tick-type{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(0 -2% 0 0)}}
+.tcaret{display:inline-block;width:.5em;margin-left:.12em;font-style:normal;
+  color:var(--amb-1);animation:blink 620ms steps(1) 1.8s infinite backwards}
 .slug{font-family:Azeret,ui-monospace,Menlo,Consolas,monospace;font-size:var(--t-slug);
   letter-spacing:.10em;text-transform:uppercase;color:var(--mute);margin:0}
 .data,code{font-family:Azeret,ui-monospace,Menlo,Consolas,monospace;font-size:var(--t-data);line-height:1.6}
 .lead{font-size:var(--t-lead);line-height:1.45;font-variation-settings:'wdth' 104,'wght' 500;margin:0 0 1em;max-width:56ch}
+/* The terms a recruiter scans for, lit in whatever colour the room is. White
+   on black for five lines gives the eye nowhere to land. */
+.lead b{font-variation-settings:'wdth' 108,'wght' 680;font-weight:400}
+.lead em{font-style:normal;color:var(--amb-1);font-variation-settings:'wdth' 104,'wght' 600;
+  transition:color 420ms cubic-bezier(.4,0,.2,1)}
 p{margin:0 0 1em;max-width:62ch}
 
 /* Section titles power on: the width axis plus tracking plus lift.
@@ -161,7 +174,19 @@ p{margin:0 0 1em;max-width:62ch}
 .lit .sect-title{transform:none;opacity:1;font-variation-settings:'wdth' 115,'wght' 700;letter-spacing:-.02em}
 
 /* ============================================================= §00 HERO */
-.hero{min-height:100svh;display:flex;align-items:center;padding-block:clamp(56px,9vh,110px)}
+/* isolate so ::before can sit at z-index:-1 and still paint above whatever
+   is behind the section -- the same trap as the page light layer. */
+.hero{min-height:100svh;display:flex;align-items:center;padding-block:clamp(56px,9vh,110px);
+  position:relative;isolation:isolate}
+/* The bench itself: a drafting grid that fades out before it reaches the
+   text, so the hero is a surface rather than a void. */
+.hero::before{content:'';position:absolute;inset:0;z-index:-1;pointer-events:none;
+  background-image:
+    repeating-linear-gradient(90deg,rgba(232,230,225,.07) 0 1px,transparent 1px 48px),
+    repeating-linear-gradient(0deg,rgba(232,230,225,.07) 0 1px,transparent 1px 48px),
+    repeating-linear-gradient(90deg,rgba(232,230,225,.13) 0 1px,transparent 1px 240px);
+  -webkit-mask-image:radial-gradient(84% 78% at 62% 48%,#000 6%,transparent 76%);
+  mask-image:radial-gradient(84% 78% at 62% 48%,#000 6%,transparent 76%)}
 .hero .grid{width:100%;align-items:center}
 .hero-txt{grid-column:1/7}
 .hero-plate{grid-column:8/13;--plate-w:calc(min(62vh,620px) * .4962)}
@@ -181,6 +206,18 @@ p{margin:0 0 1em;max-width:62ch}
     color:transparent;
     animation:hero-sheen 11s 1.4s ease-in-out infinite}
 }
+/* Every surface in Eren is drawn with a hard offset and no blur -- that is
+   the app's house style, written down in its own guide. The name borrows it,
+   in whatever colour the room is currently lit, so the biggest thing on the
+   page belongs to the same world as the screens beside it. The shadow is
+   painted from the glyph outlines, so it survives the transparent fill the
+   sheen above needs. */
+/* offsets in em, not px: the name is clamp()-sized, and a fixed 6px that
+   reads as depth at 120px crowds the second line at 56px */
+.hero .name span{
+  text-shadow:.048em .048em 0 color-mix(in oklab,var(--amb-1) 30%,transparent),
+              .096em .096em 0 color-mix(in oklab,var(--amb-2) 12%,transparent);
+  transition:text-shadow 420ms cubic-bezier(.4,0,.2,1)}
 @keyframes hero-sheen{
   0%,8%{background-position:128% 0}
   42%,100%{background-position:-34% 0}}
@@ -411,6 +448,12 @@ p{margin:0 0 1em;max-width:62ch}
    that rooms 03 and 04 were there -- the section read as "two screenshots".
    Built entirely in JS from the plates themselves, so with no script the
    rail is simply a scroller and there are no dead buttons. */
+.rail-group{margin-top:clamp(38px,4.5vw,68px)}
+.rail-label{margin:0 0 7px;font-family:Azeret,ui-monospace,monospace;font-size:11px;
+  letter-spacing:.2em;text-transform:uppercase;color:var(--bone)}
+.rail-intro{margin:0 0 18px;font-family:Azeret,ui-monospace,monospace;font-size:var(--t-data);
+  color:var(--mute);line-height:1.7;max-width:64ch}
+.note p em{font-style:normal;color:var(--bone)}
 .rail-nav{display:flex;align-items:center;gap:10px;margin:0 0 20px;flex-wrap:wrap}
 .rn-count{font-family:Azeret,ui-monospace,monospace;font-size:10px;letter-spacing:.14em;
   text-transform:uppercase;color:var(--faint);flex:0 0 auto;margin-right:2px}
@@ -642,6 +685,8 @@ p{margin:0 0 1em;max-width:62ch}
   .amb i,.grain{animation:none}
   .grain{opacity:.04}
   .hero .name span{animation:none}
+  .tick-type>span{animation:none;clip-path:none}
+  .tcaret{animation:none;opacity:.7}
 }
 
 /* ================================================================ NO JS */
@@ -676,9 +721,9 @@ p{margin:0 0 1em;max-width:62ch}
 <section class="sec hero wrap" id="s00" data-amb="#E5A56A,#E9A0B8" data-sliver="0">
   <div class="grid">
     <div class="hero-txt">
-      <p class="tick">Belgrade · Final-year IT · Available 2026</p>
+      <p class="tick tick-type"><span>Belgrade · Final-year IT · Available 2026</span><i class="tcaret" aria-hidden="true">█</i></p>
       <h1 class="name"><span>JOVAN</span><span>ŠPINJO</span></h1>
-      <p class="lead">Junior AI engineer, data &amp; BI. I build the parts around the model — the schema it reads, the auth and row-level security that fence it in, and the prompt and cache design that decides what it costs to run. The dictation pipeline below is one I wrote myself.</p>
+      <p class="lead">Junior <b>AI engineer, data &amp; BI</b>. I build the parts around the model — the <em>schema</em> it reads, the <em>auth and row-level security</em> that fence it in, and the <em>prompt and cache design</em> that decides what it costs to run. The dictation pipeline below is one I wrote myself.</p>
       <div class="keywords">
         <span>SQL · T-SQL · SSIS · Power BI · Star schema · Postgres · Row-level security</span>
         <span>Python · LLM APIs · Prompt &amp; cost design · DWH/ETL internship, Comtrade System Integration</span>
@@ -812,6 +857,10 @@ p{margin:0 0 1em;max-width:62ch}
     <h2 class="sect-title">EREN</h2>
     <p class="lead">A cat-care app two people have used every day since April. Next.js and Supabase, with a chat companion that answers in its own voice.</p>
   </div>
+  <div class="wrap rail-group">
+    <p class="rail-label">The rooms</p>
+    <p class="rail-intro">Eight rooms on one swipe ring. Every one of them writes to the same stat table, and every write is realtime-synced to the other phone.</p>
+  </div>
   <div class="wrap">
     <div class="rail-track" id="rail-eren" tabindex="0" role="group" aria-label="Eren screens — scroll, drag, or use the arrow keys">
 
@@ -895,9 +944,221 @@ p{margin:0 0 1em;max-width:62ch}
         </div>
       </div>
 
+
+      <div class="rail-item" data-amb="#C07BD5,#9D70C1" data-sliver="-1">
+        <div class="plate-wrap">
+          <figure class="plate">
+            <div class="plate-rig"><div class="bloom"></div>
+              <div class="screen">
+                <img src="shots/eren-playroom-461.webp" width="461" height="929" loading="lazy" decoding="async" data-full="shots/eren-playroom.webp" data-peek
+                     alt="Eren playroom: a purple toy room with shelves of plushes and an arcade cabinet, the cat in a hoodie, a segmented play meter along the bottom.">
+              </div>
+            </div>
+            <figcaption class="plate-slug"><span><b>Eren</b> · 05 Playroom <span class="dim">· 922&times;1858</span></span></figcaption>
+          </figure>
+          <div class="notes">
+            <div class="note"><span class="note-n">—</span><p>The arcade is gated on energy — under 30 it closes, so the games cannot be farmed while the cat is exhausted.</p></div>
+            <div class="note"><span class="note-n">—</span><p>That segmented bar is one shared gauge: bathroom, bedroom and playroom all draw the same component. Only the study keeps its own paper red-ink bars.</p></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="rail-item" data-amb="#7B8DD5,#7470C1" data-sliver="-1">
+        <div class="plate-wrap">
+          <figure class="plate">
+            <div class="plate-rig"><div class="bloom"></div>
+              <div class="screen">
+                <img src="shots/eren-bathroom-461.webp" width="461" height="929" loading="lazy" decoding="async" data-full="shots/eren-bathroom.webp" data-peek
+                     alt="Eren bathroom: blue tiles, a claw-foot bath, a bulb-lit mirror, the cat in a bandana, a soap meter reading seven percent.">
+              </div>
+            </div>
+            <figcaption class="plate-slug"><span><b>Eren</b> · 06 Bathroom <span class="dim">· 922&times;1858</span></span></figcaption>
+          </figure>
+          <div class="notes">
+            <div class="note"><span class="note-n">—</span><p>Soap is metered separately from wash, so a bath can run out of one without the other.</p></div>
+            <div class="note"><span class="note-n">—</span><p>The splash is droplets that land and are gone inside a one-percent keyframe window. Nothing cross-fades — on pixel art a fade reads as mush.</p></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="rail-item" data-amb="#D5A37B,#C19370" data-sliver="-1">
+        <div class="plate-wrap">
+          <figure class="plate">
+            <div class="plate-rig"><div class="bloom"></div>
+              <div class="screen">
+                <img src="shots/eren-school-461.webp" width="461" height="929" loading="lazy" decoding="async" data-full="shots/eren-school.webp" data-peek
+                     alt="Eren study: a wooden desk under a night window, a small robot, daily chemistry quests pinned at the top, buttons for the desk and the periodic table.">
+              </div>
+            </div>
+            <figcaption class="plate-slug"><span><b>Eren</b> · 07 Study <span class="dim">· 922&times;1858</span></span></figcaption>
+          </figure>
+          <div class="notes">
+            <div class="note"><span class="note-n">—</span><p>The potions carry real numeric perks, and you may pour one a day.</p></div>
+            <div class="note"><span class="note-n">—</span><p>That one-a-day shelf is the only piece of state deliberately left in the browser rather than the database — losing it costs nothing.</p></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="rail-item" data-amb="#7BA9D5,#708CC1" data-sliver="-1">
+        <div class="plate-wrap">
+          <figure class="plate">
+            <div class="plate-rig"><div class="bloom"></div>
+              <div class="screen">
+                <img src="shots/eren-vet-461.webp" width="461" height="929" loading="lazy" decoding="async" data-full="shots/eren-vet.webp" data-peek
+                     alt="Eren vet: a blue clinic with an exam table and framed certificates, a health report reading that Eren is in great shape, and a button to give a lollipop.">
+              </div>
+            </div>
+            <figcaption class="plate-slug"><span><b>Eren</b> · 08 Vet <span class="dim">· 922&times;1858</span></span></figcaption>
+          </figure>
+          <div class="notes">
+            <div class="note"><span class="note-n">—</span><p>Every care action swaps Eren into a pose drawn for that room, rather than layering effects over one idle sprite.</p></div>
+          </div>
+        </div>
+      </div>
     </div>
-    <p class="rail-hint">Drag, scroll, or use ← → · four rooms</p>
   </div>
+
+  <div class="wrap rail-group">
+    <p class="rail-label">The kiosk</p>
+    <p class="rail-intro">A whole second app inside the first: a shawarma kiosk you walk into, and work a shift in.</p>
+  </div>
+  <div class="wrap">
+    <div class="rail-track" id="rail-kiosk" tabindex="0" role="group" aria-label="Kiosk screens — scroll, drag, or use the arrow keys">
+
+      <div class="rail-item" data-amb="#D58E7B,#C18D70" data-sliver="-1">
+        <div class="plate-wrap">
+          <figure class="plate">
+            <div class="plate-rig"><div class="bloom"></div>
+              <div class="screen">
+                <img src="shots/kiosk-outside-461.webp" width="461" height="929" loading="lazy" decoding="async" data-full="shots/kiosk-outside.webp" data-peek
+                     alt="A pixel-art shawarma kiosk at night, shutter half down, the cat behind the serving window, a GO INSIDE button below.">
+              </div>
+            </div>
+            <figcaption class="plate-slug"><span><b>Eren</b> · Kiosk · outside <span class="dim">· 922&times;1858</span></span></figcaption>
+          </figure>
+          <div class="notes">
+            <div class="note"><span class="note-n">—</span><p>A second app inside the first. GO INSIDE is a push-in, not a route change — the kiosk is a place you walk into, not a page you navigate to.</p></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="rail-item" data-amb="#D5977B,#C18970" data-sliver="-1">
+        <div class="plate-wrap">
+          <figure class="plate">
+            <div class="plate-rig"><div class="bloom"></div>
+              <div class="screen">
+                <img src="shots/kiosk-window-461.webp" width="461" height="929" loading="lazy" decoding="async" data-full="shots/kiosk-window.webp" data-peek
+                     alt="Inside the kiosk at the serving window: the cat at the counter, a cash register, and a small screen showing a line of dialogue.">
+              </div>
+            </div>
+            <figcaption class="plate-slug"><span><b>Eren</b> · Kiosk · the window <span class="dim">· 922&times;1858</span></span></figcaption>
+          </figure>
+          <div class="notes">
+            <div class="note"><span class="note-n">—</span><p>Four walls on a swipe ring — window, left, back, right. It is a dark reskin of the care rooms’ own swipe, so one gesture covers both.</p></div>
+            <div class="note"><span class="note-n">—</span><p>The register rings the sale, on screen and on a printed receipt. Someone who only ever chats never reaches a payout; the sale is what gates it.</p></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="rail-item" data-amb="#D59A7B,#C18570" data-sliver="-1">
+        <div class="plate-wrap">
+          <figure class="plate">
+            <div class="plate-rig"><div class="bloom"></div>
+              <div class="screen">
+                <img src="shots/kiosk-spit-461.webp" width="461" height="929" loading="lazy" decoding="async" data-full="shots/kiosk-spit.webp" data-peek
+                     alt="The kiosk’s rotating shawarma spit with a knife beside it and hold-to-carve controls.">
+              </div>
+            </div>
+            <figcaption class="plate-slug"><span><b>Eren</b> · Kiosk · the spit <span class="dim">· 922&times;1858</span></span></figcaption>
+          </figure>
+          <div class="notes">
+            <div class="note"><span class="note-n">—</span><p>Carving is hold-to-cut against the same stock the shift reads from.</p></div>
+            <div class="note"><span class="note-n">—</span><p>The wall subtree is keyed, so its overlays unmount every time the ring turns. A one-shot animation therefore has to <em>resume</em> where it was rather than replay — that distinction cost a day.</p></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="rail-item" data-amb="#D58C7B,#C1B070" data-sliver="-1">
+        <div class="plate-wrap">
+          <figure class="plate">
+            <div class="plate-rig"><div class="bloom"></div>
+              <div class="screen">
+                <img src="shots/kiosk-fridge-461.webp" width="461" height="929" loading="lazy" decoding="async" data-full="shots/kiosk-fridge.webp" data-peek
+                     alt="An open fridge in the kiosk stocked with tomato, onion and lettuce, a payphone on the wall beside it.">
+              </div>
+            </div>
+            <figcaption class="plate-slug"><span><b>Eren</b> · Kiosk · the fridge <span class="dim">· 922&times;1858</span></span></figcaption>
+          </figure>
+          <div class="notes">
+            <div class="note"><span class="note-n">—</span><p>Restocking is hold-to-fill, and the fridge is the only way to refill what the prep counter spends.</p></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="rail-item" data-amb="#D5C97B,#C1BE70" data-sliver="-1">
+        <div class="plate-wrap">
+          <figure class="plate">
+            <div class="plate-rig"><div class="bloom"></div>
+              <div class="screen">
+                <img src="shots/kiosk-prep-461.webp" width="461" height="929" loading="lazy" decoding="async" data-full="shots/kiosk-prep.webp" data-peek
+                     alt="The kiosk prep counter: four trays of chopped vegetables and two sauce bottles.">
+              </div>
+            </div>
+            <figcaption class="plate-slug"><span><b>Eren</b> · Kiosk · the prep <span class="dim">· 922&times;1858</span></span></figcaption>
+          </figure>
+          <div class="notes">
+            <div class="note"><span class="note-n">—</span><p>Stock is drawn as four clip-path fills, one per tray, so the level <em>is</em> the geometry rather than a number printed beside it.</p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap rail-group">
+    <p class="rail-label">The bakery</p>
+    <p class="rail-intro">Twenty-seven donuts, every one of them carrying a real effect rather than a picture.</p>
+  </div>
+  <div class="wrap">
+    <div class="rail-track" id="rail-bakery" tabindex="0" role="group" aria-label="Bakery screens — scroll, drag, or use the arrow keys">
+
+      <div class="rail-item" data-amb="#D5A07B,#C19170" data-sliver="-1">
+        <div class="plate-wrap">
+          <figure class="plate">
+            <div class="plate-rig"><div class="bloom"></div>
+              <div class="screen">
+                <img src="shots/bakery-counter-461.webp" width="461" height="929" loading="lazy" decoding="async" data-full="shots/bakery-counter.webp" data-peek
+                     alt="Eren’s Bakery: the cat in a chef’s hat behind a counter of cakes and donuts, with buttons to order cakes or donuts.">
+              </div>
+            </div>
+            <figcaption class="plate-slug"><span><b>Eren</b> · Bakery · the counter <span class="dim">· 922&times;1858</span></span></figcaption>
+          </figure>
+          <div class="notes">
+            <div class="note"><span class="note-n">—</span><p>Twenty-seven donuts, split by where they come from: two out of the kitchen, twenty-two from the bakery, three only ever out of the gacha.</p></div>
+            <div class="note"><span class="note-n">—</span><p>The bakery deals three a day off a seeded eight-day cycle, so both phones in the household are offered exactly the same three.</p></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="rail-item" data-amb="#D5B27B,#C18B70" data-sliver="-1">
+        <div class="plate-wrap">
+          <figure class="plate">
+            <div class="plate-rig"><div class="bloom"></div>
+              <div class="screen">
+                <img src="shots/bakery-case-461.webp" width="461" height="929" loading="lazy" decoding="async" data-full="shots/bakery-case.webp" data-peek
+                     alt="The donut case: a grid of twenty-seven pixel-art donuts, twenty-one collected, with a spin button beneath.">
+              </div>
+            </div>
+            <figcaption class="plate-slug"><span><b>Eren</b> · Bakery · the case <span class="dim">· 922&times;1858</span></span></figcaption>
+          </figure>
+          <div class="notes">
+            <div class="note"><span class="note-n">—</span><p>All twenty-seven carry a numeric perk. Only four also carry a visible timed aura.</p></div>
+            <div class="note"><span class="note-n">—</span><p>That aura mounts once, high in the tree, so it follows the cat from room to room instead of being rebuilt on every screen.</p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div class="wrap">
     <div class="speech" id="speech">
       <q id="speech-q" aria-hidden="true"></q>
@@ -1055,7 +1316,7 @@ p{margin:0 0 1em;max-width:62ch}
       </div>
 
     </div>
-    <p class="rail-hint">Drag, scroll, or use ← → · three screens</p>
+    <p class="rail-hint">Drag, scroll, or use ← →</p>
   </div>
 </section>
 

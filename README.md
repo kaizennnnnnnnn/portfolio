@@ -31,6 +31,11 @@ site whose thesis is honesty, a fake "recording" would be a strange thing to shi
 
 ## Assets
 
+The Eren section is three rails: **the rooms** (eight, on one swipe ring), **the
+kiosk** (a second app inside the first — you walk in and work a shift) and **the
+bakery** (twenty-seven donuts, each with a real perk). Grouping them this way is
+the point: a single eighteen-wide rail would have read as a pile.
+
 `shots/` holds each screen twice: `<name>-461.webp` is the in-page source (461 w,
 exactly half of 922, so the pixel art halves cleanly) and `<name>.webp` is the full
 922 × 1858, fetched only when a plate is opened. The two tarot cards are cropped out
@@ -50,7 +55,8 @@ needs from that range is the caron in his own name.
 
 | | |
 |---|---|
-| First viewport | ~223 KB (index 113 KB → **32 KB gzipped**, 2 fonts, 1 screen, 3 sprite layers) |
+| First viewport | ~228 KB (index 134 KB → **37 KB gzipped**, 2 fonts, 1 screen, 3 sprite layers) |
+| Screens | 18 plates over 4 rails, every one lazy; 3 MB of shots never touches a first load |
 | Third-party requests | **0** |
 | Persistent canvases | 3, all IntersectionObserver-gated, one shared rAF loop |
 | Sprites | 55 KB total, 22 KB of it above the fold |
@@ -83,6 +89,13 @@ Three things that are load-bearing and look like mistakes if you don't know:
   path data. The first attempt was authored by hand and connected nothing. They render
   *behind* the panels, so a lead running to a lower rail disappears behind the one above
   it, which is what a real patch bay does.
+- **Keyframe names are global, and a later `@keyframes` silently replaces an earlier
+  one everywhere.** `blink` was already the terminal caret and `breathe` already the
+  plate bloom; redefining them for the cat killed his blink and hijacked the bloom.
+  Prefix anything new.
+- **The light layers work only because of `body{isolation:isolate}`.** Without it a
+  negative-z child paints *before* body's own background and is invisible. `.hero::before`
+  relies on the same trick.
 - **The rail navigator is built in JS from the plates themselves.** Two plates fill the
   row at desktop width, and nothing indicated rooms 03 and 04 existed — the section read
   as "two screenshots". The chips take their labels from each plate's own `.plate-slug`,
