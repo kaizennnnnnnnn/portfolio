@@ -152,7 +152,7 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
   color:var(--amb-1);animation:blink 620ms steps(1) 1.8s infinite backwards}
 .slug{font-family:Azeret,ui-monospace,Menlo,Consolas,monospace;font-size:var(--t-slug);
   letter-spacing:.10em;text-transform:uppercase;color:var(--mute);margin:0}
-.data,code{font-family:Azeret,ui-monospace,Menlo,Consolas,monospace;font-size:var(--t-data);line-height:1.6}
+code{font-family:Azeret,ui-monospace,Menlo,Consolas,monospace;font-size:var(--t-data);line-height:1.6}
 .lead{font-size:var(--t-lead);line-height:1.45;font-variation-settings:'wdth' 104,'wght' 500;margin:0 0 1em;max-width:56ch}
 /* The terms a recruiter scans for, lit in whatever colour the room is. White
    on black for five lines gives the eye nowhere to land. */
@@ -813,14 +813,13 @@ p{margin:0 0 1em;max-width:62ch}
 <!-- ======================================================= §02 MURMUR -->
 <section class="sec s02" id="s02" data-amb="#6FE6A0,#1E5A3E" data-sliver="-1">
   <div class="wrap">
-    <p class="tick has-cat"><span>Written by hand · running here</span><img class="cat" src="sprites/eren-lab.webp" width="148" height="200" loading="lazy" decoding="async" alt="" aria-hidden="true"></p>
+    <p class="tick has-cat"><span>Python · running here</span><img class="cat" src="sprites/eren-lab.webp" width="148" height="200" loading="lazy" decoding="async" alt="" aria-hidden="true"></p>
     <div class="grid" style="align-items:start">
       <div style="grid-column:1/5">
         <h2 class="sect-title">MURMUR</h2>
         <p class="lead">Hold a key, talk, and the text is in the editor before you've finished thinking the next sentence.</p>
-        <p>A push-to-talk dictation app for Windows. Python 3.12, PySide6 on Qt6. <code>faster-whisper small.en</code> runs locally on the GPU; when local inference comes back empty it falls through to Groq's <code>whisper-large-v3-turbo</code>.</p>
+        <p>A push-to-talk dictation app for Windows. Python 3.12, PySide6 on Qt6. <code>faster-whisper small.en</code> runs locally on the GPU. Groq's <code>whisper-large-v3-turbo</code> is there as an explicit opt-in — off by default, because unlike the local model it uploads the recording.</p>
         <p>Before the model sees anything the audio is cleaned: 200&nbsp;ms off the head and 100&nbsp;ms off the tail to kill the transient of the hotkey itself, a 4th-order Butterworth high-pass at 100&nbsp;Hz, then peak normalisation to 0.8. There is a silence guard, because a model handed near-silence will confidently invent a sentence.</p>
-        <p class="data" style="color:var(--mur-trace)">7,315 lines, written by hand, line by line.</p>
         <p class="cuda"><code>os.add_dll_directory(…)</code> — the nvidia-cu12 wheels put cuBLAS and cuDNN outside the directories Windows searches, so the loader is corrected at process start.</p>
       </div>
       <div style="grid-column:5/13">
