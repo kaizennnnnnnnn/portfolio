@@ -470,10 +470,23 @@ p{margin:0 0 1em;max-width:62ch}
   transition:color 200ms,border-color 200ms,opacity 200ms}
 .rn-a:hover:not(:disabled){color:var(--bone);border-color:var(--bone)}
 .rn-a:disabled{opacity:.28;cursor:default}
+/* The next plate peeking in is deliberate -- it is what tells you the rail
+   scrolls at all. But an un-faded peek guillotines the notes column straight
+   down the middle of a sentence, which reads as broken text rather than as
+   more content. Fade whichever edge still has something behind it; a rail
+   that fits entirely gets no fade, because both classes stay off. */
 .rail-track{display:flex;gap:clamp(20px,3vw,44px);overflow-x:auto;scroll-snap-type:x mandatory;
   touch-action:pan-y;             /* never steal the vertical thumb */
   padding-block:8px 22px;
+  --fade-l:0px;--fade-r:0px;
+  -webkit-mask-image:linear-gradient(90deg,transparent 0,#000 var(--fade-l),
+    #000 calc(100% - var(--fade-r)),transparent 100%);
+  mask-image:linear-gradient(90deg,transparent 0,#000 var(--fade-l),
+    #000 calc(100% - var(--fade-r)),transparent 100%);
   scrollbar-width:thin;scrollbar-color:var(--rule) transparent}
+/* --fade-l/--fade-r are set from JS to the width actually peeking past each
+   edge, capped. A rail whose items sit flush gets no fade at all, which is
+   what stops a near-full-width mobile item having its own text dimmed. */
 .rail-track::-webkit-scrollbar{height:3px}
 .rail-track::-webkit-scrollbar-thumb{background:var(--rule);border-radius:2px}
 .rail-track::-webkit-scrollbar-track{background:transparent}
@@ -1638,8 +1651,21 @@ requestAnimationFrame(function(){ root.classList.add('ready'); });
     var i = current();
     chips.forEach(function(c, k){ c.setAttribute('aria-current', k === i ? 'true' : 'false'); });
     arrows.forEach(function(a){ a.el.disabled = a.d < 0 ? i === 0 : i >= chips.length - 1; });
+    /* Fade exactly as much as is actually sticking out past each edge: the
+       slice of a peeking plate, and nothing more. Measured, not assumed, so
+       it is correct at every width instead of at the one I checked. */
+    var tb = track.getBoundingClientRect(), l = 0, r = 0;
+    items().forEach(function(it){
+      var b = it.getBoundingClientRect();
+      if (b.left < tb.left - 2 && b.right > tb.left + 2) l = b.right - tb.left;
+      if (b.left < tb.right - 2 && b.right > tb.right + 2) r = tb.right - b.left;
+    });
+    track.style.setProperty('--fade-l', Math.round(Math.min(88, l)) + 'px');
+    track.style.setProperty('--fade-r', Math.round(Math.min(200, r)) + 'px');
   }
   mark();
+  /* the fade depends on clientWidth, so it has to be recomputed on resize */
+  addEventListener('resize', mark, {passive: true});
   track.addEventListener('scroll', function(){
     if (markT) return;
     markT = setTimeout(function(){ markT = 0; mark(); }, 90);
