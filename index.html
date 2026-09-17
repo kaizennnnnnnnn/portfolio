@@ -296,45 +296,46 @@ p{margin:0 0 1em;max-width:62ch}
 .s01 .tick{color:var(--terms-ink);opacity:.55}
 .terms-grid{display:grid;grid-template-columns:repeat(12,1fr);gap:clamp(24px,3vw,48px);align-items:start}
 .terms-txt{grid-column:1/6}
-/* A real patch bay: sources on the left, destinations on the right, and the
-   cables are measured from the actual boxes at runtime — never hand-authored,
-   so they stay connected at every width. */
-.patchbay{grid-column:6/13;position:relative;
-  display:grid;grid-template-columns:auto minmax(0,1fr);gap:clamp(40px,5vw,78px);align-items:center}
-.rails{position:relative;z-index:1;display:flex;flex-direction:column;gap:12px}
-.rail{position:relative;z-index:1;border:1px solid var(--terms-rule);border-radius:2px;
-  padding:15px 17px;background:var(--terms-bg);text-align:left;width:100%;color:inherit;
-  transform:translateY(40px);opacity:0;
-  transition:transform 380ms var(--ease),opacity 380ms var(--ease),background 200ms}
-.lit .rail{transform:none;opacity:1}
-.lit .rail:nth-child(2){transition-delay:60ms}
-.lit .rail:nth-child(3){transition-delay:120ms}
-.rail-owned{background:var(--terms-ink);color:var(--terms-bg);border-color:var(--terms-ink);padding:21px 17px}
-.rail h3{margin:0 0 .6em;font-family:Azeret,ui-monospace,monospace;font-size:var(--t-slug);
-  letter-spacing:.12em;text-transform:uppercase;font-weight:400}
-.rail-owned h3{font-size:var(--t-data)}
-.rail ul{margin:0;padding:0;list-style:none;display:flex;flex-wrap:wrap;gap:3px 16px}
-.rail li{font-family:Azeret,ui-monospace,monospace;font-size:var(--t-data);opacity:.74;
-  position:relative;padding-left:12px}
-.rail li::before{content:'';position:absolute;left:2px;top:.66em;width:3px;height:3px;
-  background:currentColor;opacity:.55}
-.rail-owned li{opacity:.94}
-.chips{display:flex;flex-direction:column;gap:9px;align-items:stretch}
-.chip{position:relative;z-index:1;border:1px solid var(--terms-rule);border-radius:2px;padding:9px 13px;
-  background:var(--terms-bg);color:inherit;text-align:left;
-  font-family:Azeret,ui-monospace,monospace;font-size:var(--t-slug);letter-spacing:.08em;text-transform:uppercase;
-  transition:background 180ms,color 180ms,border-color 180ms}
-.chip[aria-pressed="true"]{background:var(--terms-ink);color:var(--terms-bg);border-color:var(--terms-ink)}
-/* the cable layer floats over the two columns; every path is generated from
-   measured geometry in JS, so nothing can drift out of alignment */
-/* the cable layer sits BEHIND the panels, so a lead running to a lower rail
-   disappears behind the one above it — which is what a real patch bay does */
-.cables{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:0;overflow:visible}
-.cables path{fill:none;stroke:var(--terms-ink);stroke-width:1.25;opacity:.42;
-  transition:opacity 220ms,stroke-width 220ms}
-.cables path.dim{opacity:.1}
-.cables path.hot{opacity:1;stroke-width:2.2}
-.cables circle{fill:var(--terms-ink);opacity:.5}
+.owns-h{margin:30px 0 11px;font-family:Azeret,ui-monospace,monospace;font-size:var(--t-slug);
+  letter-spacing:.14em;text-transform:uppercase;opacity:.55}
+.owns{margin:0;padding:0;list-style:none;display:flex;flex-wrap:wrap;gap:6px}
+.owns li{border:1px solid var(--terms-rule);border-radius:2px;padding:7px 11px;
+  font-family:Azeret,ui-monospace,monospace;font-size:var(--t-slug);letter-spacing:.05em;
+  text-transform:uppercase;opacity:.8}
+
+/* The ledger: three numbers that are about showing up rather than output, then
+   the faults. A list of production bugs found and fixed argues for ownership
+   far better than any diagram sorting work into who-typed-what. */
+.ledger{grid-column:6/13}
+.tally{display:flex;flex-wrap:wrap;gap:clamp(22px,3.2vw,48px);margin:0 0 34px;padding:0;list-style:none}
+.tally li{display:flex;flex-direction:column;gap:5px;opacity:0;transform:translateY(26px);
+  transition:opacity 460ms var(--ease),transform 460ms var(--ease)}
+.lit .tally li{opacity:1;transform:none}
+.lit .tally li:nth-child(2){transition-delay:90ms}
+.lit .tally li:nth-child(3){transition-delay:180ms}
+.tally b{font-size:clamp(36px,4.6vw,60px);line-height:.95;font-weight:400;
+  font-variation-settings:'wdth' 114,'wght' 700;letter-spacing:-.02em}
+.tally span{font-family:Azeret,ui-monospace,monospace;font-size:var(--t-slug);
+  line-height:1.5;max-width:17ch;opacity:.62}
+.ledger-h{margin:0 0 15px;padding-bottom:11px;border-bottom:1px solid var(--terms-rule);
+  font-family:Azeret,ui-monospace,monospace;font-size:var(--t-slug);
+  letter-spacing:.14em;text-transform:uppercase;opacity:.55}
+.faults{margin:0;padding:0;list-style:none;counter-reset:fault}
+.faults li{counter-increment:fault;position:relative;padding:0 0 15px 42px;margin:0 0 15px;
+  border-bottom:1px solid var(--terms-rule);
+  font-family:Azeret,ui-monospace,monospace;font-size:var(--t-data);line-height:1.68;
+  opacity:0;transform:translateY(16px);
+  transition:opacity 420ms var(--ease),transform 420ms var(--ease)}
+.faults li:last-child{border-bottom:0;margin-bottom:0;padding-bottom:0}
+.faults li::before{content:counter(fault,decimal-leading-zero);position:absolute;left:0;top:.05em;
+  font-size:var(--t-slug);opacity:.4}
+.lit .faults li{opacity:1;transform:none}
+.lit .faults li:nth-child(2){transition-delay:60ms}
+.lit .faults li:nth-child(3){transition-delay:120ms}
+.lit .faults li:nth-child(4){transition-delay:180ms}
+.lit .faults li:nth-child(5){transition-delay:240ms}
+.lit .faults li:nth-child(6){transition-delay:300ms}
+.s01 code{background:rgba(11,12,14,.07);padding:1px 5px;border-radius:2px}
 
 /* ========================================================== §02 MURMUR */
 .s02{background:var(--mur-bg)}
@@ -624,7 +625,7 @@ p{margin:0 0 1em;max-width:62ch}
 /* =========================================================== RESPONSIVE */
 @media (max-width:1100px){ .rail-item{width:min(90vw,640px)} }
 @media (max-width:900px){
-  .hero-txt,.hero-plate,.terms-txt,.patchbay{grid-column:1/13}
+  .hero-txt,.hero-plate,.terms-txt,.ledger{grid-column:1/13}
   .hero .grid{row-gap:44px}
   .hero-plate{--plate-w:calc(min(58vh,470px) * .4962)}
   .rail-item{width:min(92vw,520px)}
@@ -636,16 +637,6 @@ p{margin:0 0 1em;max-width:62ch}
   .rn-count{width:100%;margin-bottom:2px}
 }
 @media (max-width:720px){
-  /* The rails stack, but the argument survives: the chips sit in a row above
-     and Eren and Outrank still visibly send two cables each, one down into
-     DIRECTED and one up into OWNED. A plain vertical list would kill the whole
-     persuasive mechanism at exactly the width most recruiters meet it. */
-  .patchbay{grid-template-columns:1fr;gap:56px}
-  .chips{flex-direction:row;flex-wrap:wrap;gap:8px}
-  .chip{padding:7px 11px}
-  /* open the rail gaps so the leads running to the lower rails stay legible
-     between the panels instead of vanishing entirely behind the first one */
-  .rails{gap:24px}
   .plate-wrap{grid-template-columns:1fr;gap:20px}
   .notes{padding-block-start:0}
   .note::before{display:none}        /* leaders drop; the numbered dots carry the link */
@@ -675,7 +666,7 @@ p{margin:0 0 1em;max-width:62ch}
   .dot{transform:scale(1)}
   .note{opacity:1;transform:none}
   .note::before{width:8px}
-  .rail{transform:none;opacity:1}
+  .tally li,.faults li{transform:none;opacity:1}
   .log tbody tr{opacity:1;transform:none}
   .bench{transform:none}
   .speech .two{opacity:1}
@@ -767,37 +758,40 @@ p{margin:0 0 1em;max-width:62ch}
 <!-- ==================================================== §01 THE TERMS -->
 <section class="sec s01" id="s01" data-amb="#0B0C0E,#C6C3BA">
   <div class="wrap">
-    <p class="tick">The terms</p>
+    <p class="tick">2 April – today · still running</p>
     <div class="terms-grid">
       <div class="terms-txt">
-        <h2 class="sect-title">WHO TYPED IT</h2>
-        <p>Eren and Outrank were built by directing coding agents: I wrote the specs, chose the schema, reviewed what came back and debugged it in production. I don't write React by hand and I won't pretend to in an interview.</p>
-        <p>What I designed, debugged and can defend is on the top rail. The next section is one I typed myself — and it runs in your browser.</p>
+        <h2 class="sect-title">SIX MONTHS</h2>
+        <p>Eren has been in daily use by two people since the second of April. I direct coding agents to type
+        the React; I write the specs, choose the schema, run every migration by hand, and fix what breaks once
+        it is live.</p>
+        <p>Which of us typed a given line is the least interesting thing about it. What six months of actually
+        running the thing looked like is on the right.</p>
+        <p class="owns-h">What I am responsible for</p>
+        <ul class="owns">
+          <li>data models &amp; star schemas</li>
+          <li>auth &amp; row-level security</li>
+          <li>LLM integration, context &amp; cost</li>
+          <li>product decisions</li>
+          <li>debugging in production</li>
+        </ul>
       </div>
-      <div class="patchbay">
-        <div class="chips">
-          <button class="chip" type="button" aria-pressed="false" data-chip="eren">Eren</button>
-          <button class="chip" type="button" aria-pressed="false" data-chip="outrank">Outrank</button>
-          <button class="chip" type="button" aria-pressed="false" data-chip="murmur">Murmur</button>
-          <button class="chip" type="button" aria-pressed="false" data-chip="comtrade">Comtrade</button>
-          <button class="chip" type="button" aria-pressed="false" data-chip="faculty">Coursework</button>
-        </div>
-        <svg class="cables" id="cables" aria-hidden="true" focusable="false"></svg>
-        <noscript><p class="nojs-note">Eren and Outrank each run two leads: one into <b>Directed</b>, one into <b>Owned</b>. Being built by agents and being owned by me are not the same claim, and both are true at once.</p></noscript>
-        <div class="rails">
-          <button class="rail rail-owned" type="button" data-rail="owned" aria-pressed="false">
-            <h3>Owned — regardless of who typed it</h3>
-            <ul><li>data models &amp; star schemas</li><li>auth &amp; row-level security</li><li>LLM integration, context &amp; cost</li><li>product decisions</li><li>debugging in production</li></ul>
-          </button>
-          <button class="rail" type="button" data-rail="hand" aria-pressed="false">
-            <h3>Written by hand</h3>
-            <ul><li>Murmur</li><li>SSIS &amp; T-SQL</li><li>.NET 8 MVC</li><li>Java EE servlets + JSP</li><li>PHP 8 + PDO</li><li>19-entity ER model</li></ul>
-          </button>
-          <button class="rail" type="button" data-rail="directed" aria-pressed="false">
-            <h3>Directed — specified and debugged by me, typed by agents</h3>
-            <ul><li>Eren</li><li>Outrank</li></ul>
-          </button>
-        </div>
+
+      <div class="ledger">
+        <ol class="tally">
+          <li><b>140</b><span>days out of 166 with work committed</span></li>
+          <li><b>69</b><span>migrations, each one run by hand</span></li>
+          <li><b>2</b><span>people, every day, since April</span></li>
+        </ol>
+        <p class="ledger-h">Six things that only ever turn up once it is live</p>
+        <ol class="faults">
+          <li>The nightly decay sweep paged with <code>OFFSET</code> while mutating the very column it ordered by, so it silently stopped after a thousand households. It pages by keyset on <code>id</code> now.</li>
+          <li>Two columns were added to <code>profiles</code> and never granted. Every write to them failed silently for months, because the client never looked at the error it was handed.</li>
+          <li><code>export const dynamic = ’force-dynamic’</code> does nothing inside a client component. Twenty pages carried it and every one of them still built static.</li>
+          <li>A <code>next.config</code> env block quietly overrode Vercel’s own variables and hid two broken ones for four months.</li>
+          <li>Push notifications re-fired every time a stat wobbled across a threshold. The cooldown had to live in the database — two hours per tag — not in the client that happened to notice.</li>
+          <li>Deployments reached 52 GB against a 10 GB ceiling: 254 MB of images times two hundred builds. Deleting old deployments is the only thing that reclaims it.</li>
+        </ol>
       </div>
     </div>
   </div>
@@ -853,7 +847,7 @@ p{margin:0 0 1em;max-width:62ch}
 <!-- ========================================================= §03 EREN -->
 <section class="sec" id="s03" data-amb="#E5A56A,#E9A0B8">
   <div class="wrap">
-    <p class="tick has-cat"><span>Directed · owned · live</span><img class="cat" src="sprites/eren-cook.webp" width="118" height="200" loading="lazy" decoding="async" alt="" aria-hidden="true"></p>
+    <p class="tick has-cat"><span>In daily use since April</span><img class="cat" src="sprites/eren-cook.webp" width="118" height="200" loading="lazy" decoding="async" alt="" aria-hidden="true"></p>
     <h2 class="sect-title">EREN</h2>
     <p class="lead">A cat-care app two people have used every day since April. Next.js and Supabase, with a chat companion that answers in its own voice.</p>
   </div>
@@ -1234,7 +1228,7 @@ p{margin:0 0 1em;max-width:62ch}
 <!-- ====================================================== §05 OUTRANK -->
 <section class="sec" id="s05" data-amb="#F4F3F1,#7FA8FF">
   <div class="wrap">
-    <p class="tick">Directed · owned</p>
+    <p class="tick">Personal project · shipped</p>
     <h2 class="sect-title">OUTRANK</h2>
     <p class="lead">A habit tracker whose voice assistant is allowed to cost exactly sixty, two hundred and forty, or six hundred seconds a day.</p>
   </div>
@@ -1349,9 +1343,9 @@ p{margin:0 0 1em;max-width:62ch}
       <li><a href="https://linkedin.com/in/jovanspinjo" rel="me noopener">linkedin.com/in/jovanspinjo</a></li>
     </ul>
     <p class="colophon">
-      Built by hand for this page — no framework, no build step, no runtime dependency.<br>
+      Built for this page — no framework, no build step, no runtime dependency, not one third-party request.<br>
       The spec, the measurements, the annotations and the argument are mine.<br>
-      The typing was directed — same as Eren and Outrank. That's the point.
+      The typing was directed, same as Eren.
     </p>
   </div>
 </section>
@@ -1467,121 +1461,6 @@ var progTask = addTask(function(){
 addEventListener('scroll', function(){ sy = pageYOffset; dirty = true; progTask.on = true; start(); }, {passive: true});
 progTask.on = true; start();
 requestAnimationFrame(function(){ root.classList.add('ready'); });
-
-/* ------------------------------------------------------ §01 patchbay */
-/* Eren and Outrank each run TWO cables — one into DIRECTED and one up into
-   OWNED. That visual fact is the whole argument: you see the directed work
-   land on the owned rail before you read a word. Geometry is measured from
-   the real boxes so it survives every width and every font fallback. */
-(function(){
-  var pb = D.querySelector('.patchbay');
-  var svg = D.getElementById('cables');
-  if (!pb || !svg) return;
-  var NS = 'http://www.w3.org/2000/svg';
-  var LINKS = [
-    ['eren','owned'], ['eren','directed'],
-    ['outrank','owned'], ['outrank','directed'],
-    ['murmur','owned'], ['murmur','hand'],
-    ['comtrade','owned'], ['comtrade','hand'],
-    ['faculty','hand']
-  ];
-  var cables = [], drawn = false;
-
-  function build(){
-    var box = pb.getBoundingClientRect();
-    if (!box.width) return false;
-    svg.setAttribute('viewBox', '0 0 ' + box.width + ' ' + box.height);
-    while (svg.firstChild) svg.removeChild(svg.firstChild);
-    cables = [];
-    var vertical = getComputedStyle(pb).gridTemplateColumns.split(' ').length < 2;
-
-    /* give every cable its own port on the destination rail, so they arrive
-       spread across its edge instead of piling onto one point */
-    var perRail = {}, seen = {};
-    LINKS.forEach(function(L){ perRail[L[1]] = (perRail[L[1]] || 0) + 1; });
-
-    LINKS.forEach(function(L){
-      var a = pb.querySelector('.chip[data-chip="' + L[0] + '"]');
-      var b = pb.querySelector('.rail[data-rail="' + L[1] + '"]');
-      if (!a || !b) return;
-      var ra = a.getBoundingClientRect(), rb = b.getBoundingClientRect();
-      var n = perRail[L[1]], k = (seen[L[1]] = (seen[L[1]] || 0) + 1) - 1;
-      var frac = n > 1 ? (0.22 + 0.56 * (k / (n - 1))) : 0.5;
-      var x1, y1, x2, y2, d;
-      if (vertical) {
-        x1 = ra.left + ra.width / 2 - box.left; y1 = ra.bottom - box.top;
-        x2 = rb.left + rb.width * frac - box.left; y2 = rb.top - box.top;
-        var sag = Math.abs(y2 - y1) * 0.45;
-        d = 'M' + x1 + ' ' + y1 + ' C' + x1 + ' ' + (y1 + sag) + ' ' + x2 + ' ' + (y2 - sag) + ' ' + x2 + ' ' + y2;
-      } else {
-        x1 = ra.right - box.left; y1 = ra.top + ra.height / 2 - box.top;
-        x2 = rb.left - box.left;  y2 = rb.top + rb.height * frac - box.top;
-        var run = (x2 - x1) * 0.55;
-        /* a downward sag on the control points, so they hang like patch leads */
-        var sg = Math.abs(y2 - y1) * 0.10 + 7;
-        d = 'M' + x1 + ' ' + y1 + ' C' + (x1 + run) + ' ' + (y1 + sg) + ' ' + (x2 - run) + ' ' + (y2 + sg) + ' ' + x2 + ' ' + y2;
-      }
-      var p = D.createElementNS(NS, 'path');
-      p.setAttribute('d', d);
-      p.setAttribute('data-from', L[0]);
-      p.setAttribute('data-to', L[1]);
-      svg.appendChild(p);
-      cables.push(p);
-      [[x1, y1], [x2, y2]].forEach(function(pt){
-        var c = D.createElementNS(NS, 'circle');
-        c.setAttribute('cx', pt[0]); c.setAttribute('cy', pt[1]); c.setAttribute('r', '2.5');
-        svg.appendChild(c);
-      });
-    });
-    return true;
-  }
-
-  function draw(){
-    if (reduce) return;
-    cables.forEach(function(p, i){
-      var L = p.getTotalLength();
-      p.style.strokeDasharray = L;
-      p.style.strokeDashoffset = L;
-      p.style.transition = 'stroke-dashoffset 520ms cubic-bezier(.16,1,.3,1),opacity 220ms,stroke-width 220ms';
-      setTimeout(function(){ p.style.strokeDashoffset = 0; }, i * 40);
-    });
-  }
-
-  build();
-  new IntersectionObserver(function(es){
-    es.forEach(function(e){
-      if (e.isIntersecting && !drawn) { drawn = true; draw(); }
-    });
-  }, {threshold: .2}).observe(pb);
-
-  var rt = null;
-  addEventListener('resize', function(){
-    clearTimeout(rt);
-    rt = setTimeout(function(){ if (build() && drawn) cables.forEach(function(p){ p.style.strokeDashoffset = 0; }); }, 150);
-  }, {passive: true});
-
-  function trace(key, kind){
-    cables.forEach(function(p){
-      var hit = key !== null && p.getAttribute(kind) === key;
-      p.classList.toggle('hot', hit);
-      p.classList.toggle('dim', key !== null && !hit);
-    });
-  }
-  function wire(sel, attr, kind){
-    [].forEach.call(D.querySelectorAll(sel), function(b){
-      var k = b.getAttribute(attr);
-      function on(){ trace(k, kind); b.setAttribute('aria-pressed', 'true'); }
-      function off(){ trace(null, kind); b.setAttribute('aria-pressed', 'false'); }
-      b.addEventListener('mouseenter', on);
-      b.addEventListener('focus', on);
-      b.addEventListener('mouseleave', off);
-      b.addEventListener('blur', off);
-      b.addEventListener('click', on);
-    });
-  }
-  wire('.chip', 'data-chip', 'data-from');
-  wire('.rail[data-rail]', 'data-rail', 'data-to');
-})();
 
 /* ----------------------------------------------------- the lifted HUD */
 (function(){
